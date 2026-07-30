@@ -26,7 +26,7 @@ import {
 const MOVARA_MODELS = [
   {
     key: "10ft" as const,
-    nombre: "MOVARA 10ft",
+    nombre: "MOVARA Flex 18",
     superficie: 18,
     tagline: "Studio, espacio mínimo o módulo independiente",
     precio: { min: 15_000, max: 20_000 },
@@ -34,7 +34,7 @@ const MOVARA_MODELS = [
   },
   {
     key: "20ft" as const,
-    nombre: "MOVARA 20ft",
+    nombre: "MOVARA Flex 37",
     superficie: 37,
     tagline: "El más versátil — 1 o 2 ambientes",
     precio: { min: 22_000, max: 30_000 },
@@ -43,7 +43,7 @@ const MOVARA_MODELS = [
   },
   {
     key: "40ft" as const,
-    nombre: "MOVARA 40ft",
+    nombre: "MOVARA Flex 74",
     superficie: 74,
     tagline: "Máximo espacio — familia o inversión grande",
     precio: { min: 35_000, max: 50_000 },

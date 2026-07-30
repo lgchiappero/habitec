@@ -33,19 +33,19 @@ export const configuradorPageType = defineType({
         }),
         defineField({
           name: 'modelo10ft',
-          title: 'Tagline — MOVARA 10ft (18m²)',
+          title: 'Tagline — MOVARA Flex 18',
           type: 'string',
           initialValue: 'Studio, espacio mínimo o módulo independiente',
         }),
         defineField({
           name: 'modelo20ft',
-          title: 'Tagline — MOVARA 20ft (37m²)',
+          title: 'Tagline — MOVARA Flex 37',
           type: 'string',
           initialValue: 'El más versátil — 1 o 2 ambientes',
         }),
         defineField({
           name: 'modelo40ft',
-          title: 'Tagline — MOVARA 40ft (74m²)',
+          title: 'Tagline — MOVARA Flex 74',
           type: 'string',
           initialValue: 'Máximo espacio — familia o inversión grande',
         }),

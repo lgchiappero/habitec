@@ -37,7 +37,7 @@ function formatPrice(usd: number) {
 const HARDCODED_MODELOS = [
   {
     _id: "10ft",
-    name: "MOVARA 10ft",
+    name: "MOVARA Flex 18",
     superficie: "18 m²",
     precio: "USD 15.000",
     descripcion: "Studio de alta eficiencia. Ideal para hospedaje, trabajo remoto o inversión turística en campo.",
@@ -47,7 +47,7 @@ const HARDCODED_MODELOS = [
   },
   {
     _id: "20ft",
-    name: "MOVARA 20ft",
+    name: "MOVARA Flex 37",
     superficie: "37 m²",
     precio: "USD 22.000",
     descripcion: "El equilibrio perfecto entre confort y precio. Primera vivienda o inversión turística con alto ROI.",
@@ -57,7 +57,7 @@ const HARDCODED_MODELOS = [
   },
   {
     _id: "40ft",
-    name: "MOVARA 40ft",
+    name: "MOVARA Flex 74",
     superficie: "74 m²",
     precio: "USD 35.000",
     descripcion: "Máximo espacio y confort. Vivienda familiar, oficina corporativa o lodge premium.",

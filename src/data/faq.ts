@@ -70,7 +70,7 @@ export const FAQ_CATEGORIES: FaqCategory[] = [
       {
         pregunta: "¿Cuánto cuesta una unidad MOVARA?",
         respuesta:
-          "Los precios varían según el modelo y la configuración. MOVARA 10ft desde USD 15.000, MOVARA 20ft desde USD 22.000 y MOVARA 40ft desde USD 35.000. Estos valores son de referencia — el precio final depende de tu configuración, upgrades y ubicación. Usá el configurador para obtener un presupuesto personalizado.",
+          "Los precios varían según el modelo y la configuración. MOVARA Flex 18 desde USD 15.000, MOVARA Flex 37 desde USD 22.000 y MOVARA Flex 74 desde USD 35.000. Estos valores son de referencia — el precio final depende de tu configuración, upgrades y ubicación. Usá el configurador para obtener un presupuesto personalizado.",
       },
       {
         pregunta: "¿Hay financiación disponible?",

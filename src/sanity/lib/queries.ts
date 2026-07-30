@@ -240,6 +240,22 @@ export const MODELO_SLUGS_QUERY = groq`
   *[_type == "modelo"] { "slug": slug.current }
 `
 
+export const FLEX_PAGE_QUERY = groq`
+  *[_type == "flexPage"][0] {
+    hero {
+      title,
+      ctaPrimario,
+    },
+    galeria[] { "asset": asset, hotspot, crop, label },
+    galeriaVideos[] { url, titulo },
+    descripcion,
+    precioPorM2,
+    precioNota,
+    specsClave,
+    extrasDisponibles,
+  }
+`
+
 export const FAQ_PAGE_QUERY = groq`
   *[_type == "faqPage"][0] {
     categorias[] {

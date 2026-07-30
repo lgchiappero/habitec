@@ -66,6 +66,15 @@ export const structure: StructureResolver = (S) =>
             .title('Preguntas Frecuentes (FAQ)'),
         ),
 
+      S.listItem()
+        .title('Página MOVARA Flex')
+        .child(
+          S.document()
+            .schemaType('flexPage')
+            .documentId('flexPage')
+            .title('Página MOVARA Flex'),
+        ),
+
       S.divider(),
 
       S.listItem()

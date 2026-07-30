@@ -36,12 +36,14 @@
     "next-auth": "^5.0.0-beta.31",
     "next-sanity": "^12.4.5",
     "nodemailer": "^7.0.13",
+    "pdf2pic": "^3.2.0",
     "pg": "^8.21.0",
     "prisma": "^7.8.0",
     "react": "19.2.4",
     "react-dom": "19.2.4",
     "resend": "^6.14.0",
     "sanity": "^5.30.0",
+    "sharp": "^0.35.3",
     "styled-components": "^6.4.2",
     "zod": "^4.4.3",
     "zustand": "^5.0.14"
@@ -49,6 +51,7 @@
   "devDependencies": {
     "@playwright/test": "^1.61.0",
     "@tailwindcss/postcss": "^4",
+    "@techstark/opencv-js": "^5.0.0-release.1",
     "@testing-library/jest-dom": "^6.9.1",
     "@testing-library/react": "^16.3.2",
     "@testing-library/user-event": "^14.6.1",

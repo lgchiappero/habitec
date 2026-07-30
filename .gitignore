@@ -43,3 +43,7 @@ yarn-error.log*
 next-env.d.ts
 
 /src/generated/prisma
+
+# imágenes de trabajo temporales — no forman parte del repo
+/docs/heshi-catalogue/
+/docs/heshi-catalogue-150dpi/
