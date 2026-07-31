@@ -365,25 +365,19 @@ export const homePageType = defineType({
       name: 'modelosHome',
       title: 'Sección modelos (landing)',
       type: 'object',
-      description: 'Los datos de cada modelo vienen del documento "Modelo" en Sanity. Aquí se edita el encabezado de la sección.',
+      description: 'La foto de MOVARA Flex viene de la página "MOVARA Flex". Aquí se edita el encabezado de la sección.',
       fields: [
-        defineField({
-          name: 'badgeSeccion',
-          title: 'Badge de sección',
-          type: 'string',
-          initialValue: 'Nuestros modelos',
-        }),
         defineField({
           name: 'titulo',
           title: 'Título',
           type: 'string',
-          initialValue: 'Tres modelos. Un estándar.',
+          initialValue: 'Nuestros modelos',
         }),
         defineField({
-          name: 'badgePreventa',
-          title: 'Badge de preventa (chip derecho)',
+          name: 'subtitulo',
+          title: 'Subtítulo',
           type: 'string',
-          initialValue: '⚡ Condiciones de preventa de lanzamiento',
+          initialValue: 'Más modelos en camino.',
         }),
         defineField({
           name: 'ctaReservar',

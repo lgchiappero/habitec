@@ -128,18 +128,10 @@ export const CONFIGURADOR_PAGE_QUERY = groq`
   }
 `
 
-export const HOME_MODELOS_QUERY = groq`
-  *[_type == "modelo" && activo != false] | order(size asc, order asc) [0...3] {
-    _id,
-    name,
-    "slug": slug.current,
-    "descripcion": coalesce(descripcion, description),
-    tamano,
-    size,
-    priceUSD,
-    tagsLanding,
-    disponiblesPreventa,
-    destacado,
+export const FLEX_HOME_QUERY = groq`
+  *[_type == "flexPage"][0] {
+    "nombre": hero.title,
+    "imagen": galeria[0]{ asset, hotspot, crop },
   }
 `
 
@@ -196,9 +188,8 @@ export const HOME_PAGE_QUERY = groq`
       textoCTA,
     },
     modelosHome {
-      badgeSeccion,
       titulo,
-      badgePreventa,
+      subtitulo,
       ctaReservar,
       ctaCatalogo,
     },
