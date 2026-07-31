@@ -14,7 +14,7 @@ export default function ProductoPageClient() {
   return (
     <div className="bg-[#1C1C1C] text-stone-300" style={{ fontFamily: "var(--font-montserrat)" }}>
       {/* Hero */}
-      <section className="pt-28 pb-16 px-6 lg:px-8 border-b border-white/10">
+      <section className="pt-28 pb-16 px-4 sm:px-6 lg:px-8 border-b border-white/10">
         <div className="max-w-4xl mx-auto text-center">
           <motion.p
             initial={{ opacity: 0, y: 12 }}
@@ -47,9 +47,9 @@ export default function ProductoPageClient() {
       </section>
 
       {/* Secciones */}
-      <EspecificacionesCompletas dark className="max-w-4xl mx-auto px-6 lg:px-8" />
+      <EspecificacionesCompletas dark className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8" />
 
-      <div className="max-w-4xl mx-auto px-6 lg:px-8">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* 11. Extras y personalización */}
         <motion.section
           initial={{ opacity: 0, y: 24 }}
@@ -67,14 +67,17 @@ export default function ProductoPageClient() {
               <p className="mt-3 text-stone-400 leading-relaxed">
                 Configurá tu MOVARA según tu proyecto y tu presupuesto.
               </p>
-              <ul className="mt-6 divide-y divide-white/10 border-y border-white/10">
+              <div className="mt-6 grid sm:grid-cols-2 lg:grid-cols-3 gap-3">
                 {PRODUCTO_EXTRAS.map((e) => (
-                  <li key={e.texto} className="flex items-center justify-between gap-4 py-3.5">
+                  <div
+                    key={e.texto}
+                    className="flex items-center justify-between gap-4 py-3.5 px-4 border border-white/10 rounded-xl"
+                  >
                     <span className="text-sm text-stone-200">{e.texto}</span>
                     <span className="text-sm font-bold text-[#D4B06A] whitespace-nowrap">{e.precio}</span>
-                  </li>
+                  </div>
                 ))}
-              </ul>
+              </div>
             </div>
           </div>
         </motion.section>
@@ -86,7 +89,7 @@ export default function ProductoPageClient() {
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true, margin: "-80px" }}
         transition={{ duration: 0.5 }}
-        className="border-t border-white/10 py-20 px-6 lg:px-8"
+        className="border-t border-white/10 py-20 px-4 sm:px-6 lg:px-8"
       >
         <div className="max-w-2xl mx-auto text-center">
           <h2 className="text-3xl font-bold text-white">¿Querés ver todo esto en persona?</h2>

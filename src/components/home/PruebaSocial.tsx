@@ -102,7 +102,7 @@ export default function PruebaSocial({ content }: { content?: PruebaSocialConten
 
   return (
     <section className="py-24 bg-[#1A1A1A]">
-      <div className="max-w-5xl mx-auto px-6 lg:px-8">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Header */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}

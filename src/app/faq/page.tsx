@@ -31,7 +31,7 @@ export default async function FaqPage() {
     <>
       <Navbar />
       <main>
-        <section className="bg-sage-950 pt-32 pb-16 px-6 lg:px-8">
+        <section className="bg-sage-950 pt-32 pb-16 px-4 sm:px-6 lg:px-8">
           <div className="max-w-4xl mx-auto text-center">
             <span className="inline-block text-sage-400 text-sm font-semibold uppercase tracking-widest mb-5">
               Preguntas frecuentes
@@ -45,13 +45,13 @@ export default async function FaqPage() {
           </div>
         </section>
 
-        <section className="py-20 px-6 lg:px-8">
-          <div className="max-w-3xl mx-auto">
+        <section className="py-20 px-4 sm:px-6 lg:px-8">
+          <div className="max-w-7xl mx-auto">
             <FaqSearch categorias={categorias} />
           </div>
         </section>
 
-        <section className="py-20 px-6 lg:px-8 bg-[#F2F2F2]">
+        <section className="py-20 px-4 sm:px-6 lg:px-8 bg-[#F2F2F2]">
           <div className="max-w-2xl mx-auto text-center">
             <h2 className="text-2xl sm:text-3xl font-bold text-[#2F2F2F] mb-4">
               ¿No encontraste lo que buscabas?

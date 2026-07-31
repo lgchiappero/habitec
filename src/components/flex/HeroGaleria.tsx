@@ -14,8 +14,17 @@ type GalleryItem =
   | { kind: "image"; src: string; isSanity: boolean; alt: string }
   | { kind: "video"; url: string; embedUrl: string; label: string };
 
-const PLACEHOLDER_SRC = "/banner-hero.webp";
-const PLACEHOLDER_COUNT = 5;
+// Fotos reales de unidades MOVARA (recortes del catálogo del proveedor Heshi
+// verificados a mano — hay archivos mal nombrados en /public/configurador
+// así que estas rutas se eligieron por contenido, no por nombre de archivo).
+const FALLBACK_PHOTOS = [
+  { src: "/interiorcocina.png", alt: "Interior — living y cocina integrados" },
+  { src: "/configurador/decoracion/decor-cocina.jpg", alt: "Cocina equipada" },
+  { src: "/configurador/decoracion/decor-living.jpg", alt: "Living" },
+  { src: "/configurador/decoracion/decor-dormitorio.jpg", alt: "Dormitorio" },
+  { src: "/configurador-clean/exterior/ext-vidrio-frontal.jpg", alt: "Baño" },
+  { src: "/configurador/exterior/ext-calada-madera-clara.jpg", alt: "Exterior" },
+];
 
 function getEmbedUrl(url: string): string {
   const yt = url.match(/(?:youtube\.com\/watch\?v=|youtu\.be\/)([^&?/]+)/);
@@ -51,11 +60,11 @@ export default function HeroGaleria({
         isSanity: true,
         alt: img.label ?? `${title} — foto ${i + 1}`,
       }))
-    : Array.from({ length: PLACEHOLDER_COUNT }, (_, i) => ({
+    : FALLBACK_PHOTOS.map((p) => ({
         kind: "image" as const,
-        src: PLACEHOLDER_SRC,
+        src: p.src,
         isSanity: false,
-        alt: `${title} — foto ${i + 1}`,
+        alt: `${title} — ${p.alt}`,
       }));
 
   const videoItems: GalleryItem[] =

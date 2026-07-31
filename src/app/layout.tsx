@@ -4,6 +4,7 @@ import Script from "next/script";
 import "./globals.css";
 import WizardModal from "@/components/wizard/WizardModal";
 import BackToTop from "@/components/ui/BackToTop";
+import WhatsAppStickyBar from "@/components/ui/WhatsAppStickyBar";
 import { MetaPixelPageView } from "@/components/MetaPixelPageView";
 import { SanityLive } from "@/sanity/lib/live";
 import { client } from "@/sanity/lib/client";
@@ -58,7 +59,7 @@ export default async function RootLayout({
 
   return (
     <html lang="es" className={`${montserrat.variable} ${poppins.variable} h-full antialiased`}>
-      <body className="min-h-full flex flex-col bg-white text-stone-900">
+      <body className="min-h-full flex flex-col bg-white text-stone-900 pb-20 sm:pb-0">
         <noscript>
           <img
             height="1"
@@ -70,6 +71,7 @@ export default async function RootLayout({
         </noscript>
         {children}
         <WizardModal waNumber={waNumber} />
+        <WhatsAppStickyBar waNumber={waNumber} />
         <BackToTop />
         {process.env.SANITY_API_TOKEN && <SanityLive />}
         <MetaPixelPageView />

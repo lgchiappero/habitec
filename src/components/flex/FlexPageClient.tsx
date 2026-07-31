@@ -89,7 +89,7 @@ export default function FlexPageClient({
         />
       </div>
 
-      <main className="max-w-5xl mx-auto px-6 lg:px-8 pb-28 sm:pb-16">
+      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-16">
         {/* Precio por m² */}
         <motion.div
           initial={{ opacity: 0, y: 16 }}
@@ -124,11 +124,11 @@ export default function FlexPageClient({
           className="mt-12"
         >
           <h2 className="text-xl font-bold text-stone-900 pb-3 border-b border-stone-100">Specs técnicas</h2>
-          <div className="mt-5 flex gap-3 overflow-x-auto pb-2 -mx-6 px-6 lg:mx-0 lg:px-0 lg:flex-wrap">
+          <div className="mt-5 grid sm:grid-cols-2 lg:grid-cols-3 gap-3">
             {specsClave.map((s) => (
               <div
                 key={s}
-                className="shrink-0 w-56 sm:w-60 bg-stone-50 border border-stone-100 rounded-xl p-4 flex items-start gap-3"
+                className="bg-stone-50 border border-stone-100 rounded-xl p-4 flex items-start gap-3"
               >
                 <ShieldCheck className="w-5 h-5 text-sage-600 mt-0.5 shrink-0" />
                 <span className="text-sm text-stone-700 leading-snug">{s}</span>
@@ -179,7 +179,7 @@ export default function FlexPageClient({
           className="mt-12"
         >
           <h2 className="text-xl font-bold text-stone-900 pb-3 border-b border-stone-100">Extras disponibles</h2>
-          <ul className="mt-5 grid sm:grid-cols-2 gap-x-8 gap-y-2.5">
+          <ul className="mt-5 grid sm:grid-cols-2 lg:grid-cols-3 gap-x-8 gap-y-2.5">
             {extras.map((e) => (
               <li key={e} className="flex items-center gap-2.5 text-sm text-stone-600">
                 <span className="w-1.5 h-1.5 rounded-full bg-sage-400 shrink-0" />
@@ -208,19 +208,6 @@ export default function FlexPageClient({
           </a>
         </motion.div>
       </main>
-
-      {/* Botón → WhatsApp (mobile, sticky) */}
-      <div className="sm:hidden fixed bottom-0 inset-x-0 z-40 p-3 bg-white/95 backdrop-blur border-t border-stone-200">
-        <a
-          href={waHref}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="flex items-center justify-center gap-3 w-full py-4 bg-sage-600 hover:bg-sage-700 text-white font-bold text-base rounded-xl transition-all duration-200"
-        >
-          <WhatsAppIcon className="w-5 h-5" />
-          {ctaPrimario}
-        </a>
-      </div>
     </>
   );
 }

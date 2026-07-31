@@ -9,6 +9,15 @@ export const structure: StructureResolver = (S) =>
         .child(S.documentTypeList('modelo').title('Modelos')),
 
       S.listItem()
+        .title('Página MOVARA Flex')
+        .child(
+          S.document()
+            .schemaType('flexPage')
+            .documentId('flexPage')
+            .title('Página MOVARA Flex'),
+        ),
+
+      S.listItem()
         .title('Testimonios')
         .child(S.documentTypeList('testimonio').title('Testimonios')),
 
@@ -64,15 +73,6 @@ export const structure: StructureResolver = (S) =>
             .schemaType('faqPage')
             .documentId('faqPage')
             .title('Preguntas Frecuentes (FAQ)'),
-        ),
-
-      S.listItem()
-        .title('Página MOVARA Flex')
-        .child(
-          S.document()
-            .schemaType('flexPage')
-            .documentId('flexPage')
-            .title('Página MOVARA Flex'),
         ),
 
       S.divider(),

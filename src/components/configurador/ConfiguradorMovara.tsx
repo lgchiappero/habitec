@@ -382,12 +382,12 @@ export default function ConfiguradorMovara({
   if (showResult) {
     return (
       <main className="min-h-screen bg-stone-50 pt-16">
-        <div className="bg-[#2F2F2F] px-6 pt-14 pb-10 text-center">
+        <div className="bg-[#2F2F2F] px-4 sm:px-6 pt-14 pb-10 text-center">
           <span className="text-sage-400 text-xs font-semibold uppercase tracking-[0.2em]">Paso 7 de 7 — Tu configuración</span>
           <h1 className="text-3xl font-bold text-white mt-2">{cms.resultado.title}</h1>
           <p className="text-stone-400 mt-2 text-sm">Revisá el mensaje y enviánoslo por WhatsApp para arrancar.</p>
         </div>
-        <div className="max-w-2xl mx-auto px-6 py-10">
+        <div className="max-w-3xl mx-auto px-4 sm:px-6 py-10">
           <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.3 }}>
             <ResultScreen
               modelo={modelo!}
@@ -418,13 +418,13 @@ export default function ConfiguradorMovara({
 
   return (
     <main className="min-h-screen bg-stone-50 pt-16">
-      <div className="bg-[#2F2F2F] px-6 pt-14 pb-10 text-center">
+      <div className="bg-[#2F2F2F] px-4 sm:px-6 pt-14 pb-10 text-center">
         <span className="text-sage-400 text-xs font-semibold uppercase tracking-[0.2em]">Configurador</span>
         <h1 className="text-3xl sm:text-4xl font-bold text-white mt-2 tracking-tight">Diseñá tu MOVARA</h1>
         <p className="text-stone-400 mt-2 text-sm">7 pasos para encontrar el módulo ideal y recibir un presupuesto por WhatsApp.</p>
       </div>
 
-      <div className="max-w-2xl mx-auto px-6 py-10">
+      <div className="max-w-3xl mx-auto px-4 sm:px-6 py-10">
         {/* Progress */}
         <div className="mb-10">
           <div className="flex gap-1.5 mb-3">

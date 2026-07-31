@@ -98,7 +98,7 @@ export default function DolorConvencional({ content }: { content?: DolorContent 
 
   return (
     <section className="py-32 bg-white">
-      <div className="max-w-5xl mx-auto px-6 lg:px-8">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Heading */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}

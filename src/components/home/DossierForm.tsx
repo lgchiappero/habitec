@@ -194,7 +194,7 @@ export default function DossierForm({
 
   return (
     <section id="dossier" className="py-32 bg-[#2F2F2F]">
-      <div className="max-w-5xl mx-auto px-6 lg:px-8">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="grid lg:grid-cols-2 gap-16 items-start">
 
           {/* Left — info */}

@@ -84,7 +84,7 @@ export default function ModelosHome({
 
   return (
     <section id="modelos" className="py-32 bg-white">
-      <div className="max-w-5xl mx-auto px-6 lg:px-8">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Header */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -109,7 +109,7 @@ export default function ModelosHome({
         </motion.div>
 
         {/* Cards */}
-        <div className="space-y-4">
+        <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
           {useSanity
             ? modelos.map((m, i) => {
                 const superficie =
@@ -125,37 +125,37 @@ export default function ModelosHome({
                     whileInView={{ opacity: 1, y: 0 }}
                     viewport={{ once: true }}
                     transition={{ duration: 0.5, delay: i * 0.1 }}
-                    className={`rounded-2xl border-2 p-7 lg:p-8 flex flex-col sm:flex-row sm:items-center gap-6 transition-all duration-200 ${
+                    className={`rounded-2xl border-2 p-7 lg:p-8 flex flex-col h-full transition-all duration-200 ${
                       highlight
                         ? "bg-[#2F2F2F] border-[#D4B06A]"
                         : "bg-white border-stone-100 hover:border-stone-200"
                     }`}
                   >
                     <div
-                      className={`shrink-0 w-14 h-14 rounded-xl flex items-center justify-center text-3xl ${
+                      className={`shrink-0 w-14 h-14 rounded-xl flex items-center justify-center text-3xl mb-5 ${
                         highlight ? "bg-[#D4B06A]/10" : "bg-stone-50"
                       }`}
                     >
                       🏠
                     </div>
-                    <div className="flex-1 min-w-0">
-                      <div className="flex items-center gap-2.5 mb-2 flex-wrap">
-                        <h3 className={`font-bold text-lg ${highlight ? "text-white" : "text-[#2F2F2F]"}`}>
-                          {m.name}
-                        </h3>
-                        {tags.map((tag) => (
-                          <span
-                            key={tag}
-                            className={`text-[11px] px-2 py-0.5 rounded-full font-medium ${
-                              highlight
-                                ? "bg-[#D4B06A]/20 text-[#D4B06A]"
-                                : "bg-stone-100 text-stone-500"
-                            }`}
-                          >
-                            {tag}
-                          </span>
-                        ))}
-                      </div>
+                    <div className="flex items-center gap-2.5 mb-2 flex-wrap">
+                      <h3 className={`font-bold text-lg ${highlight ? "text-white" : "text-[#2F2F2F]"}`}>
+                        {m.name}
+                      </h3>
+                      {tags.map((tag) => (
+                        <span
+                          key={tag}
+                          className={`text-[11px] px-2 py-0.5 rounded-full font-medium ${
+                            highlight
+                              ? "bg-[#D4B06A]/20 text-[#D4B06A]"
+                              : "bg-stone-100 text-stone-500"
+                          }`}
+                        >
+                          {tag}
+                        </span>
+                      ))}
+                    </div>
+                    <div className="flex-1">
                       {m.descripcion && (
                         <p className={`text-sm leading-relaxed mb-2 ${highlight ? "text-stone-400" : "text-stone-500"}`}>
                           {m.descripcion}
@@ -167,16 +167,18 @@ export default function ModelosHome({
                         </p>
                       )}
                     </div>
-                    <div className="shrink-0 text-right">
-                      <p className={`text-xs mb-1 ${highlight ? "text-stone-500" : "text-stone-400"}`}>
-                        {superficie} · desde
-                      </p>
-                      <p className={`text-2xl font-bold mb-3 ${highlight ? "text-white" : "text-[#2F2F2F]"}`}>
-                        {precio}
-                      </p>
+                    <div className="mt-6 pt-6 border-t border-dashed border-current/10 flex items-end justify-between gap-4">
+                      <div>
+                        <p className={`text-xs mb-1 ${highlight ? "text-stone-500" : "text-stone-400"}`}>
+                          {superficie} · desde
+                        </p>
+                        <p className={`text-2xl font-bold ${highlight ? "text-white" : "text-[#2F2F2F]"}`}>
+                          {precio}
+                        </p>
+                      </div>
                       <a
                         href="#dossier"
-                        className={`inline-block px-5 py-2.5 rounded-xl text-sm font-bold transition-all duration-200 ${
+                        className={`shrink-0 inline-block px-5 py-2.5 rounded-xl text-sm font-bold transition-all duration-200 ${
                           highlight
                             ? "bg-[#D4B06A] hover:bg-[#BF9A52] text-[#1A1A1A]"
                             : "bg-[#2F2F2F] hover:bg-stone-800 text-white"
@@ -195,37 +197,37 @@ export default function ModelosHome({
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true }}
                   transition={{ duration: 0.5, delay: i * 0.1 }}
-                  className={`rounded-2xl border-2 p-7 lg:p-8 flex flex-col sm:flex-row sm:items-center gap-6 transition-all duration-200 ${
+                  className={`rounded-2xl border-2 p-7 lg:p-8 flex flex-col h-full transition-all duration-200 ${
                     m.highlight
                       ? "bg-[#2F2F2F] border-[#D4B06A]"
                       : "bg-white border-stone-100 hover:border-stone-200"
                   }`}
                 >
                   <div
-                    className={`shrink-0 w-14 h-14 rounded-xl flex items-center justify-center text-3xl ${
+                    className={`shrink-0 w-14 h-14 rounded-xl flex items-center justify-center text-3xl mb-5 ${
                       m.highlight ? "bg-[#D4B06A]/10" : "bg-stone-50"
                     }`}
                   >
                     🏠
                   </div>
-                  <div className="flex-1 min-w-0">
-                    <div className="flex items-center gap-2.5 mb-2 flex-wrap">
-                      <h3 className={`font-bold text-lg ${m.highlight ? "text-white" : "text-[#2F2F2F]"}`}>
-                        {m.name}
-                      </h3>
-                      {m.tags.map((tag) => (
-                        <span
-                          key={tag}
-                          className={`text-[11px] px-2 py-0.5 rounded-full font-medium ${
-                            m.highlight
-                              ? "bg-[#D4B06A]/20 text-[#D4B06A]"
-                              : "bg-stone-100 text-stone-500"
-                          }`}
-                        >
-                          {tag}
-                        </span>
-                      ))}
-                    </div>
+                  <div className="flex items-center gap-2.5 mb-2 flex-wrap">
+                    <h3 className={`font-bold text-lg ${m.highlight ? "text-white" : "text-[#2F2F2F]"}`}>
+                      {m.name}
+                    </h3>
+                    {m.tags.map((tag) => (
+                      <span
+                        key={tag}
+                        className={`text-[11px] px-2 py-0.5 rounded-full font-medium ${
+                          m.highlight
+                            ? "bg-[#D4B06A]/20 text-[#D4B06A]"
+                            : "bg-stone-100 text-stone-500"
+                        }`}
+                      >
+                        {tag}
+                      </span>
+                    ))}
+                  </div>
+                  <div className="flex-1">
                     <p className={`text-sm leading-relaxed mb-2 ${m.highlight ? "text-stone-400" : "text-stone-500"}`}>
                       {m.descripcion}
                     </p>
@@ -233,16 +235,18 @@ export default function ModelosHome({
                       Solo quedan <strong>{m.disponibles}</strong> unidades con precio de lanzamiento
                     </p>
                   </div>
-                  <div className="shrink-0 text-right">
-                    <p className={`text-xs mb-1 ${m.highlight ? "text-stone-500" : "text-stone-400"}`}>
-                      {m.superficie} · desde
-                    </p>
-                    <p className={`text-2xl font-bold mb-3 ${m.highlight ? "text-white" : "text-[#2F2F2F]"}`}>
-                      {m.precio}
-                    </p>
+                  <div className="mt-6 pt-6 border-t border-dashed border-current/10 flex items-end justify-between gap-4">
+                    <div>
+                      <p className={`text-xs mb-1 ${m.highlight ? "text-stone-500" : "text-stone-400"}`}>
+                        {m.superficie} · desde
+                      </p>
+                      <p className={`text-2xl font-bold ${m.highlight ? "text-white" : "text-[#2F2F2F]"}`}>
+                        {m.precio}
+                      </p>
+                    </div>
                     <a
                       href="#dossier"
-                      className={`inline-block px-5 py-2.5 rounded-xl text-sm font-bold transition-all duration-200 ${
+                      className={`shrink-0 inline-block px-5 py-2.5 rounded-xl text-sm font-bold transition-all duration-200 ${
                         m.highlight
                           ? "bg-[#D4B06A] hover:bg-[#BF9A52] text-[#1A1A1A]"
                           : "bg-[#2F2F2F] hover:bg-stone-800 text-white"

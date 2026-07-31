@@ -75,7 +75,7 @@ export default async function QuienesSomosPage() {
       <Navbar />
       <main>
         {/* Hero */}
-        <section className="relative bg-sage-950 pt-32 pb-20 px-6 lg:px-8 overflow-hidden">
+        <section className="relative bg-sage-950 pt-32 pb-20 px-4 sm:px-6 lg:px-8 overflow-hidden">
           {/* Background image */}
           {heroImage?.asset && (
             <div className="absolute inset-0">
@@ -102,14 +102,14 @@ export default async function QuienesSomosPage() {
           </div>
         </section>
 
-        <div className="max-w-4xl mx-auto px-6 lg:px-8 py-20 space-y-20">
-          {/* Historia */}
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 space-y-20">
+          {/* Historia — texto largo, ancho de lectura acotado a propósito */}
           {historiaContent && Array.isArray(historiaContent) && historiaContent.length > 0 && (
             <section>
               <h2 className="text-2xl font-bold text-stone-900 mb-6 pb-4 border-b border-stone-100">
                 {historiaTitle}
               </h2>
-              <div className="prose prose-stone max-w-none prose-p:text-stone-600 prose-headings:text-stone-900">
+              <div className="prose prose-stone max-w-3xl prose-p:text-stone-600 prose-headings:text-stone-900">
                 <PortableText value={historiaContent as Parameters<typeof PortableText>[0]["value"]} />
               </div>
             </section>
