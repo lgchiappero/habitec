@@ -20,14 +20,14 @@ export default function ModelCard({ model }: Props) {
   return (
     <article className="group flex flex-col bg-white border border-stone-100 rounded-2xl overflow-hidden hover:shadow-2xl hover:shadow-stone-900/10 hover:border-stone-200 transition-all duration-300 hover:-translate-y-1">
       {/* Image area */}
-      <div className="relative h-52 overflow-hidden bg-stone-100">
+      <div className="relative h-52 overflow-hidden bg-stone-900">
         {hasSanityImg ? (
           <>
             <Image
-              src={urlFor(img).width(600).height(400).fit("crop").auto("format").url()}
+              src={urlFor(img).width(600).height(400).fit("max").auto("format").url()}
               alt={img.label ?? model.name}
               fill
-              className="object-cover transition-transform duration-500 group-hover:scale-105"
+              className="object-contain transition-transform duration-500 group-hover:scale-105"
               sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
             />
             {/* Subtle gradient so badges stay readable */}

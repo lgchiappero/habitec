@@ -148,7 +148,7 @@ export default function ImageGallery({ images, modelName, video, videos }: Props
 
       {/* Main display */}
       <div
-        className="relative w-full aspect-[4/3] rounded-2xl overflow-hidden bg-sage-900"
+        className="relative w-full aspect-[4/3] rounded-2xl overflow-hidden bg-stone-900"
         onTouchStart={handleTouchStart}
         onTouchEnd={handleTouchEnd}
       >
@@ -172,10 +172,10 @@ export default function ImageGallery({ images, modelName, video, videos }: Props
           )
         ) : isSanityImage(active.img) ? (
           <Image
-            src={urlFor(active.img).width(900).height(675).fit("crop").auto("format").url()}
+            src={urlFor(active.img).width(900).height(675).fit("max").auto("format").url()}
             alt={active.img.label ?? modelName}
             fill
-            className="object-cover transition-opacity duration-500"
+            className="object-contain transition-opacity duration-500"
             sizes="(max-width: 768px) 100vw, 60vw"
             priority={activeIdx === 0}
           />
@@ -235,7 +235,7 @@ export default function ImageGallery({ images, modelName, video, videos }: Props
             <button
               key={i}
               onClick={() => setSelected(i)}
-              className={`relative aspect-[4/3] rounded-xl overflow-hidden bg-sage-900 transition-all duration-200 ${
+              className={`relative aspect-[4/3] rounded-xl overflow-hidden bg-stone-900 transition-all duration-200 ${
                 i === activeIdx
                   ? "ring-2 ring-sage-500 ring-offset-2"
                   : "opacity-60 hover:opacity-80"
@@ -251,12 +251,12 @@ export default function ImageGallery({ images, modelName, video, videos }: Props
                   src={urlFor(item.img)
                     .width(200)
                     .height(150)
-                    .fit("crop")
+                    .fit("max")
                     .auto("format")
                     .url()}
                   alt={item.img.label ?? `Imagen ${i + 1}`}
                   fill
-                  className="object-cover"
+                  className="object-contain"
                   sizes="25vw"
                 />
               ) : (

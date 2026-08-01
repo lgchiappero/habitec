@@ -51,12 +51,13 @@ export default function HeroGaleria({
   images?: SanityImage[] | null;
   videos?: VideoInput[] | null;
 }) {
-  const hasSanityImages = !!(images && images.length > 0);
+  const validImages = (images ?? []).filter((img) => !!img?.asset?._ref);
+  const hasSanityImages = validImages.length > 0;
 
   const imageItems: GalleryItem[] = hasSanityImages
-    ? images!.map((img, i) => ({
+    ? validImages.map((img, i) => ({
         kind: "image" as const,
-        src: urlFor(img).width(1800).height(1400).fit("crop").auto("format").url(),
+        src: urlFor(img).width(1800).height(1400).fit("max").auto("format").url(),
         isSanity: true,
         alt: img.label ?? `${title} — foto ${i + 1}`,
       }))
@@ -122,7 +123,7 @@ export default function HeroGaleria({
                 alt={active.alt}
                 fill
                 priority={selected === 0}
-                className="object-cover"
+                className="object-contain"
                 sizes="100vw"
               />
             )}
@@ -169,7 +170,7 @@ export default function HeroGaleria({
                 onClick={() => setSelected(i)}
                 aria-label={item.kind === "video" ? item.label : item.alt}
                 aria-pressed={isActive}
-                className={`relative shrink-0 w-16 h-16 sm:w-20 sm:h-20 rounded-lg overflow-hidden border-2 transition-colors ${
+                className={`relative shrink-0 w-16 h-16 sm:w-20 sm:h-20 rounded-lg overflow-hidden border-2 bg-stone-900 transition-colors ${
                   isActive ? "border-sage-500" : "border-transparent"
                 }`}
               >
@@ -178,7 +179,7 @@ export default function HeroGaleria({
                     <Play className="w-5 h-5 text-white" fill="white" />
                   </div>
                 ) : (
-                  <Image src={item.src} alt={item.alt} fill className="object-cover" sizes="80px" />
+                  <Image src={item.src} alt={item.alt} fill className="object-contain" sizes="80px" />
                 )}
               </button>
             );

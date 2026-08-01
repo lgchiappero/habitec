@@ -17,7 +17,7 @@ export const MODELOS_QUERY = groq`
     "features": coalesce(upgrades, features),
     especificaciones[] { clave, valor },
     specs,
-    images[] { "asset": asset, hotspot, crop, label },
+    images[defined(asset)] { "asset": asset, hotspot, crop, label },
     videos[] { url, titulo },
     video { url, label },
     virtualTour,
@@ -47,7 +47,7 @@ export const MODELO_BY_SLUG_QUERY = groq`
     "features": coalesce(upgrades, features),
     especificaciones[] { clave, valor },
     specs,
-    images[] { "asset": asset, hotspot, crop, label },
+    images[defined(asset)] { "asset": asset, hotspot, crop, label },
     videos[] { url, titulo },
     video { url, label },
     virtualTour,
@@ -127,7 +127,7 @@ export const CONFIGURADOR_PAGE_QUERY = groq`
 export const FLEX_CARD_QUERY = groq`
   *[_type == "flexPage"][0] {
     "nombre": hero.title,
-    "imagen": galeria[0]{ asset, hotspot, crop },
+    "imagen": galeria[defined(asset)][0]{ asset, hotspot, crop },
   }
 `
 
@@ -233,7 +233,7 @@ export const FLEX_PAGE_QUERY = groq`
       title,
       ctaPrimario,
     },
-    galeria[] { "asset": asset, hotspot, crop, label },
+    galeria[defined(asset)] { "asset": asset, hotspot, crop, label },
     galeriaVideos[] { url, titulo },
     descripcion,
     precioPorM2,

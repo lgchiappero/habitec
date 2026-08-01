@@ -37,7 +37,7 @@ export default function Hero({
         alt=""
         fill
         priority
-        className="object-cover"
+        className="object-cover object-[70%_42%]"
         sizes="100vw"
       />
       {/* Dark overlay for text contrast */}
