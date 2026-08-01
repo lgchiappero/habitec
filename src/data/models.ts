@@ -29,7 +29,6 @@ export type ProductModel = {
   size: number;
   rooms: number;
   baths: number;
-  priceUSD: number;
   tag?: string;
   features: string[];
   specs: ModelSpecs;
@@ -42,7 +41,6 @@ export type ProductModel = {
   permiteCocinaSiMax3Hab?: boolean | null;
   // Campos MOVARA nuevos
   tamano?: "10ft" | "20ft" | "40ft" | null;
-  precioHasta?: number | null;
   incluyeCocina?: boolean | null;
   incluyeBano?: boolean | null;
   especificaciones?: { clave: string; valor: string }[] | null;
@@ -116,7 +114,6 @@ export const MODELS: ProductModel[] = [
     size: 65,
     rooms: 3,
     baths: 2,
-    priceUSD: 34500,
     features: [
       "Ventilación cruzada en todos los ambientes",
       "Cocina-comedor integrado de 20 m²",
@@ -140,7 +137,6 @@ export const MODELS: ProductModel[] = [
     size: 90,
     rooms: 4,
     baths: 2,
-    priceUSD: 48900,
     features: [
       "Cuatro ambientes independientes",
       "Living-comedor de 28 m²",
@@ -165,7 +161,6 @@ export const MODELS: ProductModel[] = [
     size: 95,
     rooms: 4,
     baths: 2,
-    priceUSD: 52000,
     features: [
       "Terminaciones de línea premium",
       "Piso de porcelanato grande formato",
@@ -190,7 +185,6 @@ export const MODELS: ProductModel[] = [
     size: 120,
     rooms: 5,
     baths: 3,
-    priceUSD: 68000,
     features: [
       "Cinco ambientes + sala de estar",
       "Tres baños completos",
@@ -215,7 +209,6 @@ export const MODELS: ProductModel[] = [
     size: 35,
     rooms: 1,
     baths: 1,
-    priceUSD: 18900,
     features: [
       "Amortización en 2 temporadas promedio",
       "Deck externo de 12 m²",
@@ -239,7 +232,6 @@ export const MODELS: ProductModel[] = [
     size: 55,
     rooms: 2,
     baths: 1,
-    priceUSD: 27500,
     features: [
       "Dormitorio separado + zona de estar",
       "Revestimiento exterior de madera",
@@ -264,7 +256,6 @@ export const MODELS: ProductModel[] = [
     size: 75,
     rooms: 3,
     baths: 2,
-    priceUSD: 39000,
     features: [
       "Dos unidades independientes (37 m² c/u)",
       "Entradas separadas para cada unidad",
@@ -288,7 +279,6 @@ export const MODELS: ProductModel[] = [
     size: 20,
     rooms: 1,
     baths: 1,
-    priceUSD: 12500,
     features: [
       "Open space de 16 m² de trabajo neto",
       "Iluminación cenital (skylight)",
@@ -312,7 +302,6 @@ export const MODELS: ProductModel[] = [
     size: 35,
     rooms: 2,
     baths: 1,
-    priceUSD: 18500,
     features: [
       "Zona de trabajo + sala de reuniones",
       "Sala para hasta 6 personas",
@@ -337,7 +326,6 @@ export const MODELS: ProductModel[] = [
     size: 45,
     rooms: 2,
     baths: 1,
-    priceUSD: 23000,
     features: [
       "Estudio de 28 m² con luz cenital",
       "Sala de reuniones independiente",

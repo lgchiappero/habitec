@@ -9,8 +9,6 @@ export type RegionalModel = {
   ventanas: string;
   climatizacion: string;
   extras: string[];
-  precioMin: number;
-  precioMax: number;
 };
 
 export const REGIONAL_MODELS: Record<string, RegionalModel> = {
@@ -31,8 +29,6 @@ export const REGIONAL_MODELS: Record<string, RegionalModel> = {
       "Sellados perimetrales estanco",
       "Aleros 80 cm perimetrales",
     ],
-    precioMin: 18000,
-    precioMax: 26000,
   },
   impenetrable: {
     key: "impenetrable",
@@ -51,8 +47,6 @@ export const REGIONAL_MODELS: Record<string, RegionalModel> = {
       "Piso elevado + ventilación bajo solado",
       "Pintura exterior termorradiante",
     ],
-    precioMin: 19000,
-    precioMax: 27000,
   },
   pampa: {
     key: "pampa",
@@ -71,8 +65,6 @@ export const REGIONAL_MODELS: Record<string, RegionalModel> = {
       "Pre-instalación solar fotovoltaica",
       "Zócalo perimetral estanco",
     ],
-    precioMin: 17000,
-    precioMax: 24000,
   },
   zonda: {
     key: "zonda",
@@ -91,8 +83,6 @@ export const REGIONAL_MODELS: Record<string, RegionalModel> = {
       "Membrana impermeabilizante anti-UV",
       "Cisterna enterrada 2.000 L",
     ],
-    precioMin: 18000,
-    precioMax: 25000,
   },
   kolla: {
     key: "kolla",
@@ -111,8 +101,6 @@ export const REGIONAL_MODELS: Record<string, RegionalModel> = {
       "Cisterna 2.500 L (provisión irregular)",
       "Estructura para terrenos en pendiente",
     ],
-    precioMin: 22000,
-    precioMax: 32000,
   },
   tehuelche: {
     key: "tehuelche",
@@ -131,8 +119,6 @@ export const REGIONAL_MODELS: Record<string, RegionalModel> = {
       "Umbral térmico en puertas de acceso",
       "Barrera cortaviento perimetral",
     ],
-    precioMin: 21000,
-    precioMax: 30000,
   },
   pehuen: {
     key: "pehuen",
@@ -151,8 +137,6 @@ export const REGIONAL_MODELS: Record<string, RegionalModel> = {
       "Cubierta 2 aguas 45° evacuación de nieve",
       "Barrera de vapor de alta performance",
     ],
-    precioMin: 25000,
-    precioMax: 38000,
   },
   yagan: {
     key: "yagan",
@@ -171,8 +155,6 @@ export const REGIONAL_MODELS: Record<string, RegionalModel> = {
       "Cubierta 2 aguas 45° chapa prepintada",
       "Vestíbulo térmico de entrada incluido",
     ],
-    precioMin: 28000,
-    precioMax: 42000,
   },
 };
 

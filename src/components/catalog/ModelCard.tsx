@@ -88,14 +88,7 @@ export default function ModelCard({ model }: Props) {
         {/* Price + CTAs */}
         <div className="mt-5 pt-5 border-t border-stone-100 flex items-end justify-between">
           <div>
-            <p className="text-[10px] font-medium text-stone-400 uppercase tracking-wider leading-none">
-              Desde
-            </p>
-            <p className="text-2xl font-bold text-stone-900 mt-1 leading-none">
-              {model.priceUSD != null
-                ? `USD ${model.priceUSD.toLocaleString("es-AR")}`
-                : "Consultar precio"}
-            </p>
+            <p className="text-2xl font-bold text-stone-900 leading-none">Consultar precio</p>
           </div>
           <div className="flex items-center gap-2">
             <Link

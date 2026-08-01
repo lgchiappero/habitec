@@ -46,7 +46,6 @@ function buildWAMessage(
   let msg = `Hola MOVARA! 👋 Usé el configurador regional y me recomendaron el modelo *${m.nombre}* para ${provincia}.\n\n`;
   msg += `📍 Zona: ${m.region}\n`;
   msg += `🎯 Uso: ${USO_LABELS[uso]}\n`;
-  msg += `💰 Precio estimado: USD ${m.precioMin.toLocaleString("es-AR")} – ${m.precioMax.toLocaleString("es-AR")}\n\n`;
   msg += `🔧 Especificaciones para mi zona:\n`;
   msg += `• Panel: ${m.panel}\n`;
   msg += `• Ventanas: ${m.ventanas}\n`;
@@ -299,10 +298,6 @@ function StepModelo({ c }: { c: ConfiguradorStore }) {
                   {modelo.climatizacion}
                 </p>
               </div>
-              <p className="mt-3 text-sm font-bold text-sage-700">
-                USD {modelo.precioMin.toLocaleString("es-AR")} –{" "}
-                {modelo.precioMax.toLocaleString("es-AR")}
-              </p>
             </div>
           </div>
         </div>
@@ -363,13 +358,6 @@ function StepModelo({ c }: { c: ConfiguradorStore }) {
                     {m.nombre}
                   </p>
                   <p className="text-xs text-stone-500 mt-0.5 leading-tight">{m.region}</p>
-                  <p
-                    className={`text-xs font-semibold mt-2 ${
-                      isSelected ? "text-sage-600" : "text-stone-400"
-                    }`}
-                  >
-                    USD {m.precioMin.toLocaleString("es-AR")}+
-                  </p>
                 </button>
               );
             })}
@@ -449,12 +437,12 @@ function StepResultado({
 
       {/* Price */}
       <div className="bg-stone-950 rounded-2xl p-5 text-center">
-        <p className="text-xs text-stone-500 uppercase tracking-widest mb-1.5">Precio estimado</p>
-        <p className="text-2xl font-bold text-white">
-          USD {modelo.precioMin.toLocaleString("es-AR")} – {modelo.precioMax.toLocaleString("es-AR")}
+        <p className="text-xs text-stone-500 uppercase tracking-widest mb-1.5">Presupuesto</p>
+        <p className="text-lg font-bold text-white leading-snug">
+          El precio varía según la configuración
         </p>
         <p className="text-xs text-stone-500 mt-1.5">
-          Incluye transporte e instalación estándar · {c.provincia}
+          Consultanos para tu presupuesto personalizado · {c.provincia}
         </p>
       </div>
 

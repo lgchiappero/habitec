@@ -29,7 +29,6 @@ const MOVARA_MODELS = [
     nombre: "MOVARA Flex 18",
     superficie: 18,
     tagline: "Studio, espacio mínimo o módulo independiente",
-    precio: { min: 15_000, max: 20_000 },
     maxHab: 1,
   },
   {
@@ -37,7 +36,6 @@ const MOVARA_MODELS = [
     nombre: "MOVARA Flex 37",
     superficie: 37,
     tagline: "El más versátil — 1 o 2 ambientes",
-    precio: { min: 22_000, max: 30_000 },
     maxHab: 2,
     badge: "Más elegido",
   },
@@ -46,7 +44,6 @@ const MOVARA_MODELS = [
     nombre: "MOVARA Flex 74",
     superficie: 74,
     tagline: "Máximo espacio — familia o inversión grande",
-    precio: { min: 35_000, max: 50_000 },
     maxHab: 3,
   },
 ] as const;
@@ -225,7 +222,6 @@ function buildWAMessage(params: {
     (selectedUpgradeNames.length
       ? `⚙️ Mejoras a cotizar: ${selectedUpgradeNames.join(", ")}\n`
       : `⚙️ Zona climática: ${regional?.region ?? params.regionalKey}\n`) +
-    `💰 Precio base estimado: USD ${m.precio.min.toLocaleString("es-AR")} – ${m.precio.max.toLocaleString("es-AR")}\n\n` +
     `Quedo a la espera de su presupuesto. Gracias!`;
 
   return sanitizarMensaje(msg, 1500);
@@ -575,7 +571,7 @@ function StepModelo({ modelo, onSelect, title, subtitle, taglines }: {
                 </div>
                 <div className="mt-4 flex items-center justify-between">
                   <span className={`text-xs font-semibold ${selected ? "text-sage-500" : "text-stone-400"}`}>
-                    USD {m.precio.min.toLocaleString("es-AR")} – {m.precio.max.toLocaleString("es-AR")}
+                    Precio según configuración
                   </span>
                   {selected && <span className="w-5 h-5 rounded-full bg-sage-500 flex items-center justify-center"><CheckIcon className="w-3 h-3 text-white" /></span>}
                 </div>
@@ -1345,13 +1341,11 @@ function ResultScreen({ modelo, finalidad, localidad, provincia, regional, habit
 
       {/* Price */}
       <div className="bg-[#2F2F2F] rounded-2xl p-6 text-center">
-        <p className="text-xs uppercase tracking-widest text-stone-500 mb-2">Precio base estimado</p>
-        <p className="text-3xl font-bold text-white">
-          USD {m.precio.min.toLocaleString("es-AR")}
-          <span className="text-stone-400 text-xl font-normal mx-2">–</span>
-          {m.precio.max.toLocaleString("es-AR")}
+        <p className="text-xs uppercase tracking-widest text-stone-500 mb-2">Presupuesto</p>
+        <p className="text-xl font-bold text-white leading-snug">El precio depende de tu configuración</p>
+        <p className="text-xs text-stone-500 mt-2">
+          Incluye fabricación, transporte e instalación estándar — te lo enviamos por WhatsApp
         </p>
-        <p className="text-xs text-stone-500 mt-2">Incluye fabricación, transporte e instalación estándar</p>
       </div>
 
       {/* WA message editor */}

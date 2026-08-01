@@ -21,12 +21,6 @@ describe("MODELS — integridad de datos estáticos", () => {
     }
   });
 
-  it("todos los modelos tienen priceUSD > 0", () => {
-    for (const m of MODELS) {
-      expect(m.priceUSD, `${m.slug} sin precio`).toBeGreaterThan(0);
-    }
-  });
-
   it("todos los modelos tienen al menos una imagen", () => {
     for (const m of MODELS) {
       expect(m.images, `${m.slug} sin imágenes`).toBeDefined();
@@ -61,14 +55,6 @@ describe("Seguridad de campos opcionales — modelos parciales de Sanity", () =>
     const partial = { images: undefined } as unknown as { images?: string[] };
     expect(() => partial.images?.[0]).not.toThrow();
     expect(partial.images?.[0]).toBeUndefined();
-  });
-
-  it("nullish coalescing para priceUSD null", () => {
-    const partial = { priceUSD: null } as unknown as { priceUSD: number | null };
-    const display = partial.priceUSD != null
-      ? `USD ${partial.priceUSD.toLocaleString("es-AR")}`
-      : "Consultar precio";
-    expect(display).toBe("Consultar precio");
   });
 
   it("floorPlanSize con fallback a 'medium'", () => {

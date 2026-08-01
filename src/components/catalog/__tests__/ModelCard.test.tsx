@@ -41,7 +41,6 @@ const FULL_MODEL: ProductModel = {
   size: 65,
   rooms: 3,
   baths: 2,
-  priceUSD: 34500,
   tag: "Más elegido",
   features: ["Feature 1", "Feature 2"],
   specs: {
@@ -77,18 +76,11 @@ describe("ModelCard", () => {
     const { container } = render(<ModelCard model={FULL_MODEL} />);
     expect(container).toBeTruthy();
     expect(screen.getByText("Familiar 65")).toBeInTheDocument();
-    expect(screen.getByText(/USD/)).toBeInTheDocument();
     expect(screen.getByText("Más elegido")).toBeInTheDocument();
   });
 
-  it("muestra el precio correctamente", () => {
+  it("muestra 'Consultar precio' — no se muestran precios unitarios", () => {
     render(<ModelCard model={FULL_MODEL} />);
-    expect(screen.getByText(/34\.500/)).toBeInTheDocument();
-  });
-
-  it("muestra 'Consultar precio' cuando priceUSD es null", () => {
-    const model = { ...FULL_MODEL, priceUSD: null } as unknown as ProductModel;
-    render(<ModelCard model={model} />);
     expect(screen.getByText("Consultar precio")).toBeInTheDocument();
   });
 

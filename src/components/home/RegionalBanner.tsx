@@ -54,12 +54,7 @@ export default function RegionalBanner({ data }: { data?: RegionalBannerData | n
 
             <div className="relative">
               <p className="text-xl font-bold text-white leading-tight">{m.nombre}</p>
-              <div className="flex items-center justify-between mt-1.5 gap-3">
-                <p className="text-sm font-medium text-sage-500">{m.region}</p>
-                <p className="text-xs text-stone-400 font-semibold shrink-0">
-                  USD {m.precioMin.toLocaleString("es-AR")}+
-                </p>
-              </div>
+              <p className="text-sm font-medium text-sage-500 mt-1.5">{m.region}</p>
               {/* Gold accent bar */}
               <div className="mt-3 h-px bg-gradient-to-r from-sage-600 to-transparent" />
             </div>

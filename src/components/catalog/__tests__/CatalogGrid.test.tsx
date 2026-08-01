@@ -39,7 +39,6 @@ const makeModel = (slug: string, size: number): ProductModel => ({
   size,
   rooms: 2,
   baths: 1,
-  priceUSD: 30000,
   features: [],
   specs: { estructura: "", cubierta: "", cerramiento: "", aislacion: "", instalaciones: "", terminaciones: "", tiempo: "", garantia: "" },
   images: [],

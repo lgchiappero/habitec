@@ -148,24 +148,17 @@ export default async function ModelDetailPage({ params }: Props) {
             </div>
 
             {/* Price */}
-            {model.priceUSD != null && (
-              <div className="bg-sage-50 border border-sage-100 rounded-2xl p-5">
-                <p className="text-xs font-semibold uppercase tracking-widest text-sage-700">
-                  {model.precioHasta ? "Precio estimado" : "Precio desde"}
-                </p>
-                <p className="text-4xl font-bold text-stone-900 mt-1">
-                  USD {model.priceUSD.toLocaleString("es-AR")}
-                  {model.precioHasta && (
-                    <span className="text-stone-400 text-2xl font-normal">
-                      {" – "}{model.precioHasta.toLocaleString("es-AR")}
-                    </span>
-                  )}
-                </p>
-                <p className="text-xs text-stone-500 mt-1">
-                  Incluye fabricación, transporte e instalación
-                </p>
-              </div>
-            )}
+            <div className="bg-sage-50 border border-sage-100 rounded-2xl p-5">
+              <p className="text-xs font-semibold uppercase tracking-widest text-sage-700">
+                Presupuesto
+              </p>
+              <p className="text-lg font-bold text-stone-900 mt-1">
+                El precio varía según la configuración
+              </p>
+              <p className="text-xs text-stone-500 mt-1">
+                Consultanos para tu presupuesto personalizado
+              </p>
+            </div>
 
             {/* Delivery time */}
             {model.specs?.tiempo && (

@@ -15,7 +15,6 @@ export const modeloType = defineType({
   type: 'document',
   groups: [
     { name: 'identificacion', title: 'Identificación' },
-    { name: 'precios', title: 'Precios' },
     { name: 'dimensiones', title: 'Dimensiones e incluidos' },
     { name: 'media', title: 'Fotos y multimedia' },
     { name: 'especificaciones', title: 'Especificaciones' },
@@ -59,21 +58,6 @@ export const modeloType = defineType({
         ],
         layout: 'radio',
       },
-    }),
-
-    // ── Precios ─────────────────────────────────────────────
-    defineField({
-      name: 'priceUSD',
-      title: 'Precio desde (USD)',
-      type: 'number',
-      group: 'precios',
-    }),
-    defineField({
-      name: 'precioHasta',
-      title: 'Precio hasta (USD)',
-      type: 'number',
-      description: 'Si se completa, se muestra un rango: "Desde USD X – USD Y"',
-      group: 'precios',
     }),
 
     // ── Dimensiones e incluidos ─────────────────────────────

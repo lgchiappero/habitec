@@ -17,7 +17,6 @@ const MODELS = [
     size: 65,
     rooms: 3,
     baths: 2,
-    price: "34.500",
     description:
       "La opción más popular para familias. Tres ambientes funcionales, cocina integrada y dos baños completos.",
     gradient: "from-sage-900/80 via-sage-800/60 to-sage-700/40",
@@ -33,7 +32,6 @@ const MODELS = [
     size: 35,
     rooms: 1,
     baths: 1,
-    price: "18.900",
     description:
       "Ideal para inversión turística o como espacio independiente. Diseño inteligente que maximiza cada metro cuadrado.",
     gradient: "from-sage-950/90 via-sage-900/70 to-sage-800/50",
@@ -49,7 +47,6 @@ const MODELS = [
     size: 95,
     rooms: 4,
     baths: 2,
-    price: "52.000",
     description:
       "El máximo en confort y diseño. Cuatro ambientes, terminaciones de primera y posibilidad de ampliación.",
     gradient: "from-stone-800/90 via-stone-700/70 to-stone-600/50",
@@ -102,15 +99,9 @@ export default function FeaturedModels({ data }: { data?: FeaturedModelsData | n
               </div>
 
               <div className="p-6">
-                <div className="flex items-start justify-between gap-4">
-                  <div>
-                    <h3 className="text-xl font-bold text-stone-900">{model.name}</h3>
-                    <p className="text-stone-400 text-sm mt-0.5">{model.size} m² totales</p>
-                  </div>
-                  <div className="text-right shrink-0">
-                    <p className="text-xs text-stone-400 leading-none">Desde</p>
-                    <p className="text-xl font-bold text-stone-900 mt-0.5">USD {model.price}</p>
-                  </div>
+                <div>
+                  <h3 className="text-xl font-bold text-stone-900">{model.name}</h3>
+                  <p className="text-stone-400 text-sm mt-0.5">{model.size} m² totales</p>
                 </div>
 
                 <p className="mt-4 text-sm text-stone-500 leading-relaxed">{model.description}</p>
