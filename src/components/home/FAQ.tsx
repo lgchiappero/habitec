@@ -3,6 +3,7 @@
 import { motion } from "framer-motion";
 import Link from "next/link";
 import FaqAccordion from "@/components/faq/FaqAccordion";
+import FaqWhatsAppCta from "@/components/faq/FaqWhatsAppCta";
 import { FAQ_CATEGORIES, type FaqCategory } from "@/data/faq";
 
 const PREGUNTAS_POR_CATEGORIA = 3;
@@ -43,6 +44,7 @@ export default function FAQ({ categorias }: { categorias?: FaqCategory[] | null 
                 <h3 className="font-bold text-[#2F2F2F] text-lg">{categoria.titulo}</h3>
               </div>
               <FaqAccordion items={categoria.preguntas.slice(0, PREGUNTAS_POR_CATEGORIA)} />
+              <FaqWhatsAppCta categoria={categoria.titulo} className="border-t border-stone-100" />
             </motion.div>
           ))}
         </div>

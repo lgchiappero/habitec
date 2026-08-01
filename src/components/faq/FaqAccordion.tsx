@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { ChevronDown } from "lucide-react";
-import type { FaqItem } from "@/data/faq";
+import type { FaqItem, FaqTabla } from "@/data/faq";
 
 export default function FaqAccordion({
   items,
@@ -47,15 +47,61 @@ export default function FaqAccordion({
                   transition={{ duration: 0.25, ease: "easeInOut" }}
                   className="overflow-hidden"
                 >
-                  <p className="pb-5 pr-8 text-stone-600 text-sm leading-relaxed">
-                    {item.respuesta}
-                  </p>
+                  <div className="pb-5 pr-8">
+                    <p className="text-stone-600 text-sm leading-relaxed">{item.respuesta}</p>
+                    {item.tabla && <FaqTablaComparativa tabla={item.tabla} />}
+                  </div>
                 </motion.div>
               )}
             </AnimatePresence>
           </div>
         );
       })}
+    </div>
+  );
+}
+
+function FaqTablaComparativa({ tabla }: { tabla: FaqTabla }) {
+  return (
+    <div className="mt-4 overflow-x-auto rounded-xl border border-stone-200">
+      <table className="w-full text-sm border-collapse min-w-[480px]">
+        <thead>
+          <tr>
+            {tabla.columnas.map((col, i) => {
+              const esMovara = col.trim().toUpperCase() === "MOVARA";
+              return (
+                <th
+                  key={i}
+                  className={`text-left font-semibold px-3.5 py-2.5 ${
+                    esMovara ? "bg-[#D4B06A] text-[#1C1C1C]" : "bg-stone-50 text-stone-600"
+                  }`}
+                >
+                  {col || " "}
+                </th>
+              );
+            })}
+          </tr>
+        </thead>
+        <tbody>
+          {tabla.filas.map((fila, ri) => (
+            <tr key={ri} className={ri % 2 === 1 ? "bg-stone-50/60" : ""}>
+              {fila.map((celda, ci) => {
+                const esMovara = tabla.columnas[ci]?.trim().toUpperCase() === "MOVARA";
+                return (
+                  <td
+                    key={ci}
+                    className={`px-3.5 py-2.5 align-top leading-relaxed border-t border-stone-100 ${
+                      esMovara ? "bg-[#D4B06A]/10 text-[#2F2F2F] font-medium" : "text-stone-500"
+                    }`}
+                  >
+                    {celda}
+                  </td>
+                );
+              })}
+            </tr>
+          ))}
+        </tbody>
+      </table>
     </div>
   );
 }

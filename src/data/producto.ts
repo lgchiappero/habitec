@@ -1,192 +1,194 @@
+export type ProductoResultado = {
+  label: string;
+  valorLabel: string;
+  limiteLabel: string;
+  /** Fracción del límite normativo utilizada (0–1). Cuanto más baja, más margen. */
+  fraccion: number;
+  mejora?: string;
+};
+
+export type ProductoGrupoLista = {
+  tipo: "lista";
+  id: string;
+  titulo: string;
+  items: string[];
+};
+
+export type ProductoGrupoTabla = {
+  tipo: "tabla";
+  id: string;
+  titulo: string;
+  columnas: string[];
+  filas: string[][];
+};
+
+export type ProductoGrupoBarras = {
+  tipo: "barras";
+  id: string;
+  titulo: string;
+  items: ProductoResultado[];
+};
+
+export type ProductoGrupo = ProductoGrupoLista | ProductoGrupoTabla | ProductoGrupoBarras;
+
 export type ProductoSeccion = {
   numero: string;
   titulo: string;
   descripcion: string;
   beneficios: string[];
-  specs: string[];
+  grupos: ProductoGrupo[];
 };
 
 export const PRODUCTO_SECCIONES: ProductoSeccion[] = [
   {
     numero: "01",
-    titulo: "Estructura de acero galvanizado",
+    titulo: "Estructura de acero Q235B — verificada por ingeniería",
     descripcion:
-      "La base de toda MOVARA es su estructura de acero galvanizado de alta resistencia. No es aluminio, no es madera — es acero industrial tratado para durar décadas sin oxidarse.",
+      "Cada unidad MOVARA se calcula antes de fabricarse, no después. La estructura pasa por un análisis de ingeniería con 96 combinaciones de carga que verifica los márgenes de seguridad reales frente a sismo, viento y uso — no solo que \"cumple la norma\".",
     beneficios: [
-      "Resistencia sísmica grado 8",
-      "Resistencia al viento 0.60 kN/m²",
-      "Galvanizado 180g/m² — doble del estándar básico del mercado",
-      "No se oxida, no se pudre, no la comen las termitas",
+      "Resiste sismos 12 veces por encima del mínimo normativo",
+      "Resiste vientos 6 veces por encima del mínimo normativo",
+      "Estructura calculada con 96 combinaciones de carga",
+      "Equivalente al acero ASTM A36 usado en construcción civil internacional",
     ],
-    specs: [
-      "Acero grado Q235B según norma GB/T6728-2017",
-      "Viga superior central: tubo 60×120×3.0mm",
-      "Viga inferior: tubo 80×80×3.0mm",
-      "Marco lateral superior: tubo 50×100×1.5mm",
-      "Marco lateral inferior: tubo 40×80×1.5mm",
-      "Columnas: piezas dobladas de 2.0mm",
-      "Recubrimiento galvanizado: 180 g/m²",
-      "Pintura: esmalte electrostático en polvo ≥80 micrones",
-      "Bisagras de plegado: galvanizadas 130mm + 150×170×120mm T10mm",
-      "Separación del suelo: solo 9mm",
+    grupos: [
+      {
+        tipo: "lista",
+        id: "specs",
+        titulo: "Especificaciones técnicas",
+        items: [
+          "Grado: Q235B — norma GB/T 700-2006",
+          "Equivalencia: ASTM A36 / S235JR",
+          "Límite elástico: ≥235 MPa",
+          "Resistencia a tracción: 370–500 MPa",
+          "Peso total: 3.500 kg",
+          "Software: PKPM 2021 V1.4.0",
+        ],
+      },
+      {
+        tipo: "barras",
+        id: "resultados",
+        titulo: "Resultados de verificación estructural",
+        items: [
+          {
+            label: "Relación tensión máxima",
+            valorLabel: "0.802",
+            limiteLabel: "límite 1.0",
+            fraccion: 0.802,
+          },
+          {
+            label: "Deflexión máxima",
+            valorLabel: "L/790",
+            limiteLabel: "límite L/180",
+            fraccion: 180 / 790,
+            mejora: "4x mejor",
+          },
+          {
+            label: "Desplazamiento por viento",
+            valorLabel: "H/368",
+            limiteLabel: "límite H/60",
+            fraccion: 60 / 368,
+            mejora: "6x mejor",
+          },
+          {
+            label: "Desplazamiento sísmico",
+            valorLabel: "H/742",
+            limiteLabel: "límite H/60",
+            fraccion: 60 / 742,
+            mejora: "12x mejor",
+          },
+        ],
+      },
     ],
   },
   {
     numero: "02",
-    titulo: "Paredes con lana de roca 75mm",
+    titulo: "3 capas de protección industrial — apta para costa y campo",
     descripcion:
-      "Las paredes de MOVARA no son simples chapas. Son paneles de lana de roca de 75mm — incombustible y con la mejor aislación térmica disponible.",
+      "El acero no se pinta una sola vez: se protege con un sistema de 3 capas aplicado en taller, bajo condiciones controladas, pensado para resistir humedad, salinidad y exposición permanente a la intemperie sin repintar cada par de años.",
     beneficios: [
-      "Incombustible — Clase A1, no arde ni se derrite",
-      "Superior aislación térmica vs EPS estándar del mercado",
-      "No absorbe humedad",
-      "Múltiples terminaciones estéticas a elección",
+      "3 capas de pintura industrial aplicadas en taller",
+      "Apta para ambientes costeros e industriales (ISO 12944 C3-C4)",
+      "Durabilidad estimada: 10–15 años sin repintado",
+      "Preparación de superficie por granallado grado Sa 2.5",
     ],
-    specs: [
-      "Material: panel de lana de roca 75mm",
-      "Clasificación de fuego: Clase A1 — incombustible",
-      "Conductividad térmica: λ = 0.036–0.040 W/m·K",
-      "Revestimiento exterior: panel metálico de 16mm (compuesto con espuma de poliuretano)",
-      "Terminaciones disponibles: liso (blanco, gris, beige, marrón) o metálico tallado",
-      "Particiones internas: panel EPS 50mm",
+    grupos: [
+      {
+        tipo: "lista",
+        id: "specs",
+        titulo: "Especificaciones técnicas",
+        items: [
+          "Capa 1: Epoxi rica en zinc, zinc ≥80%, 60–80 micrones",
+          "Capa 2: Epoxi alto sólido, 80–100 micrones",
+          "Capa 3: Poliuretano alifático, 40–60 micrones, carta RAL",
+          "Espesor total: 180–240 micrones",
+          "Norma: ISO 12944 C3-C4",
+        ],
+      },
     ],
   },
   {
     numero: "03",
-    titulo: "Techo con panel sándwich de poliuretano",
+    titulo: "5 capas de aislación — 4 veces más eficiente que una pared de ladrillos",
     descripcion:
-      "El techo es donde más se pierde calor en invierno y más entra en verano. MOVARA usa panel sándwich de poliuretano — estructuralmente rígido con la mejor aislación disponible.",
+      "Las paredes de MOVARA no son un panel simple: son un sistema de 5 capas armado en fábrica, calculado para superar el rendimiento térmico y acústico de una pared de ladrillos común, con barrera de vapor integrada de fábrica.",
     beneficios: [
-      "Mejor aislación que lana de roca y EPS en el mismo espesor",
-      "No se deforma con lluvia ni granizo",
-      "Sistema de impermeabilización de 5 capas",
-      "Sin goteras",
+      "Coeficiente U: ≤0.45 W/m²·K (ladrillos típicos: 1.5–2.0)",
+      "Aislación acústica: ≥45 dB",
+      "Barrera de vapor integrada",
+      "Sistema completo de 5 capas de fábrica",
     ],
-    specs: [
-      "Material: panel sándwich núcleo PU",
-      "Espesor: 50mm o 75mm según configuración",
-      "Conductividad térmica: λ = 0.022 W/m·K",
-      "Chapa exterior: acero color 0.35mm doble cara",
-      "Impermeabilización: cola + cinta butil + tela no tejida + 3 capas pintura Oriental Yuhong",
-      "Garantía impermeabilización: más de 5 años",
+    grupos: [
+      {
+        tipo: "tabla",
+        id: "capas",
+        titulo: "Las 5 capas del sistema",
+        columnas: ["Capa", "Material", "Función"],
+        filas: [
+          ["1", "Polietileno 0.2mm", "Barrera anti-condensación"],
+          ["2", "EPS 70mm", "Aislación térmica"],
+          ["3", "EPS 70mm", "Aislación acústica"],
+          ["4", "Acero galvanizado 1mm", "Barrera de vapor"],
+          ["5", "Bambú/madera o acero lacado 4mm", "Acabado interior"],
+        ],
+      },
+      {
+        tipo: "tabla",
+        id: "opciones",
+        titulo: "Opciones de aislación",
+        columnas: ["", "Opción A — Lana de vidrio", "Opción B — Poliuretano inyectado (recomendado)"],
+        filas: [
+          ["Conductividad (λ)", "≤0.040 W/m·K", "≤0.024 W/m·K"],
+          ["Resistencia térmica (R)", "≥1.5 m²K/W", "≥2.5 m²K/W"],
+          ["Clasificación de fuego", "Clase A1 — incombustible", "Clase B2"],
+        ],
+      },
     ],
   },
   {
     numero: "04",
-    titulo: "Piso impermeable y resistente",
+    titulo: "Soldadura industrial certificada — no hay pernos estructurales",
     descripcion:
-      "El piso de MOVARA está diseñado para durar — impermeable, anticorrosivo, resistente a insectos y fácil de limpiar.",
+      "Las uniones estructurales de MOVARA no se atornillan: se sueldan en taller bajo procesos industriales controlados, con inspección posterior por ultrasonido en cada unión crítica. Menos puntos de falla, más control de calidad.",
     beneficios: [
-      "No se pudre ni se levanta con la humedad",
-      "Resistente a termitas",
-      "Fácil de limpiar",
-      "SPC 4mm superior al PVC estándar en durabilidad",
+      "Uniones soldadas por arco sumergido en taller",
+      "Control 100% en todas las uniones",
+      "Inspección por ultrasonidos",
+      "Alta soldabilidad sin tratamiento térmico",
     ],
-    specs: [
-      "Base estructural: tablero de fibra de cemento (MGO) 18mm",
-      "Opción 1: PVC 2mm — 5 colores (marrón, gris oscuro, blanco, maple, nogal)",
-      "Opción 2: SPC/LVT 4mm — 4 colores — más resistente",
-      "Carga viva: 2.0 kN/m²",
+    grupos: [
+      {
+        tipo: "lista",
+        id: "specs",
+        titulo: "Especificaciones técnicas",
+        items: [
+          "Proceso principal: SAW — uniones vigas-columnas",
+          "Proceso secundario: MAG/MIG",
+          "Proceso en campo: SMAW",
+          "Carbono equivalente CEV: ≤0.38%",
+        ],
+      },
     ],
-  },
-  {
-    numero: "05",
-    titulo: "Baño completo integrado",
-    descripcion:
-      "El baño llega instalado y listo para usar. No hay obra, no hay plomero, no hay meses de espera.",
-    beneficios: [
-      "Listo para usar el día de la instalación",
-      "Sin obra ni mano de obra adicional",
-      "Separación seca/húmeda incluida",
-      "Materiales de alta calidad estética",
-    ],
-    specs: [
-      "Set completo: espejo + lavabo + inodoro + ducha + panel de pared + suelo de mármol + puerta corrediza bidireccional",
-      "Paneles de pared: panel UV en mármol blanco, gris, blanco liso o beige",
-      "Ventana: 500×500mm aluminio con RPT",
-      "Opciones: inodoro estándar o inteligente con bidet / bañera en lugar de ducha",
-    ],
-  },
-  {
-    numero: "06",
-    titulo: "Cocina equipada y lista",
-    descripcion:
-      "La cocina llega instalada con muebles, pileta y grifo. Solo conectás el agua y empezás a usarla.",
-    beneficios: [
-      "Lista para usar desde el primer día",
-      "Mesada de alta resistencia al calor y al rayado",
-      "Múltiples configuraciones según el uso",
-    ],
-    specs: [
-      "Distribuciones: en L, en U o con alacena superior",
-      "Muebles: paneles lacados blanco, gris u oscuro",
-      "Mesada: nano-cerámica cristal (negro, blanco/mármol o gris)",
-      "Pileta: acero inoxidable + grifo incluido",
-      "Cocción: vitrocerámica incluida o espacio para gas",
-      "Opciones: extractor, alacena superior, ventana cerca de cocción",
-    ],
-  },
-  {
-    numero: "07",
-    titulo: "Ventanas y puertas DVH con RPT",
-    descripcion:
-      "Las ventanas de MOVARA son las mismas que se usan en construcción premium. Doble vidrio hermético con rotura de puente térmico — no dejan pasar el frío ni el calor.",
-    beneficios: [
-      "Sin condensación en invierno",
-      "Sin entrada de calor en verano",
-      "Aislación acústica ≥30 dB",
-      "Sin filtraciones con precipitación de 16mm/min",
-    ],
-    specs: [
-      "Ventanas: DVH 930×930mm, marco aluminio con RPT",
-      "Cantidad: 8 ventanas estándar + 1 pequeña en baño",
-      "Incluye: mosquiteros + cortinas interiores",
-      "Puerta de entrada: DVH + marco metálico aislado, 1900×2100mm",
-      "Opción: rejas de seguridad",
-    ],
-  },
-  {
-    numero: "08",
-    titulo: "Instalación eléctrica completa",
-    descripcion:
-      "Todo el sistema eléctrico viene instalado y adaptado al estándar argentino. Solo conectás a la red y listo.",
-    beneficios: [
-      "Compatible con la red eléctrica argentina sin adaptadores",
-      "Dimensionado correctamente por circuito",
-      "Protección diferencial incluida — seguridad ante cortocircuitos",
-    ],
-    specs: [
-      "Estándar: 220V, 50Hz, enchufe Tipo I (estándar argentino)",
-      "Tablero: disyuntor 40A + 2 diferenciales 25A + 2 protecciones 20A + 1 disyuntor 10A",
-      "Cableado: entrada 3×6mm², AA 3×2.5mm², generales 3×2.5mm², iluminación 2×1.5mm²",
-      "Iluminación: plafones LED 300×300mm impermeables ×6",
-      "Tomacorrientes: panel ultra-delgado estándar IRAM",
-      "Enchufe industrial CEE: 220V/50Hz/3P/64A",
-    ],
-  },
-  {
-    numero: "09",
-    titulo: "Calefón eléctrico incluido",
-    descripcion: "Agua caliente disponible desde el primer día, tanto en la cocina como en el baño.",
-    beneficios: [
-      "Incluido sin costo adicional en todas las unidades",
-      "Agua caliente en cocina y baño desde el día 1",
-    ],
-    specs: ["Calefón eléctrico instantáneo de fábrica", "Conexión: cocina y baño"],
-  },
-  {
-    numero: "10",
-    titulo: "Certificaciones",
-    descripcion:
-      "MOVARA importa producto certificado internacionalmente. No comprás una promesa — comprás un producto con documentación técnica verificable.",
-    beneficios: [
-      "Certificado de conformidad ECM Italia — EN 1090-1:2009+A1:2011",
-      "Vigencia hasta 2029",
-      "96 páginas de documentación estructural",
-      "Acero certificado norma GB/T6728-2017",
-      "En proceso de certificación ante la Dirección de Reglamentos Técnicos de Argentina",
-    ],
-    specs: ["Modelo certificado: HS-09", "Acero: certificados de colada Tianjin Yuantai Derun"],
   },
 ];
 

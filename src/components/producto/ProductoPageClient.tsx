@@ -41,7 +41,7 @@ export default function ProductoPageClient() {
             transition={{ duration: 0.5, delay: 0.1 }}
             className="mt-4 text-lg text-stone-400 max-w-2xl mx-auto"
           >
-            Datos reales del proveedor Heshi. Cada material, cada capa, cada certificación — sin letra chica.
+            Datos técnicos reales, verificados por ingeniería. Cada material, cada capa, cada certificación — sin letra chica.
           </motion.p>
         </div>
       </section>
@@ -50,7 +50,7 @@ export default function ProductoPageClient() {
       <EspecificacionesCompletas dark className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8" />
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        {/* 11. Extras y personalización */}
+        {/* 05. Extras y personalización */}
         <motion.section
           initial={{ opacity: 0, y: 24 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -60,7 +60,7 @@ export default function ProductoPageClient() {
         >
           <div className="flex items-start gap-5">
             <span className="shrink-0 w-12 h-12 rounded-xl bg-[#D4B06A]/10 border border-[#D4B06A]/30 flex items-center justify-center text-[#D4B06A] font-bold text-sm">
-              11
+              05
             </span>
             <div className="flex-1 min-w-0">
               <h2 className="text-2xl font-bold text-white">Extras y personalización</h2>

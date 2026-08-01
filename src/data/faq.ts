@@ -1,7 +1,13 @@
+export type FaqTabla = {
+  columnas: string[];
+  filas: string[][];
+};
+
 export type FaqItem = {
   _key?: string;
   pregunta: string;
   respuesta: string;
+  tabla?: FaqTabla;
 };
 
 export type FaqCategory = {
@@ -126,6 +132,110 @@ export const FAQ_CATEGORIES: FaqCategory[] = [
       },
     ],
   },
+  {
+    titulo: "Calidad",
+    icono: "🛡️",
+    preguntas: [
+      {
+        pregunta: "¿Una casa modular es tan resistente como una de material?",
+        respuesta:
+          "Es más resistente en los puntos que suelen fallar en obra tradicional. La estructura de acero Q235B de MOVARA se calcula con software de ingeniería estructural antes de fabricarse — con 96 combinaciones de carga — algo que rara vez se verifica en una construcción de albañilería. El resultado son márgenes de seguridad muy por encima del mínimo normativo, no solo el cumplimiento justo.",
+        tabla: {
+          columnas: ["", "Construcción tradicional", "MOVARA"],
+          filas: [
+            ["Cálculo estructural", "Rara vez se verifica con software", "Verificado con 96 combinaciones de carga (PKPM)"],
+            ["Margen ante sismo", "Cumple el mínimo normativo", "12 veces por encima del mínimo normativo"],
+            ["Margen ante viento", "Cumple el mínimo normativo", "6 veces por encima del mínimo normativo"],
+            ["Uniones estructurales", "Variable según la mano de obra", "100% soldadas e inspeccionadas por ultrasonido"],
+          ],
+        },
+      },
+      {
+        pregunta: "¿El acero no se oxida?",
+        respuesta:
+          "No, porque nunca queda expuesto: pasa por un sistema de 3 capas de protección industrial aplicado en taller (granallado Sa 2.5 + epoxi rica en zinc + epoxi alto sólido + poliuretano alifático), con un espesor total de 180 a 240 micrones. Cumple la norma ISO 12944 en su clasificación C3-C4, apta para ambientes costeros e industriales, con una durabilidad estimada de 10 a 15 años sin repintar.",
+      },
+      {
+        pregunta: "¿Cómo es el acabado interior? ¿Se ve como un container?",
+        respuesta:
+          "No. Por dentro no se ve chapa ni estructura expuesta: la última capa del sistema de paredes es un tablero de bambú/madera o acero lacado, igual que un revestimiento interior de una construcción tradicional. El sistema completo de 5 capas también le da a la pared un coeficiente térmico U ≤0.45 W/m²·K y aislación acústica ≥45 dB — muy por encima de una pared de ladrillos común.",
+      },
+    ],
+  },
+  {
+    titulo: "Clima",
+    icono: "🌦️",
+    preguntas: [
+      {
+        pregunta: "¿Cómo se comporta en el calor del norte argentino?",
+        respuesta:
+          "Bien, porque la aislación no es un agregado sino parte de la estructura: paredes con coeficiente U ≤0.45 W/m²·K (hasta 4 veces más eficiente que una pared de ladrillos), techo de panel sándwich de poliuretano y ventanas DVH con rotura de puente térmico que evitan la entrada de calor. Para climas más exigentes, ofrecemos la opción de poliuretano inyectado como upgrade de aislación (λ≤0.024 W/m·K).",
+      },
+      {
+        pregunta: "¿Y en la Patagonia con el frío y el viento?",
+        respuesta:
+          "La estructura está calculada específicamente para cargas de viento, con un margen de 6 veces por encima del mínimo normativo. Las aberturas DVH con RPT evitan condensación y puentes térmicos, y el sistema de aislación de 5 capas incluye barrera de vapor de fábrica — no es algo que se agrega después según el clima de cada obra.",
+      },
+      {
+        pregunta: "¿Aguanta la lluvia y la humedad del litoral?",
+        respuesta:
+          "Sí. El sistema anticorrosivo de 3 capas está clasificado para ambientes costeros e industriales (ISO 12944 C3-C4), el techo tiene impermeabilización propia y la barrera de vapor integrada en la pared evita que la humedad ambiente condense dentro del sistema de aislación.",
+      },
+    ],
+  },
+  {
+    titulo: "Seguridad",
+    icono: "🔒",
+    preguntas: [
+      {
+        pregunta: "¿Qué pasa en un sismo?",
+        respuesta:
+          "La estructura está verificada para un desplazamiento sísmico de H/742, cuando la norma exige como mínimo H/60 — un margen 12 veces mayor al mínimo normativo. Además, al no tener uniones atornilladas (todo es soldado e inspeccionado por ultrasonido), no hay pernos que puedan aflojarse ante un movimiento sísmico.",
+      },
+      {
+        pregunta: "¿El acero no conduce el calor en caso de incendio?",
+        respuesta:
+          "El acero estructural no queda expuesto: está envuelto por el sistema de aislación de lana de roca o EPS, materiales de clasificación de fuego Clase A1 (incombustible) o B2 según la opción elegida, que retrasan la transferencia de calor hacia la estructura. Ninguna vivienda es inmune al fuego, pero esto la pone en mejores condiciones que una estructura de madera, que además es combustible en sí misma.",
+      },
+    ],
+  },
+  {
+    titulo: "Proceso",
+    icono: "⏱️",
+    preguntas: [
+      {
+        pregunta: "¿Cuánto tarda en estar lista?",
+        respuesta:
+          "La fabricación toma entre 4 y 8 semanas, según el modelo y la configuración. A eso se suma el transporte hasta tu provincia (varía según la distancia) y la instalación en el terreno, que toma entre 1 y 3 días. En total, es un proceso de semanas — no de meses o años como una obra tradicional.",
+      },
+      {
+        pregunta: "¿Necesito hacer obra en el terreno?",
+        respuesta:
+          "Necesitás una base o fundación básica — puede ser una platea de hormigón, vigas de nivel o pilotes, según tu terreno — más acceso para un camión con grúa. No es obra tradicional: no hay albañilería, no hay meses de plazo, y te asesoramos en cada caso según tu ubicación.",
+      },
+      {
+        pregunta: "¿Qué pasa si algo llega dañado?",
+        respuesta:
+          "Cada unidad pasa por control de calidad antes de salir de fábrica, incluida la inspección por ultrasonido de las uniones estructurales. Si de todas formas algo se daña durante el transporte, gestionamos el reclamo junto con la transportista — el flete está cubierto por seguro — y coordinamos la solución antes de la entrega final.",
+      },
+    ],
+  },
+  {
+    titulo: "Precio",
+    icono: "💵",
+    preguntas: [
+      {
+        pregunta: "¿Por qué es más barata que una construcción tradicional?",
+        respuesta:
+          "Porque se fabrica en planta, en un proceso industrializado y en paralelo — no en un terreno, a la intemperie, con mano de obra artesanal y tiempos que se estiran. En Argentina una obra tradicional pensada para 8 meses tarda en promedio 2.3 años, y esos sobrecostos de tiempo terminan en el precio final. MOVARA tiene precio fijo, sin sorpresas ni imprevistos de obra.",
+      },
+      {
+        pregunta: "¿Tiene financiación?",
+        respuesta:
+          "Actualmente operamos con preventa: reservás tu unidad a precio de lanzamiento y las condiciones de pago se conversan en cada caso según tu situación. Consultanos por WhatsApp para conocer las opciones disponibles.",
+      },
+    ],
+  },
 ];
 
 /** Paleta por categoría, en el mismo orden que FAQ_CATEGORIES. */
@@ -135,4 +245,9 @@ export const FAQ_CATEGORY_COLORS = [
   { text: "text-emerald-600", bg: "bg-emerald-50", border: "border-emerald-200" },
   { text: "text-orange-600", bg: "bg-orange-50", border: "border-orange-200" },
   { text: "text-violet-600", bg: "bg-violet-50", border: "border-violet-200" },
+  { text: "text-rose-600", bg: "bg-rose-50", border: "border-rose-200" },
+  { text: "text-cyan-600", bg: "bg-cyan-50", border: "border-cyan-200" },
+  { text: "text-red-600", bg: "bg-red-50", border: "border-red-200" },
+  { text: "text-indigo-600", bg: "bg-indigo-50", border: "border-indigo-200" },
+  { text: "text-amber-600", bg: "bg-amber-50", border: "border-amber-200" },
 ];

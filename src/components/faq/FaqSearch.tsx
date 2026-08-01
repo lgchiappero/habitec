@@ -3,6 +3,7 @@
 import { useMemo, useState } from "react";
 import { Search } from "lucide-react";
 import FaqAccordion from "@/components/faq/FaqAccordion";
+import FaqWhatsAppCta from "@/components/faq/FaqWhatsAppCta";
 import { FAQ_CATEGORY_COLORS, type FaqCategory } from "@/data/faq";
 
 export default function FaqSearch({ categorias }: { categorias: FaqCategory[] }) {
@@ -63,6 +64,7 @@ export default function FaqSearch({ categorias }: { categorias: FaqCategory[] })
                   <h2 className={`font-bold text-lg ${color.text}`}>{categoria.titulo}</h2>
                 </div>
                 <FaqAccordion items={categoria.preguntas} />
+                <FaqWhatsAppCta categoria={categoria.titulo} className={`border-t ${color.border}`} />
               </section>
             );
           })}

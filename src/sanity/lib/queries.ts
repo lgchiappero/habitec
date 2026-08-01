@@ -253,7 +253,12 @@ export const FAQ_PAGE_QUERY = groq`
       _key,
       titulo,
       icono,
-      preguntas[] { _key, pregunta, respuesta },
+      preguntas[] {
+        _key,
+        pregunta,
+        respuesta,
+        "tabla": tabla{ columnas, "filas": filas[].celdas },
+      },
     },
   }
 `
