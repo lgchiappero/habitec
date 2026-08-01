@@ -13,7 +13,7 @@ import ContactoForm from "@/components/home/ContactoForm";
 import ConfiguradorRegional from "@/components/configurador/ConfiguradorRegional";
 import Footer from "@/components/home/Footer";
 import { client } from "@/sanity/lib/client";
-import { SITE_CONFIG_QUERY, HOME_PAGE_QUERY, FLEX_HOME_QUERY, FAQ_PAGE_QUERY } from "@/sanity/lib/queries";
+import { SITE_CONFIG_QUERY, HOME_PAGE_QUERY, FLEX_CARD_QUERY, FAQ_PAGE_QUERY } from "@/sanity/lib/queries";
 import type { FaqCategory } from "@/data/faq";
 
 async function getPageData() {
@@ -21,7 +21,7 @@ async function getPageData() {
     const [config, homePage, flex, faqPage] = await Promise.all([
       client.fetch<{ whatsappNumber?: string | null }>(SITE_CONFIG_QUERY),
       client.fetch(HOME_PAGE_QUERY),
-      client.fetch(FLEX_HOME_QUERY),
+      client.fetch(FLEX_CARD_QUERY),
       client.fetch<{ categorias?: FaqCategory[] } | null>(FAQ_PAGE_QUERY),
     ]);
     return {

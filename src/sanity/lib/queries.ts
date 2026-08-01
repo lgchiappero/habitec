@@ -128,7 +128,7 @@ export const CONFIGURADOR_PAGE_QUERY = groq`
   }
 `
 
-export const FLEX_HOME_QUERY = groq`
+export const FLEX_CARD_QUERY = groq`
   *[_type == "flexPage"][0] {
     "nombre": hero.title,
     "imagen": galeria[0]{ asset, hotspot, crop },
@@ -190,7 +190,7 @@ export const HOME_PAGE_QUERY = groq`
     modelosHome {
       titulo,
       subtitulo,
-      ctaReservar,
+      ctaVerModelo,
       ctaCatalogo,
     },
     pruebaSocial {

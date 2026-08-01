@@ -1,8 +1,9 @@
 import type { Metadata } from "next";
 import { client } from "@/sanity/lib/client";
-import { MODELOS_QUERY } from "@/sanity/lib/queries";
+import { MODELOS_QUERY, FLEX_CARD_QUERY } from "@/sanity/lib/queries";
 import { MODELS, type ProductModel } from "@/data/models";
 import CatalogGrid from "@/components/catalog/CatalogGrid";
+import FlexFeatureCard, { type FlexCardData } from "@/components/modelos/FlexFeatureCard";
 
 export const metadata: Metadata = {
   title: "Catálogo de Modelos — MOVARA",
@@ -22,8 +23,16 @@ async function getModelos(): Promise<ProductModel[]> {
   return MODELS;
 }
 
+async function getFlex(): Promise<FlexCardData> {
+  try {
+    return await client.fetch<FlexCardData>(FLEX_CARD_QUERY);
+  } catch {
+    return null;
+  }
+}
+
 export default async function CatalogPage() {
-  const models = await getModelos();
+  const [models, flex] = await Promise.all([getModelos(), getFlex()]);
 
   return (
     <>
@@ -41,6 +50,11 @@ export default async function CatalogPage() {
             colores. Entregamos en toda la Argentina.
           </p>
         </div>
+      </div>
+
+      {/* MOVARA Flex */}
+      <div className="max-w-7xl mx-auto px-6 lg:px-8 pt-14">
+        <FlexFeatureCard flex={flex} ctaLabel="Ver modelo" />
       </div>
 
       {/* Catalog */}

@@ -380,10 +380,10 @@ export const homePageType = defineType({
           initialValue: 'Más modelos en camino.',
         }),
         defineField({
-          name: 'ctaReservar',
-          title: 'Texto botón "Reservar"',
+          name: 'ctaVerModelo',
+          title: 'Texto botón "Ver modelo"',
           type: 'string',
-          initialValue: 'Reservar precio',
+          initialValue: 'Ver modelo',
         }),
         defineField({
           name: 'ctaCatalogo',
