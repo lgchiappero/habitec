@@ -18,9 +18,15 @@ vi.mock("next/image", () => ({
 }));
 
 vi.mock("@/sanity/lib/image", () => ({
-  urlFor: () => ({
-    width: () => ({ height: () => ({ fit: () => ({ auto: () => ({ url: () => "https://cdn.sanity.io/test.jpg" }) }) }) }),
-  }),
+  // Builder chainable: cualquier método (width, height, fit, auto...)
+  // devuelve el propio proxy; solo url() termina la cadena.
+  urlFor: () => {
+    const target: Record<string, unknown> = { url: () => "https://cdn.sanity.io/test.jpg" };
+    const proxy: Record<string, unknown> = new Proxy(target, {
+      get: (t, prop) => (prop in t ? t[prop as string] : () => proxy),
+    });
+    return proxy;
+  },
 }));
 
 const mockOpenWizard = vi.fn();

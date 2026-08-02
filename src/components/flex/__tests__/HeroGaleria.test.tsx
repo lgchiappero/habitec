@@ -1,5 +1,6 @@
 import { describe, it, expect, vi } from "vitest";
 import { render, screen } from "@testing-library/react";
+import userEvent from "@testing-library/user-event";
 import HeroGaleria from "../HeroGaleria";
 
 vi.mock("next/image", () => ({
@@ -26,9 +27,13 @@ vi.mock("@/sanity/lib/image", () => ({
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   urlFor: (source: any) => {
     void source.asset._ref;
-    return {
-      width: () => ({ height: () => ({ fit: () => ({ auto: () => ({ url: () => "https://cdn.sanity.io/test.jpg" }) }) }) }),
-    };
+    // Builder chainable: cualquier método encadenado (width, height, fit,
+    // auto...) devuelve el propio proxy; solo url() termina la cadena.
+    const target: Record<string, unknown> = { url: () => "https://cdn.sanity.io/test.jpg" };
+    const proxy: Record<string, unknown> = new Proxy(target, {
+      get: (t, prop) => (prop in t ? t[prop as string] : () => proxy),
+    });
+    return proxy;
   },
 }));
 
@@ -82,5 +87,89 @@ describe("HeroGaleria — seguridad ante referencias de imagen nulas", () => {
       />,
     );
     expect(screen.getAllByAltText("Foto válida").length).toBeGreaterThan(0);
+  });
+});
+
+const IMG_1 = { asset: { _ref: "image-uno-800x600-jpg", _type: "reference" }, label: "Foto uno" };
+const IMG_2 = { asset: { _ref: "image-dos-800x600-jpg", _type: "reference" }, label: "Foto dos" };
+const IMG_3 = { asset: { _ref: "image-tres-800x600-jpg", _type: "reference" }, label: "Foto tres" };
+
+describe("HeroGaleria — navegación", () => {
+  it("muestra el contador '1 / N' y avanza con la flecha derecha", async () => {
+    const user = userEvent.setup();
+    render(
+      <HeroGaleria
+        title="MOVARA Flex"
+        ctaLabel="Quiero este modelo"
+        ctaHref="#"
+        images={[IMG_1, IMG_2, IMG_3]}
+      />,
+    );
+    expect(screen.getByText("1 / 3")).toBeInTheDocument();
+
+    await user.click(screen.getByRole("button", { name: /foto siguiente/i }));
+    expect(screen.getByText("2 / 3")).toBeInTheDocument();
+  });
+
+  it("retrocede con la flecha izquierda y da la vuelta desde la primera foto", async () => {
+    const user = userEvent.setup();
+    render(
+      <HeroGaleria
+        title="MOVARA Flex"
+        ctaLabel="Quiero este modelo"
+        ctaHref="#"
+        images={[IMG_1, IMG_2, IMG_3]}
+      />,
+    );
+    await user.click(screen.getByRole("button", { name: /foto anterior/i }));
+    expect(screen.getByText("3 / 3")).toBeInTheDocument();
+  });
+
+  it("navega con las flechas ArrowRight / ArrowLeft del teclado", async () => {
+    const user = userEvent.setup();
+    render(
+      <HeroGaleria
+        title="MOVARA Flex"
+        ctaLabel="Quiero este modelo"
+        ctaHref="#"
+        images={[IMG_1, IMG_2, IMG_3]}
+      />,
+    );
+    await user.keyboard("{ArrowRight}");
+    expect(screen.getByText("2 / 3")).toBeInTheDocument();
+
+    await user.keyboard("{ArrowLeft}");
+    expect(screen.getByText("1 / 3")).toBeInTheDocument();
+  });
+
+  it("clickear un thumbnail navega directo a esa foto y lo marca activo", async () => {
+    const user = userEvent.setup();
+    render(
+      <HeroGaleria
+        title="MOVARA Flex"
+        ctaLabel="Quiero este modelo"
+        ctaHref="#"
+        images={[IMG_1, IMG_2, IMG_3]}
+      />,
+    );
+    const thumb3 = screen.getByRole("button", { name: "Foto tres" });
+    await user.click(thumb3);
+
+    expect(screen.getByText("3 / 3")).toBeInTheDocument();
+    expect(thumb3).toHaveAttribute("aria-pressed", "true");
+  });
+
+  it("no muestra flechas ni contador cuando hay una sola foto", () => {
+    render(
+      <HeroGaleria
+        title="MOVARA Flex"
+        ctaLabel="Quiero este modelo"
+        ctaHref="#"
+        images={[IMG_1]}
+      />,
+    );
+    expect(screen.queryByRole("button", { name: /foto siguiente/i })).not.toBeInTheDocument();
+    expect(screen.queryByRole("button", { name: /foto anterior/i })).not.toBeInTheDocument();
+    expect(screen.queryByText("1 / 1")).not.toBeInTheDocument();
   });
 });

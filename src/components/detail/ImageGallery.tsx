@@ -148,7 +148,7 @@ export default function ImageGallery({ images, modelName, video, videos }: Props
 
       {/* Main display */}
       <div
-        className="relative w-full aspect-[4/3] rounded-2xl overflow-hidden bg-stone-900"
+        className="relative w-full aspect-video rounded-2xl overflow-hidden bg-stone-900"
         onTouchStart={handleTouchStart}
         onTouchEnd={handleTouchEnd}
       >
@@ -172,7 +172,7 @@ export default function ImageGallery({ images, modelName, video, videos }: Props
           )
         ) : isSanityImage(active.img) ? (
           <Image
-            src={urlFor(active.img).width(900).height(675).fit("max").auto("format").url()}
+            src={urlFor({ asset: active.img.asset }).width(900).fit("max").auto("format").url()}
             alt={active.img.label ?? modelName}
             fill
             className="object-contain transition-opacity duration-500"
@@ -235,7 +235,7 @@ export default function ImageGallery({ images, modelName, video, videos }: Props
             <button
               key={i}
               onClick={() => setSelected(i)}
-              className={`relative aspect-[4/3] rounded-xl overflow-hidden bg-stone-900 transition-all duration-200 ${
+              className={`relative aspect-square rounded-xl overflow-hidden bg-stone-900 transition-all duration-200 ${
                 i === activeIdx
                   ? "ring-2 ring-sage-500 ring-offset-2"
                   : "opacity-60 hover:opacity-80"
@@ -248,9 +248,8 @@ export default function ImageGallery({ images, modelName, video, videos }: Props
                 <VideoThumbnail label={item.label} />
               ) : isSanityImage(item.img) ? (
                 <Image
-                  src={urlFor(item.img)
+                  src={urlFor({ asset: item.img.asset })
                     .width(200)
-                    .height(150)
                     .fit("max")
                     .auto("format")
                     .url()}

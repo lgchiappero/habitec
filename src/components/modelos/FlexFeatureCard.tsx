@@ -26,7 +26,7 @@ export default function FlexFeatureCard({
 }) {
   const nombre = flex?.nombre ?? "MOVARA Flex";
   const imagenUrl = flex?.imagen?.asset?._ref
-    ? urlFor(flex.imagen).width(900).height(700).fit("max").auto("format").url()
+    ? urlFor({ asset: flex.imagen.asset }).width(900).fit("max").auto("format").url()
     : null;
 
   return (
@@ -34,7 +34,7 @@ export default function FlexFeatureCard({
       href="/modelos/flex"
       className={`group grid lg:grid-cols-2 rounded-2xl border-2 border-[#D4B06A] bg-[#2F2F2F] overflow-hidden transition-shadow duration-300 hover:shadow-2xl hover:shadow-black/20 ${className}`}
     >
-      <div className="relative h-64 lg:h-auto min-h-[320px] bg-stone-900 overflow-hidden">
+      <div className="relative aspect-video lg:aspect-auto lg:h-auto min-h-[320px] bg-stone-900 overflow-hidden">
         {imagenUrl ? (
           <Image
             src={imagenUrl}

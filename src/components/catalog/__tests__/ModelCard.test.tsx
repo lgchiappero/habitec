@@ -20,9 +20,15 @@ vi.mock("next/image", () => ({
 }));
 
 vi.mock("@/sanity/lib/image", () => ({
-  urlFor: () => ({
-    width: () => ({ height: () => ({ fit: () => ({ auto: () => ({ url: () => "https://cdn.sanity.io/test.jpg" }) }) }) }),
-  }),
+  // Builder chainable: cualquier método (width, height, fit, auto...)
+  // devuelve el propio proxy; solo url() termina la cadena.
+  urlFor: () => {
+    const target: Record<string, unknown> = { url: () => "https://cdn.sanity.io/test.jpg" };
+    const proxy: Record<string, unknown> = new Proxy(target, {
+      get: (t, prop) => (prop in t ? t[prop as string] : () => proxy),
+    });
+    return proxy;
+  },
 }));
 
 const mockOpenWizard = vi.fn();
@@ -102,7 +108,7 @@ describe("ModelCard", () => {
     const model = { ...FULL_MODEL, images: [] } as unknown as ProductModel;
     const { container } = render(<ModelCard model={model} />);
     // El contenedor de imagen debe existir aunque no haya imagen real
-    const imageDiv = container.querySelector(".relative.h-52");
+    const imageDiv = container.querySelector(".relative.aspect-video");
     expect(imageDiv).toBeTruthy();
   });
 

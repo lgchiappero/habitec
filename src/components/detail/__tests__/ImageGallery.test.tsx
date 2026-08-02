@@ -14,9 +14,17 @@ vi.mock("next/image", () => ({
 }));
 
 vi.mock("@/sanity/lib/image", () => ({
-  urlFor: (source: unknown) => ({
-    width: () => ({ height: () => ({ fit: () => ({ auto: () => ({ url: () => "https://cdn.sanity.io/images/test/production/abc123-800x600.jpg" }) }) }) }),
-  }),
+  // Builder chainable: cualquier método (width, height, fit, auto...)
+  // devuelve el propio proxy; solo url() termina la cadena.
+  urlFor: () => {
+    const target: Record<string, unknown> = {
+      url: () => "https://cdn.sanity.io/images/test/production/abc123-800x600.jpg",
+    };
+    const proxy: Record<string, unknown> = new Proxy(target, {
+      get: (t, prop) => (prop in t ? t[prop as string] : () => proxy),
+    });
+    return proxy;
+  },
 }));
 
 // ── Fixtures ─────────────────────────────────────────────────────────────────

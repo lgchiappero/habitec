@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import { motion, AnimatePresence } from "framer-motion";
 import { ChevronLeft, ChevronRight, Play } from "lucide-react";
@@ -26,6 +26,8 @@ const FALLBACK_PHOTOS = [
   { src: "/configurador/exterior/ext-calada-madera-clara.jpg", alt: "Exterior" },
 ];
 
+const SWIPE_THRESHOLD = 48;
+
 function getEmbedUrl(url: string): string {
   const yt = url.match(/(?:youtube\.com\/watch\?v=|youtu\.be\/)([^&?/]+)/);
   if (yt) return `https://www.youtube.com/embed/${yt[1]}?autoplay=1&rel=0`;
@@ -36,6 +38,11 @@ function getEmbedUrl(url: string): string {
 
 function isDirectVideo(url: string): boolean {
   return /\.(mp4|webm|ogg)(\?|$)/i.test(url);
+}
+
+function isTypingTarget(el: EventTarget | null): boolean {
+  if (!(el instanceof HTMLElement)) return false;
+  return el.tagName === "INPUT" || el.tagName === "TEXTAREA" || el.isContentEditable;
 }
 
 export default function HeroGaleria({
@@ -57,7 +64,14 @@ export default function HeroGaleria({
   const imageItems: GalleryItem[] = hasSanityImages
     ? validImages.map((img, i) => ({
         kind: "image" as const,
-        src: urlFor(img).width(1800).height(1400).fit("max").auto("format").url(),
+        // Se pasa solo { asset }, sin hotspot/crop: un recorte editorial
+        // guardado en Sanity generaría un rect= que recorta la foto antes
+        // de que llegue fit("max"), volviendo a mostrarla incompleta.
+        // Solo width: si se pasan width y height juntos, @sanity/image-url
+        // calcula igual un rect= que recorta la imagen para forzar ese
+        // aspect ratio, sin importar el modo fit. Con un solo eje la
+        // imagen escala proporcional, sin recortar.
+        src: urlFor({ asset: img.asset }).width(1800).fit("max").auto("format").url(),
         isSanity: true,
         alt: img.label ?? `${title} — foto ${i + 1}`,
       }))
@@ -77,19 +91,63 @@ export default function HeroGaleria({
     })) ?? [];
 
   const items: GalleryItem[] = [...imageItems, ...videoItems];
+  const total = items.length;
 
   const [selected, setSelected] = useState(0);
   const active = items[selected];
-  const thumbsRef = useRef<HTMLDivElement>(null);
+  const activeThumbRef = useRef<HTMLButtonElement>(null);
+  const touchStartX = useRef<number | null>(null);
 
-  function scrollThumbs(dir: number) {
-    thumbsRef.current?.scrollBy({ left: dir * 240, behavior: "smooth" });
+  function goNext() {
+    setSelected((s) => (s + 1) % total);
+  }
+  function goPrev() {
+    setSelected((s) => (s - 1 + total) % total);
+  }
+
+  // Navegación por teclado — flechas izquierda/derecha en toda la página.
+  useEffect(() => {
+    if (total <= 1) return;
+    function onKeyDown(e: KeyboardEvent) {
+      if (isTypingTarget(e.target)) return;
+      if (e.key === "ArrowRight") setSelected((s) => (s + 1) % total);
+      else if (e.key === "ArrowLeft") setSelected((s) => (s - 1 + total) % total);
+    }
+    window.addEventListener("keydown", onKeyDown);
+    return () => window.removeEventListener("keydown", onKeyDown);
+  }, [total]);
+
+  // Mantiene el thumbnail activo visible dentro de la fila con scroll horizontal.
+  useEffect(() => {
+    activeThumbRef.current?.scrollIntoView({
+      behavior: "smooth",
+      inline: "center",
+      block: "nearest",
+    });
+  }, [selected]);
+
+  function handleTouchStart(e: React.TouchEvent) {
+    touchStartX.current = e.touches[0].clientX;
+  }
+
+  function handleTouchEnd(e: React.TouchEvent) {
+    if (touchStartX.current === null || total <= 1) return;
+    const delta = e.changedTouches[0].clientX - touchStartX.current;
+    if (Math.abs(delta) > SWIPE_THRESHOLD) {
+      if (delta < 0) goNext();
+      else goPrev();
+    }
+    touchStartX.current = null;
   }
 
   return (
-    <div className="w-full">
-      {/* Imagen principal */}
-      <div className="relative w-full h-[70vh] sm:h-[75vh] lg:h-[80vh] bg-stone-900 overflow-hidden">
+    <div className="relative w-full h-[calc(100dvh-4rem)] bg-black flex flex-col overflow-hidden">
+      {/* Imagen/video principal — 80% de la altura disponible */}
+      <div
+        className="relative flex-[4] min-h-0"
+        onTouchStart={handleTouchStart}
+        onTouchEnd={handleTouchEnd}
+      >
         <AnimatePresence mode="wait">
           <motion.div
             key={selected}
@@ -105,7 +163,7 @@ export default function HeroGaleria({
                   src={active.url}
                   controls
                   autoPlay
-                  className="absolute inset-0 w-full h-full object-cover"
+                  className="absolute inset-0 w-full h-full object-contain"
                   aria-label={active.label}
                 />
               ) : (
@@ -130,47 +188,67 @@ export default function HeroGaleria({
           </motion.div>
         </AnimatePresence>
 
-        {/* Texto mínimo — título y CTA, ambos con fondo semi-transparente */}
-        <div className="absolute inset-x-0 top-0 z-10 flex items-start justify-between p-5 sm:p-8 pointer-events-none">
-          <span className="pointer-events-auto bg-black/40 backdrop-blur-md text-white font-bold text-base sm:text-xl px-4 py-2 sm:px-5 sm:py-2.5 rounded-full">
+        {/* Flechas prev/next — grandes, siempre visibles */}
+        {total > 1 && (
+          <>
+            <button
+              type="button"
+              onClick={goPrev}
+              aria-label="Foto anterior"
+              className="absolute left-3 sm:left-6 top-1/2 -translate-y-1/2 z-20 w-11 h-11 sm:w-14 sm:h-14 rounded-full bg-black/50 hover:bg-black/70 backdrop-blur-sm text-white flex items-center justify-center transition-colors"
+            >
+              <ChevronLeft size={28} />
+            </button>
+            <button
+              type="button"
+              onClick={goNext}
+              aria-label="Foto siguiente"
+              className="absolute right-3 sm:right-6 top-1/2 -translate-y-1/2 z-20 w-11 h-11 sm:w-14 sm:h-14 rounded-full bg-black/50 hover:bg-black/70 backdrop-blur-sm text-white flex items-center justify-center transition-colors"
+            >
+              <ChevronRight size={28} />
+            </button>
+          </>
+        )}
+
+        {/* Contador */}
+        {total > 1 && (
+          <div className="absolute top-4 right-4 sm:top-6 sm:right-6 z-20">
+            <span className="bg-black/50 backdrop-blur-sm text-white text-xs sm:text-sm font-semibold px-3 py-1.5 rounded-full tabular-nums">
+              {selected + 1} / {total}
+            </span>
+          </div>
+        )}
+
+        {/* Nombre del modelo + CTA — esquina inferior izquierda */}
+        <div className="absolute bottom-4 left-4 sm:bottom-6 sm:left-6 z-20 flex flex-col items-start gap-2.5 max-w-[80%]">
+          <span className="bg-black/50 backdrop-blur-md text-white font-bold text-base sm:text-xl px-4 py-2 sm:px-5 sm:py-2.5 rounded-full">
             {title}
           </span>
           <a
             href={ctaHref}
             target="_blank"
             rel="noopener noreferrer"
-            className="pointer-events-auto bg-white/20 hover:bg-white/30 backdrop-blur-md border border-white/40 text-white font-bold text-sm sm:text-base px-4 py-2 sm:px-6 sm:py-3 rounded-full transition-colors whitespace-nowrap"
+            className="bg-white/20 hover:bg-white/30 backdrop-blur-md border border-white/40 text-white font-bold text-sm sm:text-base px-4 py-2 sm:px-6 sm:py-3 rounded-full transition-colors whitespace-nowrap"
           >
             {ctaLabel}
           </a>
         </div>
       </div>
 
-      {/* Thumbnails */}
-      <div className="relative bg-white border-b border-stone-100">
-        <button
-          type="button"
-          onClick={() => scrollThumbs(-1)}
-          className="hidden sm:flex absolute left-1 top-1/2 -translate-y-1/2 z-10 w-8 h-8 rounded-full bg-white shadow-md border border-stone-200 items-center justify-center text-stone-500 hover:text-stone-800"
-          aria-label="Thumbnails anteriores"
-        >
-          <ChevronLeft size={16} />
-        </button>
-
-        <div
-          ref={thumbsRef}
-          className="flex gap-2.5 overflow-x-auto px-4 sm:px-10 py-3 sm:py-4 scroll-smooth"
-        >
+      {/* Thumbnails — 20% de la altura, con scroll horizontal si no entran */}
+      <div className="relative flex-1 min-h-0 bg-black border-t border-white/10">
+        <div className="h-full flex items-center gap-2.5 overflow-x-auto px-4 sm:px-6 scroll-smooth">
           {items.map((item, i) => {
             const isActive = i === selected;
             return (
               <button
                 key={i}
+                ref={isActive ? activeThumbRef : undefined}
                 type="button"
                 onClick={() => setSelected(i)}
                 aria-label={item.kind === "video" ? item.label : item.alt}
                 aria-pressed={isActive}
-                className={`relative shrink-0 w-16 h-16 sm:w-20 sm:h-20 rounded-lg overflow-hidden border-2 bg-stone-900 transition-colors ${
+                className={`relative h-[70%] aspect-square shrink-0 rounded-lg overflow-hidden border-2 bg-stone-900 transition-colors ${
                   isActive ? "border-sage-500" : "border-transparent"
                 }`}
               >
@@ -185,15 +263,6 @@ export default function HeroGaleria({
             );
           })}
         </div>
-
-        <button
-          type="button"
-          onClick={() => scrollThumbs(1)}
-          className="hidden sm:flex absolute right-1 top-1/2 -translate-y-1/2 z-10 w-8 h-8 rounded-full bg-white shadow-md border border-stone-200 items-center justify-center text-stone-500 hover:text-stone-800"
-          aria-label="Siguientes thumbnails"
-        >
-          <ChevronRight size={16} />
-        </button>
       </div>
     </div>
   );
