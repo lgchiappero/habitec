@@ -5,6 +5,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { ChevronDown, ShieldCheck } from "lucide-react";
 import HeroGaleria from "@/components/flex/HeroGaleria";
 import EspecificacionesCompletas from "@/components/producto/EspecificacionesCompletas";
+import VirtualTour from "@/components/VirtualTour";
 import { getWhatsAppUrl } from "@/lib/whatsapp";
 
 type SanityAsset = { _ref: string; _type: string };
@@ -187,6 +188,17 @@ export default function FlexPageClient({
               </li>
             ))}
           </ul>
+        </motion.section>
+
+        {/* Tour interactivo */}
+        <motion.section
+          initial={{ opacity: 0, y: 16 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.5 }}
+          className="mt-12"
+        >
+          <VirtualTour modelName={title} />
         </motion.section>
 
         {/* Botón → WhatsApp (desktop, inline) */}

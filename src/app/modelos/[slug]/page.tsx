@@ -9,7 +9,7 @@ import { getWhatsAppUrl } from "@/lib/whatsapp";
 import ImageGallery from "@/components/detail/ImageGallery";
 import FloorPlan from "@/components/detail/FloorPlan";
 import ConsultarButton from "@/components/detail/ConsultarButton";
-import VirtualTour from "@/components/detail/VirtualTour";
+import VirtualTour from "@/components/VirtualTour";
 import EspecificacionesEstandar from "@/components/EspecificacionesEstandar";
 
 const FINALIDAD_LABELS: Record<string, string> = {
@@ -264,10 +264,8 @@ export default async function ModelDetailPage({ params }: Props) {
               <FloorPlan size={model.floorPlanSize ?? "medium"} />
             </section>
 
-            {/* Virtual tour — only when URL is set */}
-            {model.virtualTour && (
-              <VirtualTour url={model.virtualTour} modelName={model.name} />
-            )}
+            {/* Tour interactivo */}
+            <VirtualTour modelName={model.name} />
           </div>
 
           {/* Sidebar */}

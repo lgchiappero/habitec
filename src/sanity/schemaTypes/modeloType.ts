@@ -175,14 +175,6 @@ export const modeloType = defineType({
         defineField({ name: 'label', title: 'Etiqueta', type: 'string', initialValue: 'Video del modelo' }),
       ],
     }),
-    defineField({
-      name: 'virtualTour',
-      title: 'Tour virtual 360° (URL)',
-      type: 'url',
-      group: 'media',
-      description: 'URL de Matterport, Google Street View u otro recorrido virtual embebible.',
-    }),
-
     // ── Especificaciones ─────────────────────────────────────
     defineField({
       name: 'descripcion',

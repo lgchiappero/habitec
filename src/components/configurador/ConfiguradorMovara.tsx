@@ -6,6 +6,15 @@ import Link from "next/link";
 import { REGIONAL_MODELS, PROVINCIA_A_MODELO, PROVINCIAS_AR, getModeloKey } from "@/data/regional-models";
 import { getWhatsAppUrl } from "@/lib/whatsapp";
 import {
+  MaterialesSection,
+  PREMIUM_ITEMS,
+  getDefaultMateriales,
+  getMaterialLabel,
+  type MaterialesSeleccion,
+  type MaterialCategoryKey,
+  type PremiumKey,
+} from "./StepMateriales";
+import {
   validateField,
   particularSchema,
   empresaSchema,
@@ -186,6 +195,8 @@ function buildWAMessage(params: {
   nombreContacto: string;
   telefono: string;
   email: string;
+  materiales: MaterialesSeleccion;
+  premiumInteres: string[];
 }): string {
   const m = MOVARA_MODELS.find((x) => x.key === params.modelo)!;
   const f = FINALIDADES.find((x) => x.key === params.finalidad)!;
@@ -209,6 +220,22 @@ function buildWAMessage(params: {
     .map((k) => allUpgrades.find((u) => u.key === k)?.nombre)
     .filter(Boolean);
 
+  const materialesLines = [
+    `- Exterior: ${getMaterialLabel("exterior", params.materiales.exterior)}`,
+    `- Paneles baño: ${getMaterialLabel("panelesBano", params.materiales.panelesBano)}`,
+    `- Puerta baño: ${getMaterialLabel("puertaBano", params.materiales.puertaBano)}`,
+    `- Cocina: ${getMaterialLabel("cocina", params.materiales.cocina)}`,
+    `- Mesada: ${getMaterialLabel("mesada", params.materiales.mesada)}`,
+    `- Piso: ${getMaterialLabel("piso", params.materiales.piso)}`,
+    `- Puerta principal: ${getMaterialLabel("puertaPrincipal", params.materiales.puertaPrincipal)}`,
+    `- Ventanas: ${getMaterialLabel("ventanas", params.materiales.ventanas)}`,
+  ].join("\n");
+
+  const premiumNames = params.premiumInteres
+    .map((k) => PREMIUM_ITEMS.find((p) => p.key === k)?.title)
+    .filter(Boolean);
+  const premiumLine = premiumNames.length ? premiumNames.join(", ") : "Ninguna";
+
   const msg =
     `Hola MOVARA! 👋\n\n` +
     `👤 Cliente: ${clienteNombre}\n` +
@@ -222,9 +249,11 @@ function buildWAMessage(params: {
     (selectedUpgradeNames.length
       ? `⚙️ Mejoras a cotizar: ${selectedUpgradeNames.join(", ")}\n`
       : `⚙️ Zona climática: ${regional?.region ?? params.regionalKey}\n`) +
+    `\n🎨 Materiales elegidos:\n${materialesLines}\n\n` +
+    `⭐ Opciones premium a cotizar:\n${premiumLine}\n\n` +
     `Quedo a la espera de su presupuesto. Gracias!`;
 
-  return sanitizarMensaje(msg, 1500);
+  return sanitizarMensaje(msg, 2200);
 }
 
 // ─────────────────────────────────────────────────────────
@@ -290,6 +319,20 @@ export default function ConfiguradorMovara({
   const [incluyeBano, setIncluyeBano] = useState(true);
   const [tipoAgua, setTipoAgua] = useState<TipoAgua>("calefon-electrico");
   const [lavarropas, setLavarropas] = useState<TipoLavarropas>("sin");
+  const [materiales, setMateriales] = useState<MaterialesSeleccion>(() => getDefaultMateriales());
+  const [premiumInteres, setPremiumInteres] = useState<Set<PremiumKey>>(new Set());
+
+  function selectMaterial(cat: MaterialCategoryKey, id: string) {
+    setMateriales((prev) => ({ ...prev, [cat]: id }));
+  }
+
+  function togglePremiumInteres(key: PremiumKey) {
+    setPremiumInteres((prev) => {
+      const next = new Set(prev);
+      next.has(key) ? next.delete(key) : next.add(key);
+      return next;
+    });
+  }
 
   // Paso 5
   const [upgradesSeleccionados, setUpgradesSeleccionados] = useState<Set<string>>(new Set());
@@ -348,6 +391,8 @@ export default function ConfiguradorMovara({
         nombreContacto,
         telefono,
         email,
+        materiales,
+        premiumInteres: Array.from(premiumInteres),
       });
       setWaMessage(msg);
       setShowResult(true);
@@ -450,7 +495,7 @@ export default function ConfiguradorMovara({
             {step === 1 && <StepModelo modelo={modelo} onSelect={setModelo} title={cms.paso1.title} subtitle={cms.paso1.subtitle} taglines={cms.paso1.taglines} />}
             {step === 2 && <StepFinalidad finalidad={finalidad} onSelect={setFinalidad} title={cms.paso2.title} subtitle={cms.paso2.subtitle} descs={cms.paso2.descs} />}
             {step === 3 && <StepUbicacion localidad={localidad} setLocalidad={setLocalidad} provincia={provincia} setProvincia={setProvincia} regional={regional} title={cms.paso3.title} subtitle={cms.paso3.subtitle} localidadLabel={cms.paso3.localidadLabel} provinciaLabel={cms.paso3.provinciaLabel} />}
-            {step === 4 && <StepConfiguracion modelo={modelo} habitaciones={habitaciones} setHabitaciones={setHabitaciones} maxHab={maxHab} incluyeCocina={incluyeCocina} setIncluyeCocina={setIncluyeCocina} tipoCocina={tipoCocina} setTipoCocina={setTipoCocina} incluyeBano={incluyeBano} setIncluyeBano={setIncluyeBano} tipoAgua={tipoAgua} setTipoAgua={setTipoAgua} lavarropas={lavarropas} setLavarropas={setLavarropas} />}
+            {step === 4 && <StepConfiguracion modelo={modelo} habitaciones={habitaciones} setHabitaciones={setHabitaciones} maxHab={maxHab} incluyeCocina={incluyeCocina} setIncluyeCocina={setIncluyeCocina} tipoCocina={tipoCocina} setTipoCocina={setTipoCocina} incluyeBano={incluyeBano} setIncluyeBano={setIncluyeBano} tipoAgua={tipoAgua} setTipoAgua={setTipoAgua} lavarropas={lavarropas} setLavarropas={setLavarropas} materiales={materiales} onSelectMaterial={selectMaterial} premiumInteres={premiumInteres} onTogglePremium={togglePremiumInteres} />}
             {step === 5 && (
               <StepMejoras
                 regionalKey={regionalKey}
@@ -743,7 +788,7 @@ function Field({ label, children }: { label: React.ReactNode; children: React.Re
   );
 }
 
-function StepConfiguracion({ modelo, habitaciones, setHabitaciones, maxHab, incluyeCocina, setIncluyeCocina, tipoCocina, setTipoCocina, incluyeBano, setIncluyeBano, tipoAgua, setTipoAgua, lavarropas, setLavarropas }: {
+function StepConfiguracion({ modelo, habitaciones, setHabitaciones, maxHab, incluyeCocina, setIncluyeCocina, tipoCocina, setTipoCocina, incluyeBano, setIncluyeBano, tipoAgua, setTipoAgua, lavarropas, setLavarropas, materiales, onSelectMaterial, premiumInteres, onTogglePremium }: {
   modelo: ModeloKey | null;
   habitaciones: 1 | 2 | 3;
   setHabitaciones: (v: 1 | 2 | 3) => void;
@@ -758,6 +803,10 @@ function StepConfiguracion({ modelo, habitaciones, setHabitaciones, maxHab, incl
   setTipoAgua: (v: TipoAgua) => void;
   lavarropas: TipoLavarropas;
   setLavarropas: (v: TipoLavarropas) => void;
+  materiales: MaterialesSeleccion;
+  onSelectMaterial: (cat: MaterialCategoryKey, id: string) => void;
+  premiumInteres: Set<PremiumKey>;
+  onTogglePremium: (key: PremiumKey) => void;
 }) {
   const habOpts = ([1, 2, 3] as const).filter((n) => n <= maxHab).map((n) => ({ value: String(n), label: `${n} hab.` }));
 
@@ -826,6 +875,13 @@ function StepConfiguracion({ modelo, habitaciones, setHabitaciones, maxHab, incl
           <p className="text-[10px] font-bold uppercase tracking-widest text-sage-600 mb-1">Vista previa</p>
           <p className="text-sm text-stone-700 leading-relaxed">{preview}</p>
         </div>
+
+        <MaterialesSection
+          seleccion={materiales}
+          onSelect={onSelectMaterial}
+          premiumInteres={premiumInteres}
+          onTogglePremium={onTogglePremium}
+        />
       </div>
     </div>
   );

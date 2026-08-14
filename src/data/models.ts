@@ -36,7 +36,6 @@ export type ProductModel = {
   floorPlanSize: "small" | "medium" | "large" | "xl";
   video?: { url: string; label?: string } | null;
   videos?: { url: string; titulo?: string }[] | null;
-  virtualTour?: string | null;
   maxHabitaciones?: number | null;
   permiteCocinaSiMax3Hab?: boolean | null;
   // Campos MOVARA nuevos
