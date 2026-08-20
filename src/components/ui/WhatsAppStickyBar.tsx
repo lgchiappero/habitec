@@ -1,5 +1,6 @@
 "use client";
 
+import { usePathname } from "next/navigation";
 import { getWhatsAppUrl } from "@/lib/whatsapp";
 
 export default function WhatsAppStickyBar({
@@ -11,7 +12,13 @@ export default function WhatsAppStickyBar({
   mensaje?: string;
   label?: string;
 }) {
+  const pathname = usePathname();
   const href = getWhatsAppUrl(mensaje, waNumber);
+
+  // El configurador tiene su propio flujo de WhatsApp (botón de envío en el
+  // resultado) y, en mobile, su propio panel de precio fijo abajo — mostrar
+  // esta barra ahí también hace que las dos se pisen en la misma posición.
+  if (pathname?.startsWith("/configurador")) return null;
 
   return (
     <div className="sm:hidden fixed bottom-0 inset-x-0 z-40 p-3 bg-white/95 backdrop-blur border-t border-stone-200">

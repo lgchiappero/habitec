@@ -3,7 +3,7 @@ import { Suspense } from "react";
 import ConfiguradorMovara from "@/components/configurador/ConfiguradorMovara";
 import ConfiguradorModeloReader from "@/components/configurador/ConfiguradorModeloReader";
 import { client } from "@/sanity/lib/client";
-import { CONFIGURADOR_PAGE_QUERY } from "@/sanity/lib/queries";
+import { CONFIGURADOR_PAGE_QUERY, SITE_CONFIG_QUERY } from "@/sanity/lib/queries";
 
 // Contenido del CMS: cambia poco, se sirve estático y se revalida cada 1h.
 // `force-static` es una barrera explícita: si alguien reintroduce una API
@@ -26,8 +26,16 @@ async function getConfiguradorData() {
   }
 }
 
+async function getPrecios() {
+  try {
+    return await client.fetch(SITE_CONFIG_QUERY);
+  } catch {
+    return null;
+  }
+}
+
 export default async function ConfiguradorPage() {
-  const data = await getConfiguradorData();
+  const [data, precios] = await Promise.all([getConfiguradorData(), getPrecios()]);
 
   // `?modelo=` solo afecta el estado inicial del cliente, no el render del
   // servidor: se lee con useSearchParams() dentro de un Suspense boundary
@@ -35,8 +43,8 @@ export default async function ConfiguradorPage() {
   // mismo componente sin preselección, así no hay salto visual mientras
   // hidrata.
   return (
-    <Suspense fallback={<ConfiguradorMovara data={data} />}>
-      <ConfiguradorModeloReader data={data} />
+    <Suspense fallback={<ConfiguradorMovara data={data} precios={precios} />}>
+      <ConfiguradorModeloReader data={data} precios={precios} />
     </Suspense>
   );
 }

@@ -86,6 +86,9 @@ export const SITE_CONFIG_QUERY = groq`
     metaDescription,
     logo,
     favicon,
+    precioBaseM2,
+    precioAdicionalDefault,
+    preciosExtras[] { nombre, precio },
   }
 `
 

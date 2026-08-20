@@ -1,19 +1,18 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import Link from "next/link";
 import { REGIONAL_MODELS, PROVINCIA_A_MODELO, PROVINCIAS_AR, getModeloKey } from "@/data/regional-models";
 import { getWhatsAppUrl } from "@/lib/whatsapp";
 import {
   MaterialesSection,
-  PREMIUM_ITEMS,
   getDefaultMateriales,
   getMaterialLabel,
+  findMaterialOption,
   type MaterialesSeleccion,
-  type MaterialCategoryKey,
-  type PremiumKey,
 } from "./StepMateriales";
+import { PrecioPanel, type PrecioResumen } from "./PrecioPanel";
 import {
   validateField,
   particularSchema,
@@ -160,9 +159,28 @@ export type ConfiguradorPageData = {
   resultado?: { title?: string | null; waButtonText?: string | null; trustText?: string | null } | null;
 };
 
+export type PreciosConfig = {
+  precioBaseM2?: number | null;
+  precioAdicionalDefault?: number | null;
+  preciosExtras?: { nombre?: string | null; precio?: number | null }[] | null;
+};
+
+const DEFAULT_PRECIO_BASE_M2 = 650;
+const DEFAULT_PRECIO_ADICIONAL = 500;
+
 // ─────────────────────────────────────────────────────────
 // Helpers
 // ─────────────────────────────────────────────────────────
+
+/** Precio de una franja con costo adicional: el que esté cargado en Sanity
+ * bajo ese nombre, o `precioAdicionalDefault` si no tiene uno propio. */
+function resolvePremiumPrice(priceName: string, precios?: PreciosConfig | null): number {
+  return (
+    precios?.preciosExtras?.find((e) => e.nombre === priceName)?.precio ??
+    precios?.precioAdicionalDefault ??
+    DEFAULT_PRECIO_ADICIONAL
+  );
+}
 
 const LABELS_AGUA: Record<TipoAgua, string> = {
   "calefon-electrico": "calefón eléctrico",
@@ -175,6 +193,36 @@ const LABELS_LAVA: Record<TipoLavarropas, string> = {
   cocina: "lavarropas en cocina",
   externo: "espacio externo con desagüe",
 };
+
+function calcularPrecio({
+  modelo,
+  materiales,
+  precios,
+}: {
+  modelo: ModeloKey | null;
+  materiales: MaterialesSeleccion;
+  precios?: PreciosConfig | null;
+}): PrecioResumen {
+  const precioBaseM2 = precios?.precioBaseM2 ?? DEFAULT_PRECIO_BASE_M2;
+
+  const m = modelo ? MOVARA_MODELS.find((x) => x.key === modelo) : null;
+  const base = m ? m.superficie * precioBaseM2 : 0;
+
+  const adicionales = Object.entries(materiales).flatMap(([key, id]) => {
+    const found = findMaterialOption(key, id);
+    if (!found?.selector.priceName) return [];
+    return [
+      {
+        key,
+        nombre: `${found.selector.priceName}: ${found.option.label}`,
+        precio: resolvePremiumPrice(found.selector.priceName, precios),
+      },
+    ];
+  });
+
+  const total = base + adicionales.reduce((sum, a) => sum + a.precio, 0);
+  return { base, adicionales, total };
+}
 
 function buildWAMessage(params: {
   modelo: ModeloKey;
@@ -196,7 +244,6 @@ function buildWAMessage(params: {
   telefono: string;
   email: string;
   materiales: MaterialesSeleccion;
-  premiumInteres: string[];
 }): string {
   const m = MOVARA_MODELS.find((x) => x.key === params.modelo)!;
   const f = FINALIDADES.find((x) => x.key === params.finalidad)!;
@@ -231,9 +278,10 @@ function buildWAMessage(params: {
     `- Ventanas: ${getMaterialLabel("ventanas", params.materiales.ventanas)}`,
   ].join("\n");
 
-  const premiumNames = params.premiumInteres
-    .map((k) => PREMIUM_ITEMS.find((p) => p.key === k)?.title)
-    .filter(Boolean);
+  const premiumNames = Object.entries(params.materiales).flatMap(([key, id]) => {
+    const found = findMaterialOption(key, id);
+    return found?.selector.priceName ? [`${found.selector.priceName}: ${found.option.label}`] : [];
+  });
   const premiumLine = premiumNames.length ? premiumNames.join(", ") : "Ninguna";
 
   const msg =
@@ -265,9 +313,11 @@ const VALID_MODELO_KEYS = new Set(MOVARA_MODELS.map((m) => m.key));
 
 export default function ConfiguradorMovara({
   data,
+  precios,
   preselectedModelo,
 }: {
   data?: ConfiguradorPageData | null;
+  precios?: PreciosConfig | null;
   preselectedModelo?: string;
 }) {
   const cms = {
@@ -320,19 +370,12 @@ export default function ConfiguradorMovara({
   const [tipoAgua, setTipoAgua] = useState<TipoAgua>("calefon-electrico");
   const [lavarropas, setLavarropas] = useState<TipoLavarropas>("sin");
   const [materiales, setMateriales] = useState<MaterialesSeleccion>(() => getDefaultMateriales());
-  const [premiumInteres, setPremiumInteres] = useState<Set<PremiumKey>>(new Set());
 
-  function selectMaterial(cat: MaterialCategoryKey, id: string) {
-    setMateriales((prev) => ({ ...prev, [cat]: id }));
+  function selectMaterial(key: string, id: string, nullable?: boolean) {
+    setMateriales((prev) => ({ ...prev, [key]: nullable && prev[key] === id ? null : id }));
   }
 
-  function togglePremiumInteres(key: PremiumKey) {
-    setPremiumInteres((prev) => {
-      const next = new Set(prev);
-      next.has(key) ? next.delete(key) : next.add(key);
-      return next;
-    });
-  }
+  const priceFor = (priceName: string) => resolvePremiumPrice(priceName, precios);
 
   // Paso 5
   const [upgradesSeleccionados, setUpgradesSeleccionados] = useState<Set<string>>(new Set());
@@ -353,6 +396,11 @@ export default function ConfiguradorMovara({
 
   const regionalKey = getModeloKey(provincia, localidad);
   const regional = REGIONAL_MODELS[regionalKey] ?? null;
+
+  const precioResumen = useMemo(
+    () => calcularPrecio({ modelo, materiales, precios }),
+    [modelo, materiales, precios]
+  );
 
   const step6Valid =
     tipoCliente === "particular"
@@ -392,7 +440,6 @@ export default function ConfiguradorMovara({
         telefono,
         email,
         materiales,
-        premiumInteres: Array.from(premiumInteres),
       });
       setWaMessage(msg);
       setShowResult(true);
@@ -465,7 +512,7 @@ export default function ConfiguradorMovara({
         <p className="text-stone-400 mt-2 text-sm">7 pasos para encontrar el módulo ideal y recibir un presupuesto por WhatsApp.</p>
       </div>
 
-      <div className="max-w-3xl mx-auto px-4 sm:px-6 py-10">
+      <div className={`max-w-3xl mx-auto px-4 sm:px-6 py-10 ${modelo ? "pb-28 sm:pb-10" : ""}`}>
         {/* Progress */}
         <div className="mb-10">
           <div className="flex gap-1.5 mb-3">
@@ -484,6 +531,8 @@ export default function ConfiguradorMovara({
           </div>
         </div>
 
+        {modelo && <PrecioPanel resumen={precioResumen} />}
+
         <AnimatePresence mode="wait" initial={false}>
           <motion.div
             key={step}
@@ -495,7 +544,7 @@ export default function ConfiguradorMovara({
             {step === 1 && <StepModelo modelo={modelo} onSelect={setModelo} title={cms.paso1.title} subtitle={cms.paso1.subtitle} taglines={cms.paso1.taglines} />}
             {step === 2 && <StepFinalidad finalidad={finalidad} onSelect={setFinalidad} title={cms.paso2.title} subtitle={cms.paso2.subtitle} descs={cms.paso2.descs} />}
             {step === 3 && <StepUbicacion localidad={localidad} setLocalidad={setLocalidad} provincia={provincia} setProvincia={setProvincia} regional={regional} title={cms.paso3.title} subtitle={cms.paso3.subtitle} localidadLabel={cms.paso3.localidadLabel} provinciaLabel={cms.paso3.provinciaLabel} />}
-            {step === 4 && <StepConfiguracion modelo={modelo} habitaciones={habitaciones} setHabitaciones={setHabitaciones} maxHab={maxHab} incluyeCocina={incluyeCocina} setIncluyeCocina={setIncluyeCocina} tipoCocina={tipoCocina} setTipoCocina={setTipoCocina} incluyeBano={incluyeBano} setIncluyeBano={setIncluyeBano} tipoAgua={tipoAgua} setTipoAgua={setTipoAgua} lavarropas={lavarropas} setLavarropas={setLavarropas} materiales={materiales} onSelectMaterial={selectMaterial} premiumInteres={premiumInteres} onTogglePremium={togglePremiumInteres} />}
+            {step === 4 && <StepConfiguracion modelo={modelo} habitaciones={habitaciones} setHabitaciones={setHabitaciones} maxHab={maxHab} incluyeCocina={incluyeCocina} setIncluyeCocina={setIncluyeCocina} tipoCocina={tipoCocina} setTipoCocina={setTipoCocina} incluyeBano={incluyeBano} setIncluyeBano={setIncluyeBano} tipoAgua={tipoAgua} setTipoAgua={setTipoAgua} lavarropas={lavarropas} setLavarropas={setLavarropas} materiales={materiales} onSelectMaterial={selectMaterial} priceFor={priceFor} />}
             {step === 5 && (
               <StepMejoras
                 regionalKey={regionalKey}
@@ -788,7 +837,7 @@ function Field({ label, children }: { label: React.ReactNode; children: React.Re
   );
 }
 
-function StepConfiguracion({ modelo, habitaciones, setHabitaciones, maxHab, incluyeCocina, setIncluyeCocina, tipoCocina, setTipoCocina, incluyeBano, setIncluyeBano, tipoAgua, setTipoAgua, lavarropas, setLavarropas, materiales, onSelectMaterial, premiumInteres, onTogglePremium }: {
+function StepConfiguracion({ modelo, habitaciones, setHabitaciones, maxHab, incluyeCocina, setIncluyeCocina, tipoCocina, setTipoCocina, incluyeBano, setIncluyeBano, tipoAgua, setTipoAgua, lavarropas, setLavarropas, materiales, onSelectMaterial, priceFor }: {
   modelo: ModeloKey | null;
   habitaciones: 1 | 2 | 3;
   setHabitaciones: (v: 1 | 2 | 3) => void;
@@ -804,10 +853,16 @@ function StepConfiguracion({ modelo, habitaciones, setHabitaciones, maxHab, incl
   lavarropas: TipoLavarropas;
   setLavarropas: (v: TipoLavarropas) => void;
   materiales: MaterialesSeleccion;
-  onSelectMaterial: (cat: MaterialCategoryKey, id: string) => void;
-  premiumInteres: Set<PremiumKey>;
-  onTogglePremium: (key: PremiumKey) => void;
+  onSelectMaterial: (key: string, id: string, nullable?: boolean) => void;
+  priceFor: (priceName: string) => number;
 }) {
+  // Este paso es el más largo del configurador — sin este reset, el scroll
+  // arrastrado desde el paso anterior puede dejar al usuario a mitad o al
+  // final de la página en vez de arrancar arriba.
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: "instant" });
+  }, []);
+
   const habOpts = ([1, 2, 3] as const).filter((n) => n <= maxHab).map((n) => ({ value: String(n), label: `${n} hab.` }));
 
   const preview = [
@@ -876,12 +931,7 @@ function StepConfiguracion({ modelo, habitaciones, setHabitaciones, maxHab, incl
           <p className="text-sm text-stone-700 leading-relaxed">{preview}</p>
         </div>
 
-        <MaterialesSection
-          seleccion={materiales}
-          onSelect={onSelectMaterial}
-          premiumInteres={premiumInteres}
-          onTogglePremium={onTogglePremium}
-        />
+        <MaterialesSection seleccion={materiales} onSelect={onSelectMaterial} priceFor={priceFor} />
       </div>
     </div>
   );

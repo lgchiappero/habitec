@@ -8,6 +8,7 @@ export const siteConfigType = defineType({
     { name: 'contacto', title: 'Contacto' },
     { name: 'footer', title: 'Footer' },
     { name: 'seo', title: 'SEO y marca' },
+    { name: 'precios', title: 'Precios del configurador' },
   ],
   fields: [
     defineField({
@@ -151,6 +152,65 @@ export const siteConfigType = defineType({
       description: 'Icono cuadrado de al menos 32×32 px.',
       options: { hotspot: false },
       group: 'seo',
+    }),
+    // ── Precios del configurador ────────────────────────────
+    defineField({
+      name: 'precioBaseM2',
+      title: 'Precio base por m² (USD)',
+      type: 'number',
+      description: 'El precio base de cada modelo se calcula como m² × este valor.',
+      initialValue: 650,
+      validation: (Rule) => Rule.positive(),
+      group: 'precios',
+    }),
+    defineField({
+      name: 'precioAdicionalDefault',
+      title: 'Precio por defecto de un adicional (USD)',
+      type: 'number',
+      description: 'Se usa para cualquier adicional que no tenga un precio propio cargado abajo en "Precios de adicionales".',
+      initialValue: 500,
+      validation: (Rule) => Rule.positive(),
+      group: 'precios',
+    }),
+    defineField({
+      name: 'preciosExtras',
+      title: 'Precios de adicionales',
+      type: 'array',
+      description: 'Precio individual (USD) de cada adicional con costo extra del configurador. El nombre debe coincidir exactamente con el de la lista.',
+      group: 'precios',
+      initialValue: [
+        { nombre: 'Paneles premium', precio: 500 },
+        { nombre: 'Piso SPC', precio: 500 },
+        { nombre: 'Bañera', precio: 500 },
+        { nombre: 'Cocina ampliada', precio: 500 },
+        { nombre: 'Muro cortina', precio: 500 },
+        { nombre: 'Galería con sobretecho', precio: 500 },
+        { nombre: 'Inodoro inteligente', precio: 500 },
+      ],
+      of: [
+        defineArrayMember({
+          type: 'object',
+          fields: [
+            defineField({
+              name: 'nombre',
+              title: 'Nombre del adicional',
+              type: 'string',
+            }),
+            defineField({
+              name: 'precio',
+              title: 'Precio (USD)',
+              type: 'number',
+              validation: (Rule) => Rule.positive(),
+            }),
+          ],
+          preview: {
+            select: { title: 'nombre', subtitle: 'precio' },
+            prepare({ title, subtitle }) {
+              return { title, subtitle: subtitle ? `USD ${subtitle}` : undefined }
+            },
+          },
+        }),
+      ],
     }),
   ],
   preview: {
