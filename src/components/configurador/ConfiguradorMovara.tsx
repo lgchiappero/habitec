@@ -41,16 +41,16 @@ const MOVARA_MODELS = [
   },
   {
     key: "20ft" as const,
-    nombre: "MOVARA Flex 37",
-    superficie: 37,
+    nombre: "MOVARA Flex 38",
+    superficie: 38,
     tagline: "El más versátil — 1 o 2 ambientes",
     maxHab: 2,
     badge: "Más elegido",
   },
   {
     key: "40ft" as const,
-    nombre: "MOVARA Flex 74",
-    superficie: 74,
+    nombre: "MOVARA Flex 77",
+    superficie: 77,
     tagline: "Máximo espacio — familia o inversión grande",
     maxHab: 3,
   },
@@ -392,7 +392,9 @@ export default function ConfiguradorMovara({
   const [showResult, setShowResult] = useState(false);
   const [waMessage, setWaMessage] = useState("");
 
-  const maxHab = modelo ? MOVARA_MODELS.find((m) => m.key === modelo)!.maxHab : 3;
+  const modeloSeleccionado = modelo ? MOVARA_MODELS.find((m) => m.key === modelo)! : null;
+  const maxHab = modeloSeleccionado?.maxHab ?? 3;
+  const modeloLabel = modeloSeleccionado ? `${modeloSeleccionado.nombre}m²` : null;
 
   const regionalKey = getModeloKey(provincia, localidad);
   const regional = REGIONAL_MODELS[regionalKey] ?? null;
@@ -512,7 +514,7 @@ export default function ConfiguradorMovara({
         <p className="text-stone-400 mt-2 text-sm">7 pasos para encontrar el módulo ideal y recibir un presupuesto por WhatsApp.</p>
       </div>
 
-      <div className={`max-w-3xl mx-auto px-4 sm:px-6 py-10 ${modelo ? "pb-28 sm:pb-10" : ""}`}>
+      <div className="max-w-3xl mx-auto px-4 sm:px-6 py-10 pb-28 sm:pb-10">
         {/* Progress */}
         <div className="mb-10">
           <div className="flex gap-1.5 mb-3">
@@ -531,7 +533,7 @@ export default function ConfiguradorMovara({
           </div>
         </div>
 
-        {modelo && <PrecioPanel resumen={precioResumen} />}
+        <PrecioPanel resumen={precioResumen} modeloLabel={modeloLabel} />
 
         <AnimatePresence mode="wait" initial={false}>
           <motion.div

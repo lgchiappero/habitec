@@ -12,7 +12,7 @@ type VideoInput = { url: string; titulo?: string | null };
 
 type GalleryItem =
   | { kind: "image"; src: string; isSanity: boolean; alt: string }
-  | { kind: "video"; url: string; embedUrl: string; label: string };
+  | { kind: "video"; url: string; embedUrl: string; label: string; videoId: string | null };
 
 // Fotos reales de unidades MOVARA (recortes del catálogo del proveedor Heshi
 // verificados a mano — hay archivos mal nombrados en /public/configurador
@@ -28,9 +28,22 @@ const FALLBACK_PHOTOS = [
 
 const SWIPE_THRESHOLD = 48;
 
+function getYoutubeId(url: string): string | null {
+  // youtu.be/ID — formato corto
+  // youtube.com/watch?v=ID — formato estándar
+  // youtube.com/embed/ID — ya es un embed, se usa el ID directo
+  return (
+    url.match(/youtu\.be\/([^&?/]+)/)?.[1] ??
+    url.match(/youtube\.com\/watch\?v=([^&]+)/)?.[1] ??
+    url.match(/youtube\.com\/embed\/([^&?/]+)/)?.[1] ??
+    null
+  );
+}
+
 function getEmbedUrl(url: string): string {
-  const yt = url.match(/(?:youtube\.com\/watch\?v=|youtu\.be\/)([^&?/]+)/);
-  if (yt) return `https://www.youtube.com/embed/${yt[1]}?autoplay=1&rel=0`;
+  const youtubeId = getYoutubeId(url);
+  if (youtubeId) return `https://www.youtube-nocookie.com/embed/${youtubeId}?rel=0&modestbranding=1`;
+
   const vimeo = url.match(/vimeo\.com\/(\d+)/);
   if (vimeo) return `https://player.vimeo.com/video/${vimeo[1]}?autoplay=1`;
   return url;
@@ -43,6 +56,43 @@ function isDirectVideo(url: string): boolean {
 function isTypingTarget(el: EventTarget | null): boolean {
   if (!(el instanceof HTMLElement)) return false;
   return el.tagName === "INPUT" || el.tagName === "TEXTAREA" || el.isContentEditable;
+}
+
+// Thumbnail de video: preview real de YouTube (maxresdefault) con ícono de
+// play encima. Si el video no tiene maxresdefault, YouTube no devuelve un
+// 404 — responde 200 con un placeholder gris de 120x90, así que hay que
+// detectar ese tamaño en onLoad y recién ahí caer a hqdefault (que sí existe
+// siempre). Sin video ID (o si también falla hqdefault) se muestra el
+// fallback gris con el ícono de play, como antes.
+function VideoThumb({ videoId, label }: { videoId: string | null; label: string }) {
+  const [src, setSrc] = useState(videoId ? `https://img.youtube.com/vi/${videoId}/maxresdefault.jpg` : null);
+  const [failed, setFailed] = useState(false);
+
+  return (
+    <div className="absolute inset-0 bg-stone-800">
+      {src && !failed && (
+        <Image
+          src={src}
+          alt={label}
+          fill
+          className="object-cover"
+          sizes="80px"
+          onLoad={(e) => {
+            const img = e.currentTarget;
+            if (img.naturalWidth === 120 && img.naturalHeight === 90 && !src.includes("hqdefault")) {
+              setSrc(`https://img.youtube.com/vi/${videoId}/hqdefault.jpg`);
+            }
+          }}
+          onError={() => setFailed(true)}
+        />
+      )}
+      <div className="absolute inset-0 flex items-center justify-center">
+        <div className="w-8 h-8 rounded-full bg-black/50 flex items-center justify-center">
+          <Play className="w-3.5 h-3.5 text-white ml-0.5" fill="white" />
+        </div>
+      </div>
+    </div>
+  );
 }
 
 export default function HeroGaleria({
@@ -88,6 +138,7 @@ export default function HeroGaleria({
       url: v.url,
       embedUrl: getEmbedUrl(v.url),
       label: v.titulo ?? "Video",
+      videoId: getYoutubeId(v.url),
     })) ?? [];
 
   const items: GalleryItem[] = [...imageItems, ...videoItems];
@@ -170,8 +221,11 @@ export default function HeroGaleria({
                 <iframe
                   src={active.embedUrl}
                   title={active.label}
+                  width="100%"
+                  height="100%"
                   allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                   allowFullScreen
+                  frameBorder="0"
                   className="absolute inset-0 w-full h-full border-0"
                 />
               )
@@ -253,9 +307,7 @@ export default function HeroGaleria({
                 }`}
               >
                 {item.kind === "video" ? (
-                  <div className="absolute inset-0 bg-stone-800 flex items-center justify-center">
-                    <Play className="w-5 h-5 text-white" fill="white" />
-                  </div>
+                  <VideoThumb videoId={item.videoId} label={item.label} />
                 ) : (
                   <Image src={item.src} alt={item.alt} fill className="object-contain" sizes="80px" />
                 )}

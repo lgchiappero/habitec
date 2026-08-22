@@ -3,8 +3,8 @@ import type { PedidoInput } from "@/lib/validators/pedido";
 // Etiquetas en inglés — el PDF se genera en inglés para el proveedor.
 export const modeloLabels: Record<PedidoInput["modelo"], string> = {
   "10ft": "10ft (18m²)",
-  "20ft": "20ft (37m²)",
-  "40ft": "40ft (74m²)",
+  "20ft": "20ft (38m²)",
+  "40ft": "40ft (77m²)",
 };
 
 export const zonaClimaticaLabels: Record<PedidoInput["zonaClimatica"], string> = {

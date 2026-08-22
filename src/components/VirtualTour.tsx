@@ -32,6 +32,10 @@ const MIN_ZOOM = 1;
 const MAX_ZOOM = 3;
 const SWIPE_THRESHOLD = 48;
 
+// Tour virtual oculto hasta nuevo aviso — el componente y sus fotos quedan
+// intactos, listos para reactivar con solo volver esto a `true`.
+export const TOUR_ENABLED = false;
+
 function isTypingTarget(el: EventTarget | null): boolean {
   if (!(el instanceof HTMLElement)) return false;
   return el.tagName === "INPUT" || el.tagName === "TEXTAREA" || el.isContentEditable;
@@ -51,6 +55,8 @@ export default function VirtualTour({
   className?: string;
 }) {
   const [open, setOpen] = useState(false);
+
+  if (!TOUR_ENABLED) return null;
 
   return (
     <section className={className} style={{ fontFamily: "var(--font-montserrat)" }}>

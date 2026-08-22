@@ -4,8 +4,8 @@ import type { PedidoInput } from "@/lib/validators/pedido";
 
 export const modeloLabelsEs: Record<PedidoInput["modelo"], string> = {
   "10ft": "10ft — 18 m²",
-  "20ft": "20ft — 37 m²",
-  "40ft": "40ft — 74 m²",
+  "20ft": "20ft — 38 m²",
+  "40ft": "40ft — 77 m²",
 };
 
 export const zonaClimaticaLabelsEs: Record<PedidoInput["zonaClimatica"], string> = {

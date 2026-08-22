@@ -6,9 +6,9 @@ const CSP = [
   "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://connect.facebook.net",
   "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com",
   "font-src 'self' https://fonts.gstatic.com",
-  "img-src 'self' data: blob: https://cdn.sanity.io https://www.facebook.com",
+  "img-src 'self' data: blob: https://cdn.sanity.io https://www.facebook.com https://img.youtube.com",
   "connect-src 'self' https://*.sanity.io wss://*.sanity.io https://api.mercadopago.com https://www.facebook.com https://connect.facebook.net",
-  "frame-src https://maps.google.com https://www.google.com",
+  "frame-src https://maps.google.com https://www.google.com https://www.youtube.com https://youtube.com https://*.youtube.com https://www.youtube-nocookie.com https://*.youtube-nocookie.com",
   "frame-ancestors 'none'",
   "base-uri 'self'",
   "form-action 'self'",
@@ -31,7 +31,10 @@ const SECURITY_HEADERS = [
 
 const nextConfig: NextConfig = {
   images: {
-    remotePatterns: [{ protocol: "https", hostname: "cdn.sanity.io" }],
+    remotePatterns: [
+      { protocol: "https", hostname: "cdn.sanity.io" },
+      { protocol: "https", hostname: "img.youtube.com" },
+    ],
   },
   async headers() {
     return [

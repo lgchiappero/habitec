@@ -39,13 +39,13 @@ export const configuradorPageType = defineType({
         }),
         defineField({
           name: 'modelo20ft',
-          title: 'Tagline — MOVARA Flex 37',
+          title: 'Tagline — MOVARA Flex 38',
           type: 'string',
           initialValue: 'El más versátil — 1 o 2 ambientes',
         }),
         defineField({
           name: 'modelo40ft',
-          title: 'Tagline — MOVARA Flex 74',
+          title: 'Tagline — MOVARA Flex 77',
           type: 'string',
           initialValue: 'Máximo espacio — familia o inversión grande',
         }),

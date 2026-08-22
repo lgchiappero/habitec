@@ -32,8 +32,15 @@ function isSanityImage(img: GalleryImage): img is GalleryImage & { asset: Sanity
 }
 
 function getEmbedUrl(url: string): string {
-  const yt = url.match(/(?:youtube\.com\/watch\?v=|youtu\.be\/)([^&?/]+)/);
-  if (yt) return `https://www.youtube.com/embed/${yt[1]}?autoplay=1&rel=0`;
+  // youtu.be/ID — formato corto
+  // youtube.com/watch?v=ID — formato estándar
+  // youtube.com/embed/ID — ya es un embed, se usa el ID directo
+  const youtubeId =
+    url.match(/youtu\.be\/([^&?/]+)/)?.[1] ??
+    url.match(/youtube\.com\/watch\?v=([^&]+)/)?.[1] ??
+    url.match(/youtube\.com\/embed\/([^&?/]+)/)?.[1];
+  if (youtubeId) return `https://www.youtube-nocookie.com/embed/${youtubeId}?rel=0&modestbranding=1`;
+
   const vimeo = url.match(/vimeo\.com\/(\d+)/);
   if (vimeo) return `https://player.vimeo.com/video/${vimeo[1]}?autoplay=1`;
   return url;
@@ -165,8 +172,11 @@ export default function ImageGallery({ images, modelName, video, videos }: Props
             <iframe
               src={active.embedUrl}
               title={active.label}
+              width="100%"
+              height="100%"
               allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
               allowFullScreen
+              frameBorder="0"
               className="absolute inset-0 w-full h-full border-0"
             />
           )

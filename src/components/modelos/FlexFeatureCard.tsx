@@ -51,7 +51,18 @@ export default function FlexFeatureCard({
         <span className="text-xs font-semibold uppercase tracking-widest text-[#D4B06A] mb-3">
           Disponible ahora
         </span>
-        <h3 className="text-2xl lg:text-3xl font-bold text-white mb-3">{nombre}</h3>
+        <h3 className="text-2xl lg:text-3xl font-bold text-white mb-2">{nombre}</h3>
+        <div className="flex items-center flex-wrap gap-2 mb-4">
+          <span className="text-xs text-stone-400">Disponible en:</span>
+          {["18m²", "38m²", "77m²"].map((size) => (
+            <span
+              key={size}
+              className="px-2.5 py-1 rounded-full bg-white/10 border border-white/15 text-xs font-semibold text-white"
+            >
+              {size}
+            </span>
+          ))}
+        </div>
         <p className="text-stone-400 text-sm leading-relaxed mb-6 max-w-md">
           Una unidad plegable y expandible que se transporta cerrada y se despliega en
           destino. Vivienda, inversión turística u oficina, lista en días.

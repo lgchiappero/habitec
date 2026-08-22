@@ -1,7 +1,7 @@
 import { describe, it, expect, vi } from "vitest";
 import { render, screen, fireEvent } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import VirtualTour from "../VirtualTour";
+import VirtualTour, { TOUR_ENABLED } from "../VirtualTour";
 
 vi.mock("next/image", () => ({
   default: ({
@@ -24,7 +24,9 @@ vi.mock("framer-motion", () => ({
   AnimatePresence: ({ children }: { children?: React.ReactNode }) => <>{children}</>,
 }));
 
-describe("VirtualTour", () => {
+// Tour oculto tras un feature flag (VirtualTour.tsx) — estos tests se
+// saltean mientras esté apagado y vuelven a correr solos apenas se reactive.
+describe.skipIf(!TOUR_ENABLED)("VirtualTour", () => {
   it("muestra el botón para iniciar el tour y arranca cerrado", () => {
     render(<VirtualTour modelName="Familiar 65" />);
     expect(screen.getByRole("button", { name: /recorrer la casa/i })).toBeInTheDocument();
@@ -97,5 +99,12 @@ describe("VirtualTour", () => {
     fireEvent.error(img);
 
     expect(await screen.findByText("Foto próximamente")).toBeInTheDocument();
+  });
+});
+
+describe.skipIf(TOUR_ENABLED)("VirtualTour (oculto)", () => {
+  it("no renderiza nada mientras TOUR_ENABLED esté en false", () => {
+    const { container } = render(<VirtualTour modelName="Familiar 65" />);
+    expect(container).toBeEmptyDOMElement();
   });
 });

@@ -13,6 +13,7 @@ export type PrecioResumen = {
 
 const COLOR_SIN_ADICIONALES = { text: "#2d9e75", bg: "#e6f7f1" };
 const COLOR_CON_ADICIONALES = { text: "#854F0B", bg: "#faeeda" };
+const COLOR_SIN_MODELO = { text: "#78716c", bg: "#f5f5f4" };
 
 const NOTA =
   "* Precio estimado de referencia. El precio final depende de la configuración completa y se confirma en el presupuesto personalizado.";
@@ -54,18 +55,18 @@ function Desglose({ resumen, colors }: { resumen: PrecioResumen; colors: { text:
   );
 }
 
-export function PrecioPanel({ resumen }: { resumen: PrecioResumen }) {
+export function PrecioPanel({ resumen, modeloLabel }: { resumen: PrecioResumen; modeloLabel: string | null }) {
   const [open, setOpen] = useState(false);
   const displayTotal = useCountUp(resumen.total);
   const hasExtras = resumen.adicionales.length > 0;
-  const colors = hasExtras ? COLOR_CON_ADICIONALES : COLOR_SIN_ADICIONALES;
+  const colors = !modeloLabel ? COLOR_SIN_MODELO : hasExtras ? COLOR_CON_ADICIONALES : COLOR_SIN_ADICIONALES;
 
   const scale = useMotionValue(1);
   useEffect(() => {
     const controls = animate(scale, [1, 1.035, 1], { duration: 0.45, ease: "easeOut" });
     return () => controls.stop();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [resumen.total]);
+  }, [resumen.total, modeloLabel]);
 
   return (
     <>
@@ -74,34 +75,43 @@ export function PrecioPanel({ resumen }: { resumen: PrecioResumen }) {
         style={{ scale, backgroundColor: colors.bg }}
         className="hidden sm:block sticky top-16 z-30 mb-6 rounded-2xl border border-black/5 px-5 py-4 shadow-sm transition-colors duration-500"
       >
-        <div className="flex items-start justify-between gap-4">
-          <div className="min-w-0">
-            <p className="text-[10px] font-bold uppercase tracking-widest opacity-70 transition-colors duration-500" style={{ color: colors.text }}>
-              Precio estimado
+        {!modeloLabel ? (
+          <p className="text-sm font-bold transition-colors duration-500" style={{ color: colors.text }}>
+            Seleccioná un modelo para ver el precio
+          </p>
+        ) : (
+          <>
+            <div className="flex items-start justify-between gap-4">
+              <div className="min-w-0">
+                <p className="text-base font-extrabold transition-colors duration-500" style={{ color: colors.text }}>
+                  {modeloLabel}
+                </p>
+                <p className="text-sm font-semibold mt-0.5 transition-colors duration-500" style={{ color: colors.text }}>
+                  Precio estimado:{" "}
+                  <span className="text-2xl font-extrabold tabular-nums">{formatUSD(displayTotal)}</span>
+                </p>
+              </div>
+              <button
+                type="button"
+                onClick={() => setOpen((v) => !v)}
+                className="shrink-0 mt-1 text-xs font-bold underline underline-offset-2 decoration-1 cursor-pointer transition-colors duration-500"
+                style={{ color: colors.text }}
+              >
+                {open ? "Ocultar detalle" : "Ver detalle"}
+              </button>
+            </div>
+            <p className="text-[10px] mt-2 leading-relaxed opacity-70 transition-colors duration-500" style={{ color: colors.text }}>
+              {NOTA}
             </p>
-            <p className="text-3xl font-extrabold tabular-nums transition-colors duration-500" style={{ color: colors.text }}>
-              {formatUSD(displayTotal)}
-            </p>
-          </div>
-          <button
-            type="button"
-            onClick={() => setOpen((v) => !v)}
-            className="shrink-0 mt-1 text-xs font-bold underline underline-offset-2 decoration-1 cursor-pointer transition-colors duration-500"
-            style={{ color: colors.text }}
-          >
-            {open ? "Ocultar detalle" : "Ver detalle"}
-          </button>
-        </div>
-        <p className="text-[10px] mt-2 leading-relaxed opacity-70 transition-colors duration-500" style={{ color: colors.text }}>
-          {NOTA}
-        </p>
-        <AnimatePresence initial={false}>
-          {open && (
-            <motion.div initial={{ height: 0, opacity: 0 }} animate={{ height: "auto", opacity: 1 }} exit={{ height: 0, opacity: 0 }} transition={{ duration: 0.25 }} className="overflow-hidden">
-              <Desglose resumen={resumen} colors={colors} />
-            </motion.div>
-          )}
-        </AnimatePresence>
+            <AnimatePresence initial={false}>
+              {open && (
+                <motion.div initial={{ height: 0, opacity: 0 }} animate={{ height: "auto", opacity: 1 }} exit={{ height: 0, opacity: 0 }} transition={{ duration: 0.25 }} className="overflow-hidden">
+                  <Desglose resumen={resumen} colors={colors} />
+                </motion.div>
+              )}
+            </AnimatePresence>
+          </>
+        )}
       </motion.div>
 
       {/* Mobile — barra fija abajo */}
@@ -109,29 +119,37 @@ export function PrecioPanel({ resumen }: { resumen: PrecioResumen }) {
         style={{ scale, backgroundColor: colors.bg }}
         className="sm:hidden fixed bottom-0 left-0 right-0 z-40 border-t border-black/5 px-4 pt-3 pb-[calc(env(safe-area-inset-bottom)+0.75rem)] shadow-[0_-4px_16px_rgba(0,0,0,0.08)] transition-colors duration-500"
       >
-        <button type="button" onClick={() => setOpen((v) => !v)} className="w-full flex items-center justify-between gap-3 cursor-pointer">
-          <div className="text-left min-w-0">
-            <p className="text-[9px] font-bold uppercase tracking-widest opacity-70 transition-colors duration-500" style={{ color: colors.text }}>
-              Precio estimado
+        {!modeloLabel ? (
+          <p className="text-sm font-bold transition-colors duration-500" style={{ color: colors.text }}>
+            Seleccioná un modelo para ver el precio
+          </p>
+        ) : (
+          <>
+            <button type="button" onClick={() => setOpen((v) => !v)} className="w-full flex items-center justify-between gap-3 cursor-pointer">
+              <div className="text-left min-w-0">
+                <p className="text-xs font-extrabold transition-colors duration-500" style={{ color: colors.text }}>
+                  {modeloLabel}
+                </p>
+                <p className="text-[11px] font-semibold transition-colors duration-500" style={{ color: colors.text }}>
+                  Precio estimado: <span className="text-lg font-extrabold tabular-nums">{formatUSD(displayTotal)}</span>
+                </p>
+              </div>
+              <span className="shrink-0 text-[11px] font-bold underline underline-offset-2 decoration-1 transition-colors duration-500" style={{ color: colors.text }}>
+                {open ? "Ocultar" : "Ver detalle"}
+              </span>
+            </button>
+            <p className="text-[8.5px] mt-1 leading-tight opacity-70 transition-colors duration-500" style={{ color: colors.text }}>
+              {NOTA}
             </p>
-            <p className="text-xl font-extrabold tabular-nums transition-colors duration-500" style={{ color: colors.text }}>
-              {formatUSD(displayTotal)}
-            </p>
-          </div>
-          <span className="shrink-0 text-[11px] font-bold underline underline-offset-2 decoration-1 transition-colors duration-500" style={{ color: colors.text }}>
-            {open ? "Ocultar" : "Ver detalle"}
-          </span>
-        </button>
-        <p className="text-[8.5px] mt-1 leading-tight opacity-70 transition-colors duration-500" style={{ color: colors.text }}>
-          {NOTA}
-        </p>
-        <AnimatePresence initial={false}>
-          {open && (
-            <motion.div initial={{ height: 0, opacity: 0 }} animate={{ height: "auto", opacity: 1 }} exit={{ height: 0, opacity: 0 }} transition={{ duration: 0.25 }} className="overflow-hidden">
-              <Desglose resumen={resumen} colors={colors} />
-            </motion.div>
-          )}
-        </AnimatePresence>
+            <AnimatePresence initial={false}>
+              {open && (
+                <motion.div initial={{ height: 0, opacity: 0 }} animate={{ height: "auto", opacity: 1 }} exit={{ height: 0, opacity: 0 }} transition={{ duration: 0.25 }} className="overflow-hidden">
+                  <Desglose resumen={resumen} colors={colors} />
+                </motion.div>
+              )}
+            </AnimatePresence>
+          </>
+        )}
       </motion.div>
     </>
   );

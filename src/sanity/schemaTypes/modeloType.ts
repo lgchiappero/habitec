@@ -53,8 +53,8 @@ export const modeloType = defineType({
       options: {
         list: [
           { title: '10ft — 18 m²', value: '10ft' },
-          { title: '20ft — 37 m²', value: '20ft' },
-          { title: '40ft — 74 m²', value: '40ft' },
+          { title: '20ft — 38 m²', value: '20ft' },
+          { title: '40ft — 77 m²', value: '40ft' },
         ],
         layout: 'radio',
       },

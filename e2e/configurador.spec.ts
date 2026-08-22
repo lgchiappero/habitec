@@ -4,9 +4,9 @@ import { test, expect, type Page } from "@playwright/test";
 
 /** Complete steps 1–5 of the configurador with default valid choices. */
 async function completarPasos1a5(page: Page) {
-  // Step 1 — Modelo: MOVARA Flex 37
-  await expect(page.getByText("MOVARA Flex 37").first()).toBeVisible();
-  await page.locator("button").filter({ hasText: "MOVARA Flex 37" }).first().click();
+  // Step 1 — Modelo: MOVARA Flex 38
+  await expect(page.getByText("MOVARA Flex 38").first()).toBeVisible();
+  await page.locator("button").filter({ hasText: "MOVARA Flex 38" }).first().click();
   await page.getByRole("button", { name: "Siguiente" }).click();
 
   // Step 2 — Finalidad: Inversor
@@ -85,14 +85,14 @@ test.describe("Configurador — flujo completo", () => {
 
   test("Test 3: botón Atrás vuelve al paso anterior correctamente", async ({ page }) => {
     // Step 1 → step 2
-    await page.locator("button").filter({ hasText: "MOVARA Flex 37" }).first().click();
+    await page.locator("button").filter({ hasText: "MOVARA Flex 38" }).first().click();
     await page.getByRole("button", { name: "Siguiente" }).click();
     await expect(page.getByText("Paso 2 de 7")).toBeVisible();
 
     // Back to step 1
     await page.getByRole("button", { name: "Atrás" }).click();
     await expect(page.getByText("Paso 1 de 7")).toBeVisible();
-    await expect(page.getByText("MOVARA Flex 37").first()).toBeVisible();
+    await expect(page.getByText("MOVARA Flex 38").first()).toBeVisible();
 
     // Step 1 → step 2 → step 3 → back to step 2
     await page.locator("button").filter({ hasText: "MOVARA Flex 18" }).first().click();
