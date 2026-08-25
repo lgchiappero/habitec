@@ -2,20 +2,22 @@ import type { NextConfig } from "next";
 
 const CSP = [
   "default-src 'self'",
-  // Next.js requires unsafe-inline/eval for client-side hydration
-  "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://connect.facebook.net",
+  // Next.js requires unsafe-eval/unsafe-inline for client-side hydration
+  "script-src 'self' 'unsafe-eval' 'unsafe-inline' https://connect.facebook.net https://www.googletagmanager.com",
   "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com",
   "font-src 'self' https://fonts.gstatic.com",
-  "img-src 'self' data: blob: https://cdn.sanity.io https://www.facebook.com https://img.youtube.com",
-  "connect-src 'self' https://*.sanity.io wss://*.sanity.io https://api.mercadopago.com https://www.facebook.com https://connect.facebook.net",
-  "frame-src https://maps.google.com https://www.google.com https://www.youtube.com https://youtube.com https://*.youtube.com https://www.youtube-nocookie.com https://*.youtube-nocookie.com",
+  "img-src 'self' data: https: blob:",
+  "media-src 'self' https://www.youtube-nocookie.com https://www.youtube.com",
+  "frame-src 'self' https://www.youtube-nocookie.com https://www.youtube.com https://youtube.com https://*.youtube.com https://maps.google.com https://www.google.com https://www.facebook.com",
+  "connect-src 'self' https://api.mercadopago.com https://www.facebook.com https://connect.facebook.net https://*.supabase.co https://api.sanity.io https://*.sanity.io",
+  "form-action 'self' https://www.facebook.com",
   "frame-ancestors 'none'",
-  "base-uri 'self'",
-  "form-action 'self'",
 ].join("; ");
 
+// X-Frame-Options se eliminó: frame-ancestors 'none' en el CSP ya cubre la
+// protección contra clickjacking, y evita el conflicto con los iframes
+// externos (YouTube, Maps) que sí queremos poder embeber via frame-src.
 const SECURITY_HEADERS = [
-  { key: "X-Frame-Options", value: "DENY" },
   { key: "X-Content-Type-Options", value: "nosniff" },
   { key: "Referrer-Policy", value: "strict-origin-when-cross-origin" },
   {

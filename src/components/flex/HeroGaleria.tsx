@@ -32,10 +32,18 @@ function getYoutubeId(url: string): string | null {
   // youtu.be/ID — formato corto
   // youtube.com/watch?v=ID — formato estándar
   // youtube.com/embed/ID — ya es un embed, se usa el ID directo
+  // youtube.com/shorts/ID — Shorts
+  // youtube.com/live/ID — transmisión en vivo / VOD de live
   return (
     url.match(/youtu\.be\/([^&?/]+)/)?.[1] ??
     url.match(/youtube\.com\/watch\?v=([^&]+)/)?.[1] ??
     url.match(/youtube\.com\/embed\/([^&?/]+)/)?.[1] ??
+    url.match(/youtube\.com\/shorts\/([^&?/]+)/)?.[1] ??
+    url.match(/youtube\.com\/live\/([^&?/]+)/)?.[1] ??
+    // Red de seguridad: cualquier otra URL de youtube.com/youtu.be con un ID
+    // de 11 caracteres en la ruta — cubre formatos nuevos que YouTube agregue
+    // a futuro sin que se cuele una URL de youtube.com sin convertir.
+    url.match(/(?:youtube\.com|youtu\.be)\/(?:[^\s?&]*\/)*?([A-Za-z0-9_-]{11})(?:[?&]|$)/)?.[1] ??
     null
   );
 }
