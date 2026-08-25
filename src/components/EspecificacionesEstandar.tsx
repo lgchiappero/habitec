@@ -4,26 +4,31 @@ type Props = {
 
 const AISLACION_ROWS = [
   {
-    label: "Material",
+    label: "Paredes",
     value: "Lana de roca 75 mm",
-    detail: "Paredes, techo y particiones interiores",
+    detail: "Paredes y particiones interiores",
   },
   {
-    label: "Valor R",
-    value: "2.1 m²K/W",
-    comparison: "60% menos transferencia de calor vs sin aislación",
+    label: "Techo",
+    value: "Panel sándwich PU",
+    detail: "Núcleo de poliuretano — impermeabilización de 5 capas de fábrica",
+  },
+  {
+    label: "Aislación térmica",
+    value: "4x superior",
+    comparison: "vs una pared de ladrillos convencional",
     highlight: true,
   },
   {
     label: "Aislación acústica",
-    value: "Absorción 0.70–0.75",
-    comparison: "vs poliuretano estándar 0.40",
+    value: "≥45 dB",
+    comparison: "vs 35-40 dB de una pared de ladrillos estándar",
     highlight: true,
   },
   {
     label: "Resistencia al fuego",
-    value: "Certificada",
-    detail: "Lana de roca no propaga llama",
+    value: "Clase A1",
+    detail: "Incombustible — la lana de roca no arde ni propaga llama",
   },
 ];
 

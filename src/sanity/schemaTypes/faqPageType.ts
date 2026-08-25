@@ -241,7 +241,7 @@ export const faqPageType = defineType({
             {
               pregunta: '¿Cómo es el acabado interior? ¿Se ve como un container?',
               respuesta:
-                'No. Por dentro no se ve chapa ni estructura expuesta: la última capa del sistema de paredes es un tablero de bambú/madera o acero lacado, igual que un revestimiento interior de una construcción tradicional. El sistema completo de 5 capas también le da a la pared un coeficiente térmico U ≤0.45 W/m²·K y aislación acústica ≥45 dB — muy por encima de una pared de ladrillos común.',
+                'No. Por dentro no se ve chapa ni estructura expuesta: la última capa del sistema de paredes es un tablero de bambú/madera o acero lacado, igual que un revestimiento interior de una construcción tradicional. El panel de lana de roca 75mm le da a la pared una aislación térmica 4 veces superior y aislación acústica ≥45 dB — muy por encima de una pared de ladrillos común (35-40 dB).',
             },
           ],
         },
@@ -252,17 +252,17 @@ export const faqPageType = defineType({
             {
               pregunta: '¿Cómo se comporta en el calor del norte argentino?',
               respuesta:
-                'Bien, porque la aislación no es un agregado sino parte de la estructura: paredes con coeficiente U ≤0.45 W/m²·K (hasta 4 veces más eficiente que una pared de ladrillos), techo de panel sándwich de poliuretano y ventanas DVH con rotura de puente térmico que evitan la entrada de calor. Para climas más exigentes, ofrecemos la opción de poliuretano inyectado como upgrade de aislación (λ≤0.024 W/m·K).',
+                'Bien, porque la aislación no es un agregado sino parte de la estructura: paredes con lana de roca 75mm (aislación térmica 4 veces superior a una pared de ladrillos), techo de panel sándwich de poliuretano con sistema de impermeabilización de 5 capas, y ventanas DVH con rotura de puente térmico que evitan la entrada de calor.',
             },
             {
               pregunta: '¿Y en la Patagonia con el frío y el viento?',
               respuesta:
-                'La estructura está calculada específicamente para cargas de viento, con un margen de 6 veces por encima del mínimo normativo. Las aberturas DVH con RPT evitan condensación y puentes térmicos, y el sistema de aislación de 5 capas incluye barrera de vapor de fábrica — no es algo que se agrega después según el clima de cada obra.',
+                'La estructura está calculada específicamente para cargas de viento, con un margen de 6 veces por encima del mínimo normativo. Las aberturas DVH con RPT evitan condensación y puentes térmicos, y el panel de lana de roca de las paredes incluye barrera de vapor integrada de fábrica — no es algo que se agrega después según el clima de cada obra.',
             },
             {
               pregunta: '¿Aguanta la lluvia y la humedad del litoral?',
               respuesta:
-                'Sí. El sistema anticorrosivo de 3 capas está clasificado para ambientes costeros e industriales (ISO 12944 C3-C4), el techo tiene impermeabilización propia y la barrera de vapor integrada en la pared evita que la humedad ambiente condense dentro del sistema de aislación.',
+                'Sí. El sistema anticorrosivo de 3 capas está clasificado para ambientes costeros e industriales (ISO 12944 C3-C4), el techo tiene un sistema de impermeabilización de 5 capas integrado de fábrica y la barrera de vapor integrada en la pared evita que la humedad ambiente condense dentro del panel de lana de roca.',
             },
           ],
         },
@@ -278,7 +278,7 @@ export const faqPageType = defineType({
             {
               pregunta: '¿El acero no conduce el calor en caso de incendio?',
               respuesta:
-                'El acero estructural no queda expuesto: está envuelto por el sistema de aislación de lana de roca o EPS, materiales de clasificación de fuego Clase A1 (incombustible) o B2 según la opción elegida, que retrasan la transferencia de calor hacia la estructura. Ninguna vivienda es inmune al fuego, pero esto la pone en mejores condiciones que una estructura de madera, que además es combustible en sí misma.',
+                'El acero estructural no queda expuesto: está envuelto por el panel de lana de roca, material de clasificación de fuego Clase A1 (incombustible) que mantiene su forma hasta 1.000°C y retrasa la transferencia de calor hacia la estructura. Ninguna vivienda es inmune al fuego, pero esto la pone en mejores condiciones que una estructura de madera, que además es combustible en sí misma.',
             },
           ],
         },

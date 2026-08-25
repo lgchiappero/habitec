@@ -72,7 +72,7 @@ const IMGS = {
 const SPECS_FAMILIAR: ModelSpecs = {
   estructura: "Steel frame galvanizado 90 mm",
   cubierta: "Chapa Lysaght prepintada + membrana asfáltica",
-  cerramiento: "Panel SIP 150 mm (EPS de alta densidad)",
+  cerramiento: "Panel SIP 150 mm (núcleo de lana de roca de alta densidad)",
   aislacion: "Lana de roca 50 mm + barrera de vapor",
   instalaciones: "Eléctrica, sanitaria, gas natural/GLP",
   terminaciones: "Piso vinílico SPC, pintura látex premium",
@@ -83,8 +83,8 @@ const SPECS_FAMILIAR: ModelSpecs = {
 const SPECS_TURISTICO: ModelSpecs = {
   estructura: "Steel frame galvanizado 70 mm",
   cubierta: "Deck metálico + membrana EPDM",
-  cerramiento: "Panel SIP 100 mm",
-  aislacion: "Poliestireno expandido 80 mm",
+  cerramiento: "Panel SIP 100 mm (núcleo de lana de roca)",
+  aislacion: "Lana de roca 80 mm",
   instalaciones: "Eléctrica, sanitaria, split de calefacción",
   terminaciones: "Deck de madera, revestimiento de madera terciada",
   tiempo: "45–75 días desde aprobación",
@@ -94,8 +94,8 @@ const SPECS_TURISTICO: ModelSpecs = {
 const SPECS_OFICINA: ModelSpecs = {
   estructura: "Steel frame galvanizado 70 mm",
   cubierta: "Chapa acanalada + skylight opcional",
-  cerramiento: "Panel SIP 100 mm + doble vidriado hermético",
-  aislacion: "Lana de vidrio 50 mm + barrera de vapor",
+  cerramiento: "Panel SIP 100 mm (núcleo de lana de roca) + doble vidriado hermético",
+  aislacion: "Lana de roca 50 mm + barrera de vapor",
   instalaciones: "Eléctrica trifásica, datos CAT6, split inverter",
   terminaciones: "Piso flotante laminado, pintura antihumedad",
   tiempo: "30–60 días desde aprobación",

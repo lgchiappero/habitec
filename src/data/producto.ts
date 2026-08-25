@@ -129,44 +129,59 @@ export const PRODUCTO_SECCIONES: ProductoSeccion[] = [
   },
   {
     numero: "03",
-    titulo: "5 capas de aislación — 4 veces más eficiente que una pared de ladrillos",
+    titulo: "Lana de roca 75mm en paredes — 4 veces más eficiente que una pared de ladrillos",
     descripcion:
-      "Las paredes de MOVARA no son un panel simple: son un sistema de 5 capas armado en fábrica, calculado para superar el rendimiento térmico y acústico de una pared de ladrillos común, con barrera de vapor integrada de fábrica.",
+      "Panel de lana de roca 75mm en paredes y particiones. Incombustible y con rendimiento térmico y acústico superior a la construcción tradicional.",
     beneficios: [
-      "Coeficiente U: ≤0.45 W/m²·K (ladrillos típicos: 1.5–2.0)",
-      "Aislación acústica: ≥45 dB",
-      "Barrera de vapor integrada",
-      "Sistema completo de 5 capas de fábrica",
+      "Aislación térmica 4 veces superior a una pared de ladrillos convencional",
+      "Aislación acústica ≥45 dB — una pared de ladrillos estándar logra 35-40 dB",
+      "Ignífuga Clase A1 — no arde, no propaga llamas, no genera humo tóxico",
+      "En caso de incendio mantiene su forma hasta 1.000°C — la construcción tradicional con aislantes orgánicos arde",
+      "No pudre, no se degrada con humedad, no es alimento de roedores ni insectos",
+      "Sin mantenimiento durante toda la vida útil de la estructura",
     ],
     grupos: [
       {
         tipo: "tabla",
         id: "capas",
-        titulo: "Las 5 capas del sistema",
+        titulo: "Composición del panel de pared",
         columnas: ["Capa", "Material", "Función"],
         filas: [
           ["1", "Polietileno 0.2mm", "Barrera anti-condensación"],
-          ["2", "EPS 70mm", "Aislación térmica"],
-          ["3", "EPS 70mm", "Aislación acústica"],
-          ["4", "Acero galvanizado 1mm", "Barrera de vapor"],
-          ["5", "Bambú/madera o acero lacado 4mm", "Acabado interior"],
-        ],
-      },
-      {
-        tipo: "tabla",
-        id: "opciones",
-        titulo: "Opciones de aislación",
-        columnas: ["", "Opción A — Lana de vidrio", "Opción B — Poliuretano inyectado (recomendado)"],
-        filas: [
-          ["Conductividad (λ)", "≤0.040 W/m·K", "≤0.024 W/m·K"],
-          ["Resistencia térmica (R)", "≥1.5 m²K/W", "≥2.5 m²K/W"],
-          ["Clasificación de fuego", "Clase A1 — incombustible", "Clase B2"],
+          ["2", "Lana de roca 75mm", "Aislación térmica y acústica"],
+          ["3", "Acero galvanizado 1mm", "Barrera de vapor"],
+          ["4", "Bambú/madera o acero lacado 4mm", "Acabado interior"],
         ],
       },
     ],
   },
   {
     numero: "04",
+    titulo: "Panel PU en techo — sistema de impermeabilización integrado de fábrica",
+    descripcion:
+      "Panel sándwich con núcleo de poliuretano (PU) en el techo. Sistema de impermeabilización de 5 capas integrado de fábrica.",
+    beneficios: [
+      "Conductividad térmica λ = 0.022 W/m·K vs isolant estándar λ = 0.040 W/m·K — el PU es casi el doble de eficiente en el mismo espesor",
+      "Sistema integrado de fábrica en una sola capa — el techo tradicional requiere 3 etapas separadas: chapa, isolant y cielorrazo, cada una con su mano de obra y posibilidad de fallas",
+      "Sin puentes térmicos — el isolant tradicional pierde eficiencia en los puntos de fijación y bordes",
+      "Impermeabilización de 5 capas integrada de fábrica — el techo tradicional depende de la correcta instalación del isolant y del sellado de juntas",
+      "Sin mantenimiento — el isolant tradicional se degrada, se humedece y pierde propiedades con el tiempo",
+      "No genera condensación interior — problema frecuente en techos con isolant mal instalado",
+    ],
+    grupos: [
+      {
+        tipo: "lista",
+        id: "specs",
+        titulo: "Especificaciones técnicas",
+        items: [
+          "Conductividad térmica: λ = 0.022 W/m·K",
+          "Sistema de impermeabilización: 5 capas integradas de fábrica",
+        ],
+      },
+    ],
+  },
+  {
+    numero: "05",
     titulo: "Soldadura industrial certificada — no hay pernos estructurales",
     descripcion:
       "Las uniones estructurales de MOVARA no se atornillan: se sueldan en taller bajo procesos industriales controlados, con inspección posterior por ultrasonido en cada unión crítica. Menos puntos de falla, más control de calidad.",

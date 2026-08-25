@@ -38,7 +38,7 @@ export const REGIONAL_MODELS: Record<string, RegionalModel> = {
     tagline: "Ingeniería contra los veranos más extremos del país",
     descripcion:
       "Para las zonas de mayor temperatura de Argentina. Aislación termorradiante bajo cubierta, parasoles y ventilación cruzada forzada que reducen la temperatura interior hasta 12°C.",
-    panel: "Panel 75 mm EPS + manta termorradiante",
+    panel: "Panel 75 mm lana de roca + manta termorradiante",
     ventanas: "DVH aluminio rompecorriente + parasoles fijos",
     climatizacion: "Split inverter alta eficiencia (COP ≥ 4) + ventilación cruzada",
     extras: [
@@ -56,7 +56,7 @@ export const REGIONAL_MODELS: Record<string, RegionalModel> = {
     tagline: "El estándar de confort para el clima más equilibrado",
     descripcion:
       "Clima templado con cuatro estaciones marcadas. Modelo de referencia MOVARA: aislación balanceada, aberturas amplias para el sol de invierno y ventilación natural en verano.",
-    panel: "Panel SIP 100 mm EPS",
+    panel: "Panel SIP 100 mm lana de roca",
     ventanas: "DVH aluminio estándar",
     climatizacion: "Split inverter + instalación gas natural",
     extras: [
@@ -74,7 +74,7 @@ export const REGIONAL_MODELS: Record<string, RegionalModel> = {
     tagline: "Contra el viento y la amplitud térmica de Cuyo",
     descripcion:
       "Diseñado para la amplitud térmica extrema y el viento Zonda. Sellados extra, doble vidriado con protección UV y calefacción radiante para los inviernos secos y fríos.",
-    panel: "Panel 100 mm EPS + barrera de vapor reforzada",
+    panel: "Panel 100 mm lana de roca + barrera de vapor reforzada",
     ventanas: "DVH aluminio rompecorriente + filtro UV",
     climatizacion: "Split inverter + losa radiante eléctrica",
     extras: [
@@ -92,7 +92,7 @@ export const REGIONAL_MODELS: Record<string, RegionalModel> = {
     tagline: "Altura y amplitud térmica: confort en el NOA",
     descripcion:
       "Adaptado para la puna y los valles del NOA. Gran amplitud térmica diaria, radiación UV intensa y temporada de lluvias. Aislación para noches frías y protección contra el sol de altura.",
-    panel: "Panel 100 mm EPS + revestimiento anti-UV",
+    panel: "Panel 100 mm lana de roca + revestimiento anti-UV",
     ventanas: "DVH aluminio con lámina control solar UV",
     climatizacion: "Split inverter + calefactor a gas/GLP",
     extras: [
@@ -110,7 +110,7 @@ export const REGIONAL_MODELS: Record<string, RegionalModel> = {
     tagline: "Para el frío y el viento patagónico",
     descripcion:
       "La Patagonia exige lo mejor en aislación y resistencia al viento. Panel de 150 mm, estructura reforzada para ráfagas y calefacción central para los inviernos más fríos.",
-    panel: "Panel 150 mm EPS alta densidad",
+    panel: "Panel 150 mm lana de roca alta densidad",
     ventanas: "DVH aluminio rompecorriente térmico",
     climatizacion: "Calefacción central a gas + split inverter",
     extras: [
