@@ -8,7 +8,7 @@ import WhatsAppStickyBar from "@/components/ui/WhatsAppStickyBar";
 import { MetaPixelPageView } from "@/components/MetaPixelPageView";
 import { SanityLive } from "@/sanity/lib/live";
 import { client } from "@/sanity/lib/client";
-import { SITE_CONFIG_QUERY } from "@/sanity/lib/queries";
+import { SITE_CONFIG_QUERY, CUPOS_QUERY } from "@/sanity/lib/queries";
 
 const META_PIXEL_ID = "996322016615557";
 
@@ -39,6 +39,16 @@ async function getSiteConfig(): Promise<SiteConfig | null> {
   }
 }
 
+type CuposConfig = { totalUnidades?: number | null; unidadesReservadas?: number | null };
+
+async function getCupos(): Promise<CuposConfig | null> {
+  try {
+    return await client.fetch<CuposConfig>(CUPOS_QUERY);
+  } catch {
+    return null;
+  }
+}
+
 export async function generateMetadata(): Promise<Metadata> {
   const config = await getSiteConfig();
   return {
@@ -54,12 +64,12 @@ export default async function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const config = await getSiteConfig();
+  const [config, cupos] = await Promise.all([getSiteConfig(), getCupos()]);
   const waNumber = config?.whatsappNumber ?? null;
 
   return (
     <html lang="es" className={`${montserrat.variable} ${poppins.variable} h-full antialiased`}>
-      <body className="min-h-full flex flex-col bg-white text-stone-900 pb-20 sm:pb-0">
+      <body className="min-h-full flex flex-col bg-white text-stone-900 pb-24 sm:pb-20">
         <noscript>
           <img
             height="1"
@@ -71,7 +81,11 @@ export default async function RootLayout({
         </noscript>
         {children}
         <WizardModal waNumber={waNumber} />
-        <WhatsAppStickyBar waNumber={waNumber} />
+        <WhatsAppStickyBar
+          waNumber={waNumber}
+          total={cupos?.totalUnidades ?? 20}
+          reservadas={cupos?.unidadesReservadas ?? 7}
+        />
         <BackToTop />
         {process.env.SANITY_API_TOKEN && <SanityLive />}
         <MetaPixelPageView />

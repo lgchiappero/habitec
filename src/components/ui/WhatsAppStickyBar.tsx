@@ -2,15 +2,20 @@
 
 import { usePathname } from "next/navigation";
 import { getWhatsAppUrl } from "@/lib/whatsapp";
+import CuposBar from "@/components/ui/CuposBar";
 
 export default function WhatsAppStickyBar({
   waNumber,
-  mensaje = "Hola MOVARA! Quiero más información sobre sus espacios modulares.",
-  label = "Consultar por WhatsApp",
+  mensaje = "Hola MOVARA! Quiero hablar con un asesor sobre el precio de lanzamiento.",
+  label = "Hablar con un asesor",
+  total,
+  reservadas,
 }: {
   waNumber?: string | null;
   mensaje?: string;
   label?: string;
+  total?: number | null;
+  reservadas?: number | null;
 }) {
   const pathname = usePathname();
   const href = getWhatsAppUrl(mensaje, waNumber);
@@ -18,19 +23,35 @@ export default function WhatsAppStickyBar({
   // El configurador tiene su propio flujo de WhatsApp (botón de envío en el
   // resultado) y, en mobile, su propio panel de precio fijo abajo — mostrar
   // esta barra ahí también hace que las dos se pisen en la misma posición.
-  if (pathname?.startsWith("/configurador")) return null;
+  // El Studio y el admin tampoco son páginas de cara al cliente.
+  if (
+    pathname?.startsWith("/configurador") ||
+    pathname?.startsWith("/studio") ||
+    pathname?.startsWith("/admin")
+  ) {
+    return null;
+  }
+
+  const mostrarCupos = typeof total === "number" && typeof reservadas === "number" && total > 0;
 
   return (
-    <div className="sm:hidden fixed bottom-0 inset-x-0 z-40 p-3 bg-white/95 backdrop-blur border-t border-stone-200">
-      <a
-        href={href}
-        target="_blank"
-        rel="noopener noreferrer"
-        className="flex items-center justify-center gap-3 w-full py-4 bg-sage-600 hover:bg-sage-700 text-white font-bold text-base rounded-xl transition-all duration-200"
-      >
-        <WhatsAppIcon className="w-5 h-5" />
-        {label}
-      </a>
+    <div className="fixed bottom-0 inset-x-0 z-40 px-3 py-3 sm:px-6 bg-[#1A1A1A]/97 backdrop-blur border-t border-[#D4B06A]/15">
+      <div className="max-w-5xl mx-auto flex items-center gap-3 sm:gap-6">
+        {mostrarCupos && (
+          <div className="shrink-0">
+            <CuposBar variant="mini" total={total as number} reservadas={reservadas as number} />
+          </div>
+        )}
+        <a
+          href={href}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="flex-1 sm:flex-initial sm:ml-auto flex items-center justify-center gap-2 sm:gap-2.5 py-3.5 sm:py-3 px-4 sm:px-8 bg-[#D4B06A] hover:bg-[#BF9A52] text-[#1A1A1A] font-bold text-[13px] sm:text-sm rounded-xl transition-all duration-200 whitespace-nowrap"
+        >
+          <WhatsAppIcon className="w-[18px] h-[18px]" />
+          {label}
+        </a>
+      </div>
     </div>
   );
 }

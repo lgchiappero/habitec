@@ -92,6 +92,15 @@ export const SITE_CONFIG_QUERY = groq`
   }
 `
 
+// Versión liviana de los cupos de preventa, para la barra sticky global
+// (se muestra en todo el sitio, no solo en el home donde vive HOME_PAGE_QUERY).
+export const CUPOS_QUERY = groq`
+  *[_type == "homePage"][0].preventa {
+    totalUnidades,
+    unidadesReservadas,
+  }
+`
+
 export const CONFIGURADOR_PAGE_QUERY = groq`
   *[_type == "configuradorPage"][0] {
     paso1 {

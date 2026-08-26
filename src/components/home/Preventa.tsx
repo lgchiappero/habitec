@@ -2,6 +2,7 @@
 
 import { motion } from "framer-motion";
 import { Shield, Layers, Thermometer, Eye } from "lucide-react";
+import CuposBar from "@/components/ui/CuposBar";
 
 type Beneficio = { _key?: string; titulo: string; descripcion: string };
 
@@ -47,7 +48,6 @@ const CERT_CARDS = [
 export default function Preventa({ content }: { content?: PreventaContent | null }) {
   const TOTAL = content?.totalUnidades ?? 20;
   const RESERVADAS = content?.unidadesReservadas ?? 7;
-  const pct = Math.round((RESERVADAS / TOTAL) * 100);
 
   return (
     <section id="preventa" className="py-32 bg-[#1A1A1A]">
@@ -58,12 +58,6 @@ export default function Preventa({ content }: { content?: PreventaContent | null
           viewport={{ once: true }}
           transition={{ duration: 0.6 }}
         >
-          {/* Badge — rojo pulsante */}
-          <div className="inline-flex items-center gap-2.5 px-5 py-2 rounded-full border border-red-500/40 bg-red-500/10 text-red-400 text-xs font-bold uppercase tracking-widest mb-10">
-            <span className="w-2 h-2 rounded-full bg-red-500 animate-pulse" />
-            🔥 {content?.badgeEscasez ?? "Precio Lanzamiento Exclusivo — Activo"}
-          </div>
-
           <h2 className="text-4xl sm:text-5xl font-bold text-white leading-tight mb-6">
             {content?.titulo ? (
               content.titulo
@@ -81,23 +75,8 @@ export default function Preventa({ content }: { content?: PreventaContent | null
           </p>
 
           {/* Progress */}
-          <div className="bg-white/5 border border-white/10 rounded-2xl p-8 mb-10 text-left max-w-md mx-auto">
-            <div className="flex justify-between items-baseline mb-3">
-              <span className="text-stone-400 text-sm">{RESERVADAS} lugares reservados</span>
-              <span className="text-[#D4B06A] font-bold text-lg">{TOTAL - RESERVADAS} disponibles</span>
-            </div>
-            <div className="h-2.5 bg-white/10 rounded-full overflow-hidden mb-3">
-              <motion.div
-                initial={{ width: 0 }}
-                whileInView={{ width: `${pct}%` }}
-                viewport={{ once: true }}
-                transition={{ duration: 1.4, delay: 0.2, ease: "easeOut" }}
-                className="h-full bg-[#D4B06A] rounded-full"
-              />
-            </div>
-            <p className="text-stone-600 text-xs text-center">
-              {RESERVADAS} de {TOTAL} lugares con condiciones especiales ocupados
-            </p>
+          <div className="mb-10">
+            <CuposBar total={TOTAL} reservadas={RESERVADAS} />
           </div>
 
           {/* Benefits */}
