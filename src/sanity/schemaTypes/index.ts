@@ -5,6 +5,7 @@ import { testimonioType } from './testimonioType'
 import { siteConfigType } from './siteConfigType'
 import { homePageType } from './homePageType'
 import { configuradorPageType } from './configuradorPageType'
+import { configuradorModelosType } from './configuradorModelosType'
 import { modelosPageType } from './modelosPageType'
 import { quienesSomosType } from './quienesSomosType'
 import { faqPageType } from './faqPageType'
@@ -22,6 +23,7 @@ export const schema: { types: SchemaTypeDefinition[] } = {
     siteConfigType,
     homePageType,
     configuradorPageType,
+    configuradorModelosType,
     modelosPageType,
     quienesSomosType,
     faqPageType,

@@ -49,6 +49,15 @@ export const structure: StructureResolver = (S) =>
         ),
 
       S.listItem()
+        .title('Imágenes del Configurador')
+        .child(
+          S.document()
+            .schemaType('configuradorModelos')
+            .documentId('configuradorModelos')
+            .title('Imágenes del Configurador'),
+        ),
+
+      S.listItem()
         .title('Quiénes somos')
         .child(
           S.document()

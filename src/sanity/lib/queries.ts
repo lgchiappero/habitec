@@ -125,6 +125,23 @@ export const CONFIGURADOR_PAGE_QUERY = groq`
   }
 `
 
+export const CONFIGURADOR_MODELOS_QUERY = groq`
+  *[_type == "configuradorModelos"][0] {
+    flex18 {
+      imagenPrincipal,
+      galeria[defined(asset)] { "asset": asset, hotspot, crop, label },
+    },
+    flex38 {
+      imagenPrincipal,
+      galeria[defined(asset)] { "asset": asset, hotspot, crop, label },
+    },
+    flex77 {
+      imagenPrincipal,
+      galeria[defined(asset)] { "asset": asset, hotspot, crop, label },
+    },
+  }
+`
+
 export const FLEX_CARD_QUERY = groq`
   *[_type == "flexPage"][0] {
     "nombre": hero.title,

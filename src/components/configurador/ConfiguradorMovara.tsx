@@ -3,6 +3,7 @@
 import { useState, useEffect, useMemo } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import Link from "next/link";
+import Image from "next/image";
 import { REGIONAL_MODELS, PROVINCIA_A_MODELO, PROVINCIAS_AR, getModeloKey } from "@/data/regional-models";
 import { getWhatsAppUrl } from "@/lib/whatsapp";
 import {
@@ -145,7 +146,7 @@ const UPGRADES_BY_REGION: Record<string, Upgrade[]> = {
   ],
 };
 
-type ModeloKey = (typeof MOVARA_MODELS)[number]["key"];
+export type ModeloKey = (typeof MOVARA_MODELS)[number]["key"];
 type FinalidadKey = (typeof FINALIDADES)[number]["key"];
 type TipoCocina = "electrico" | "gas";
 type TipoAgua = "calefon-electrico" | "termotanque-gas";
@@ -315,10 +316,13 @@ export default function ConfiguradorMovara({
   data,
   precios,
   preselectedModelo,
+  modeloImagenes,
 }: {
   data?: ConfiguradorPageData | null;
   precios?: PreciosConfig | null;
   preselectedModelo?: string;
+  /** Imágenes por tamaño (de Sanity — schema `configuradorModelos`), con fallback a banner-hero. */
+  modeloImagenes?: Record<ModeloKey, string[]>;
 }) {
   const cms = {
     paso1: {
@@ -543,7 +547,7 @@ export default function ConfiguradorMovara({
             exit={{ opacity: 0, x: slideDir * -30 }}
             transition={{ duration: 0.2, ease: "easeOut" }}
           >
-            {step === 1 && <StepModelo modelo={modelo} onSelect={setModelo} title={cms.paso1.title} subtitle={cms.paso1.subtitle} taglines={cms.paso1.taglines} />}
+            {step === 1 && <StepModelo modelo={modelo} onSelect={setModelo} title={cms.paso1.title} subtitle={cms.paso1.subtitle} taglines={cms.paso1.taglines} modeloImagenes={modeloImagenes} />}
             {step === 2 && <StepFinalidad finalidad={finalidad} onSelect={setFinalidad} title={cms.paso2.title} subtitle={cms.paso2.subtitle} descs={cms.paso2.descs} />}
             {step === 3 && <StepUbicacion localidad={localidad} setLocalidad={setLocalidad} provincia={provincia} setProvincia={setProvincia} regional={regional} title={cms.paso3.title} subtitle={cms.paso3.subtitle} localidadLabel={cms.paso3.localidadLabel} provinciaLabel={cms.paso3.provinciaLabel} />}
             {step === 4 && <StepConfiguracion modelo={modelo} habitaciones={habitaciones} setHabitaciones={setHabitaciones} maxHab={maxHab} incluyeCocina={incluyeCocina} setIncluyeCocina={setIncluyeCocina} tipoCocina={tipoCocina} setTipoCocina={setTipoCocina} incluyeBano={incluyeBano} setIncluyeBano={setIncluyeBano} tipoAgua={tipoAgua} setTipoAgua={setTipoAgua} lavarropas={lavarropas} setLavarropas={setLavarropas} materiales={materiales} onSelectMaterial={selectMaterial} priceFor={priceFor} />}
@@ -634,12 +638,72 @@ function PhotoCarousel({ slides }: { slides: number }) {
   );
 }
 
-function StepModelo({ modelo, onSelect, title, subtitle, taglines }: {
+/** Fotos reales del modelo (de Sanity) con fila de thumbnails clickeable. */
+function ModeloPhotoCarousel({ images }: { images: string[] }) {
+  const [current, setCurrent] = useState(0);
+  const total = images.length;
+
+  return (
+    <div className="mt-3 rounded-xl overflow-hidden border border-stone-100">
+      <div className="relative bg-stone-100 h-36">
+        <Image
+          src={images[current]}
+          alt={`Foto ${current + 1} de ${total}`}
+          fill
+          className="object-cover"
+          sizes="(max-width: 640px) 100vw, 400px"
+        />
+        {total > 1 && (
+          <>
+            <button
+              type="button"
+              onClick={(e) => { e.stopPropagation(); setCurrent((c) => (c - 1 + total) % total); }}
+              className="absolute left-2 top-1/2 -translate-y-1/2 w-7 h-7 rounded-full bg-white/80 hover:bg-white flex items-center justify-center shadow-sm transition-colors"
+            >
+              <ChevronLeftIcon />
+            </button>
+            <button
+              type="button"
+              onClick={(e) => { e.stopPropagation(); setCurrent((c) => (c + 1) % total); }}
+              className="absolute right-2 top-1/2 -translate-y-1/2 w-7 h-7 rounded-full bg-white/80 hover:bg-white flex items-center justify-center shadow-sm transition-colors"
+            >
+              <ChevronRightIcon />
+            </button>
+            <span className="absolute bottom-1.5 right-1.5 bg-black/50 text-white text-[10px] font-semibold px-1.5 py-0.5 rounded-full tabular-nums">
+              {current + 1} / {total}
+            </span>
+          </>
+        )}
+      </div>
+      {total > 1 && (
+        <div className="flex gap-1.5 p-2 bg-white overflow-x-auto">
+          {images.map((src, i) => (
+            <button
+              key={src}
+              type="button"
+              onClick={(e) => { e.stopPropagation(); setCurrent(i); }}
+              aria-label={`Ver foto ${i + 1}`}
+              aria-pressed={i === current}
+              className={`relative shrink-0 w-12 h-12 rounded-md overflow-hidden border-2 transition-colors ${
+                i === current ? "border-sage-500" : "border-transparent hover:border-stone-300"
+              }`}
+            >
+              <Image src={src} alt="" fill className="object-cover" sizes="48px" />
+            </button>
+          ))}
+        </div>
+      )}
+    </div>
+  );
+}
+
+function StepModelo({ modelo, onSelect, title, subtitle, taglines, modeloImagenes }: {
   modelo: ModeloKey | null;
   onSelect: (k: ModeloKey) => void;
   title: string;
   subtitle: string;
   taglines: Record<string, string | null>;
+  modeloImagenes?: Record<ModeloKey, string[]>;
 }) {
   return (
     <div>
@@ -673,7 +737,10 @@ function StepModelo({ modelo, onSelect, title, subtitle, taglines }: {
                 </div>
               </button>
               <div className="px-5 pb-5">
-                <PhotoCarousel slides={3} />
+                {(() => {
+                  const imgs = modeloImagenes?.[m.key] ?? [];
+                  return imgs.length > 0 ? <ModeloPhotoCarousel images={imgs} /> : <PhotoCarousel slides={3} />;
+                })()}
               </div>
             </div>
           );

@@ -1,9 +1,10 @@
 import type { Metadata } from "next";
 import { Suspense } from "react";
-import ConfiguradorMovara from "@/components/configurador/ConfiguradorMovara";
+import ConfiguradorMovara, { type ModeloKey } from "@/components/configurador/ConfiguradorMovara";
 import ConfiguradorModeloReader from "@/components/configurador/ConfiguradorModeloReader";
 import { client } from "@/sanity/lib/client";
-import { CONFIGURADOR_PAGE_QUERY, SITE_CONFIG_QUERY } from "@/sanity/lib/queries";
+import { CONFIGURADOR_PAGE_QUERY, SITE_CONFIG_QUERY, CONFIGURADOR_MODELOS_QUERY } from "@/sanity/lib/queries";
+import { urlFor } from "@/sanity/lib/image";
 
 // Contenido del CMS: cambia poco, se sirve estático y se revalida cada 1h.
 // `force-static` es una barrera explícita: si alguien reintroduce una API
@@ -34,8 +35,52 @@ async function getPrecios() {
   }
 }
 
+type SanityAsset = { _ref: string; _type: string };
+type SanityImage = { asset?: SanityAsset; hotspot?: unknown; crop?: unknown; label?: string };
+type ModeloImagenesRaw = { imagenPrincipal?: SanityImage | null; galeria?: SanityImage[] | null };
+
+// Placeholder cuando el modelo todavía no tiene fotos cargadas en Sanity —
+// mismo archivo que ya se usa como fallback de galería en /modelos/flex.
+const PLACEHOLDER_IMG = "/banner-hero.webp";
+
+function buildUrls(m?: ModeloImagenesRaw | null): string[] {
+  const urls: string[] = [];
+  // Sin hotspot/crop a propósito: con fit("max") y un solo eje (width), un
+  // rect= editorial recortaría la foto antes de escalarla — mismo criterio
+  // que ya se usa en el resto del sitio para estas galerías (ver HeroGaleria).
+  if (m?.imagenPrincipal?.asset?._ref) {
+    urls.push(urlFor({ asset: m.imagenPrincipal.asset }).width(900).fit("max").auto("format").url());
+  }
+  const galeria = (m?.galeria ?? []).filter((img): img is SanityImage & { asset: SanityAsset } => !!img?.asset?._ref);
+  for (const img of galeria) {
+    urls.push(urlFor({ asset: img.asset }).width(900).fit("max").auto("format").url());
+  }
+  return urls.length > 0 ? urls : [PLACEHOLDER_IMG];
+}
+
+async function getModeloImagenes(): Promise<Record<ModeloKey, string[]>> {
+  try {
+    const data = await client.fetch<{
+      flex18?: ModeloImagenesRaw | null;
+      flex38?: ModeloImagenesRaw | null;
+      flex77?: ModeloImagenesRaw | null;
+    } | null>(CONFIGURADOR_MODELOS_QUERY);
+    return {
+      "10ft": buildUrls(data?.flex18),
+      "20ft": buildUrls(data?.flex38),
+      "40ft": buildUrls(data?.flex77),
+    };
+  } catch {
+    return { "10ft": [PLACEHOLDER_IMG], "20ft": [PLACEHOLDER_IMG], "40ft": [PLACEHOLDER_IMG] };
+  }
+}
+
 export default async function ConfiguradorPage() {
-  const [data, precios] = await Promise.all([getConfiguradorData(), getPrecios()]);
+  const [data, precios, modeloImagenes] = await Promise.all([
+    getConfiguradorData(),
+    getPrecios(),
+    getModeloImagenes(),
+  ]);
 
   // `?modelo=` solo afecta el estado inicial del cliente, no el render del
   // servidor: se lee con useSearchParams() dentro de un Suspense boundary
@@ -43,8 +88,8 @@ export default async function ConfiguradorPage() {
   // mismo componente sin preselección, así no hay salto visual mientras
   // hidrata.
   return (
-    <Suspense fallback={<ConfiguradorMovara data={data} precios={precios} />}>
-      <ConfiguradorModeloReader data={data} precios={precios} />
+    <Suspense fallback={<ConfiguradorMovara data={data} precios={precios} modeloImagenes={modeloImagenes} />}>
+      <ConfiguradorModeloReader data={data} precios={precios} modeloImagenes={modeloImagenes} />
     </Suspense>
   );
 }

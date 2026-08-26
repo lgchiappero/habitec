@@ -37,6 +37,12 @@ export type MaterialSelector = {
    *  para mostrarlo (badge, desglose, WhatsApp) como para buscar el precio
    *  cargado en Sanity (`preciosExtras[].nombre`). */
   priceName?: string;
+  /** "contain" para objetos verticales (puertas, ventanas): se ve la pieza
+   *  completa, sin recortar. Default "cover" — para fotos de ambientes o
+   *  exteriores completos, donde sí conviene llenar el recuadro. */
+  imageFit?: "cover" | "contain";
+  /** Fondo neutro detrás de la imagen cuando imageFit es "contain". */
+  imageBg?: string;
 };
 
 export type MaterialCategoryGroup = {
@@ -106,11 +112,11 @@ export const MATERIAL_CATEGORY_GROUPS: MaterialCategoryGroup[] = [
         key: "piso",
         label: "PVC estándar — sin costo",
         options: [
-          { id: "nogal-oscuro", color: "#3d2b1f", label: "Nogal oscuro" },
-          { id: "gris-oscuro", color: "#4a4a4a", label: "Gris oscuro" },
-          { id: "pino-blanco", color: "#f0e6d3", label: "Pino blanco", border: true },
-          { id: "maple", color: "#c8a46e", label: "Maple" },
-          { id: "castano-gris", color: "#8a8070", label: "Castaño gris" },
+          { id: "nogal-oscuro", img: `${DIR}/piso/piso-pvc-01-nogal.jpg`, color: "#3d2b1f", label: "Nogal oscuro" },
+          { id: "gris-oscuro", img: `${DIR}/piso/piso-pvc-02-gris-oscuro.jpg`, color: "#4a4a4a", label: "Gris oscuro" },
+          { id: "pino-blanco", img: `${DIR}/piso/piso-pvc-03-pino-blanco.jpg`, color: "#f0e6d3", label: "Pino blanco", border: true },
+          { id: "maple", img: `${DIR}/piso/piso-pvc-04-maple.jpg`, color: "#c8a46e", label: "Maple" },
+          { id: "castano-gris", img: `${DIR}/piso/piso-pvc-05-castano.jpg`, color: "#8a8070", label: "Castaño gris" },
         ],
       },
       {
@@ -118,17 +124,17 @@ export const MATERIAL_CATEGORY_GROUPS: MaterialCategoryGroup[] = [
         label: "SPC premium — costo adicional",
         priceName: "Piso SPC",
         options: [
-          { id: "spc-8917", color: "#8b5e3c", label: "8917" },
-          { id: "spc-8916", color: "#c79a65", label: "8916" },
-          { id: "spc-8915", color: "#c9a876", label: "8915" },
-          { id: "spc-8913", color: "#6e6259", label: "8913" },
-          { id: "spc-8912", color: "#d8b98b", label: "8912" },
-          { id: "spc-8911", color: "#e8dfc8", label: "8911" },
-          { id: "spc-8918", color: "#5c3a26", label: "8918" },
-          { id: "spc-8920", color: "#6b2e22", label: "8920" },
-          { id: "spc-8921", color: "#8c8c8c", label: "8921" },
-          { id: "spc-8923", color: "#d9c4a0", label: "8923" },
-          { id: "spc-8927", color: "#7c7873", label: "8927" },
+          { id: "spc-8917", img: `${DIR}/piso/piso-spc-8917.jpg`, color: "#8b5e3c", label: "8917" },
+          { id: "spc-8916", img: `${DIR}/piso/piso-spc-8916.jpg`, color: "#c79a65", label: "8916" },
+          { id: "spc-8915", img: `${DIR}/piso/piso-spc-8915.jpg`, color: "#c9a876", label: "8915" },
+          { id: "spc-8913", img: `${DIR}/piso/piso-spc-8913.jpg`, color: "#6e6259", label: "8913" },
+          { id: "spc-8912", img: `${DIR}/piso/piso-spc-8912.jpg`, color: "#d8b98b", label: "8912" },
+          { id: "spc-8911", img: `${DIR}/piso/piso-spc-8911.jpg`, color: "#e8dfc8", label: "8911" },
+          { id: "spc-8918", img: `${DIR}/piso/piso-spc-8918.jpg`, color: "#5c3a26", label: "8918" },
+          { id: "spc-8920", img: `${DIR}/piso/piso-spc-8920.jpg`, color: "#6b2e22", label: "8920" },
+          { id: "spc-8921", img: `${DIR}/piso/piso-spc-8921.jpg`, color: "#8c8c8c", label: "8921" },
+          { id: "spc-8923", img: `${DIR}/piso/piso-spc-8923.jpg`, color: "#d9c4a0", label: "8923" },
+          { id: "spc-8927", img: `${DIR}/piso/piso-spc-8927.jpg`, color: "#7c7873", label: "8927" },
         ],
       },
     ],
@@ -150,6 +156,8 @@ export const MATERIAL_CATEGORY_GROUPS: MaterialCategoryGroup[] = [
       {
         key: "puertaBano",
         label: "Puerta de baño — sin costo",
+        imageFit: "contain",
+        imageBg: "#f5f5f5",
         options: [
           { id: "negro-cuadricula", img: `${DIR}/bano-puerta-01-negro-cuadricula.png`, label: "Negro cuadriculado" },
           { id: "blanco-cuadricula", img: `${DIR}/bano-puerta-02-blanco-cuadricula.png`, label: "Blanco cuadriculado" },
@@ -190,11 +198,16 @@ export const MATERIAL_CATEGORY_GROUPS: MaterialCategoryGroup[] = [
         key: "mesada",
         label: "Mesada — sin costo",
         options: [
-          { id: "negro", color: "#1a1a1a", label: "Negro" },
-          { id: "blanco-marmol", color: "#f5f5f0", label: "Blanco mármol" },
-          { id: "gris", color: "#808080", label: "Gris" },
-          { id: "blanco", color: "#ffffff", label: "Blanco", border: true },
-          { id: "dorado", color: "#c8a96e", label: "Dorado/Ocre" },
+          { id: "negro", img: `${DIR}/cocina/cocina-mesada-negro.jpg`, color: "#1a1a1a", label: "Negro" },
+          { id: "blanco-marmol", img: `${DIR}/cocina/cocina-mesada-blanco-marmol.jpg`, color: "#f5f5f0", label: "Blanco mármol" },
+          { id: "gris", img: `${DIR}/cocina/cocina-mesada-gris.jpg`, color: "#808080", label: "Gris" },
+          { id: "blanco", img: `${DIR}/cocina/cocina-mesada-blanco.jpg`, color: "#ffffff", label: "Blanco", border: true },
+          { id: "dorado", img: `${DIR}/cocina/cocina-mesada-dorado.jpg`, color: "#c8a96e", label: "Dorado/Ocre" },
+          { id: "blanco-marmol-venas-grises", img: `${DIR}/cocina/cocina-mesada-blanco-marmol-venas-grises.jpg`, color: "#eceae6", border: true, label: "Blanco mármol con venas grises" },
+          { id: "negro-absoluto", img: `${DIR}/cocina/cocina-mesada-negro-absoluto.jpg`, color: "#0a0a0a", label: "Negro absoluto" },
+          { id: "gris-cemento", img: `${DIR}/cocina/cocina-mesada-gris-cemento.jpg`, color: "#9a968d", label: "Gris cemento" },
+          { id: "beige-arena", img: `${DIR}/cocina/cocina-mesada-beige-arena.jpg`, color: "#d8c9a8", label: "Beige arena" },
+          { id: "verde-agua", img: `${DIR}/cocina/cocina-mesada-verde-agua.jpg`, color: "#93bdaf", label: "Verde agua" },
         ],
       },
       {
@@ -219,6 +232,8 @@ export const MATERIAL_CATEGORY_GROUPS: MaterialCategoryGroup[] = [
       {
         key: "puertaPrincipal",
         label: "Puerta principal — sin costo",
+        imageFit: "contain",
+        imageBg: "#f0f0f0",
         options: [
           { id: "corredera-doble", img: `${DIR}/puertacorrediza2hojas.png`, label: "Corredera doble hoja" },
           { id: "doble-hoja-abatible", img: `${DIR}/puertadeabrir2hojas.png`, label: "Doble hoja abatible" },
@@ -229,6 +244,8 @@ export const MATERIAL_CATEGORY_GROUPS: MaterialCategoryGroup[] = [
       {
         key: "ventanas",
         label: "Ventanas — sin costo",
+        imageFit: "contain",
+        imageBg: "#f0f0f0",
         options: [
           { id: "estandar-mosquitero", img: `${DIR}/ventanadeabrirconmosquitero.png`, label: "Estándar con mosquitero" },
           { id: "abatible-fija", img: `${DIR}/ventanaconabatienteconcargo.png`, label: "Abatible con paño fijo" },
@@ -304,9 +321,27 @@ function CheckIcon({ className }: { className?: string }) {
   );
 }
 
-function MaterialImage({ src, alt, sizes }: { src: string; alt: string; sizes: string }) {
+function MaterialImage({
+  src,
+  alt,
+  sizes,
+  fit = "cover",
+  fallbackColor,
+  fallbackBorder,
+}: {
+  src: string;
+  alt: string;
+  sizes: string;
+  fit?: "cover" | "contain";
+  /** Si la imagen no carga (todavía no existe el archivo), mostrar este color en vez del cuadro gris genérico. */
+  fallbackColor?: string;
+  fallbackBorder?: boolean;
+}) {
   const [error, setError] = useState(false);
   if (error) {
+    if (fallbackColor) {
+      return <div className={`w-full h-full ${fallbackBorder ? "border border-stone-300" : ""}`} style={{ backgroundColor: fallbackColor }} />;
+    }
     return (
       <div className="w-full h-full bg-stone-200 flex items-center justify-center p-2 text-center">
         <span className="text-[10px] font-semibold text-stone-500 leading-snug">{alt}</span>
@@ -319,7 +354,7 @@ function MaterialImage({ src, alt, sizes }: { src: string; alt: string; sizes: s
       alt={alt}
       fill
       sizes={sizes}
-      className="object-cover object-center"
+      className={`object-center ${fit === "contain" ? "object-contain" : "object-cover"}`}
       onError={() => setError(true)}
     />
   );
@@ -355,12 +390,16 @@ function MaterialCard({
   selected,
   onSelect,
   priceAmount,
+  imageFit = "cover",
+  imageBg,
 }: {
   option: MaterialOption;
   selected: boolean;
   onSelect: () => void;
   /** Si está definida, esta card tiene costo adicional. */
   priceAmount?: number;
+  imageFit?: "cover" | "contain";
+  imageBg?: string;
 }) {
   const isPremium = priceAmount !== undefined;
   const accent = isPremium ? ORANGE : GREEN;
@@ -377,12 +416,19 @@ function MaterialCard({
       style={selected ? { borderColor: accent } : undefined}
     >
       {/* Imagen — nunca lleva overlay ni tinte, se ve siempre limpia. */}
-      <div className="relative w-full aspect-[4/3] bg-stone-100">
-        {option.color ? (
+      <div className="relative w-full aspect-[4/3]" style={{ backgroundColor: imageBg ?? "#f5f5f4" }}>
+        {option.img ? (
+          <MaterialImage
+            src={option.img}
+            alt={option.label}
+            sizes={TILE_SIZES}
+            fit={imageFit}
+            fallbackColor={option.color}
+            fallbackBorder={option.border}
+          />
+        ) : option.color ? (
           <div className={`w-full h-full ${option.border ? "border border-stone-300" : ""}`} style={{ backgroundColor: option.color }} />
-        ) : (
-          <MaterialImage src={option.img!} alt={option.label} sizes={TILE_SIZES} />
-        )}
+        ) : null}
         {isPremium && <ImagePriceBadge amount={priceAmount!} />}
       </div>
       {/* Estado de selección: solo acá — nunca sobre la imagen. */}
@@ -411,7 +457,15 @@ function SelectorBlock({
       <p className="text-xs font-bold text-stone-500 uppercase tracking-wide mb-2">{selector.label}</p>
       <div className={TILE_GRID}>
         {selector.options.map((opt) => (
-          <MaterialCard key={opt.id} option={opt} selected={selectedId === opt.id} onSelect={() => onSelect(opt.id)} priceAmount={amount} />
+          <MaterialCard
+            key={opt.id}
+            option={opt}
+            selected={selectedId === opt.id}
+            onSelect={() => onSelect(opt.id)}
+            priceAmount={amount}
+            imageFit={selector.imageFit}
+            imageBg={selector.imageBg}
+          />
         ))}
       </div>
     </div>
