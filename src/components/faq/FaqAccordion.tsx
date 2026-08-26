@@ -48,7 +48,7 @@ export default function FaqAccordion({
                   className="overflow-hidden"
                 >
                   <div className="pb-5 pr-8">
-                    <p className="text-stone-600 text-sm leading-relaxed">{item.respuesta}</p>
+                    <p className="text-stone-600 text-sm leading-relaxed whitespace-pre-line">{item.respuesta}</p>
                     {item.tabla && <FaqTablaComparativa tabla={item.tabla} />}
                   </div>
                 </motion.div>

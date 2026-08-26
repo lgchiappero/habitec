@@ -236,6 +236,42 @@ export const FAQ_CATEGORIES: FaqCategory[] = [
       },
     ],
   },
+  {
+    titulo: "MOVARA vs Construcción tradicional",
+    icono: "⚖️",
+    preguntas: [
+      {
+        pregunta: "¿Una casa MOVARA es tan sólida como una de material?",
+        respuesta:
+          "La construcción tradicional de ladrillos en Argentina tiene entre 150 y 200mm de espesor en sus paredes, con una aislación térmica que depende completamente de cómo se hizo la obra. Si salió bien, aísla bien. Si salió mal — y en Argentina muchas veces sale mal — no aísla nada.\n\nUna MOVARA tiene lana de roca de 75mm certificada, con un coeficiente de aislación 4 veces superior a una pared de ladrillos estándar. Sin depender de ningún albañil.\n\nEn cuanto a la estructura: el acero Q235B resiste sismos y vientos por encima del mínimo normativo argentino. La mayoría de las casas de ladrillo en Argentina no tienen ningún cálculo estructural documentado.",
+      },
+      {
+        pregunta: "¿Cuánto dura una MOVARA comparada con una casa tradicional?",
+        respuesta:
+          "Una casa de material bien construida dura décadas. Una mal construida se fisura, humedece y deteriora en pocos años.\n\nUna MOVARA tiene garantía de 3 años de fábrica y una vida útil estimada de más de 30 años con mantenimiento básico. La estructura de acero galvanizado no se oxida ni se degrada. Los paneles de lana de roca no se pudren ni pierden propiedades con el tiempo.\n\nLa diferencia clave: con MOVARA sabés exactamente lo que recibís antes de pagar. Con la construcción tradicional, no.",
+      },
+      {
+        pregunta: "¿El techo de MOVARA es mejor que el techo tradicional?",
+        respuesta:
+          "Un techo tradicional en Argentina suele tener chapa, isolant y cielorrazo — tres materiales distintos, instalados en tres etapas diferentes, con tres posibilidades de que algo salga mal.\n\nEl techo de MOVARA es un panel sándwich de poliuretano con impermeabilización de 5 capas integrada de fábrica. Una sola pieza. Sin etapas, sin juntas, sin posibilidad de goteras por mala instalación.\n\nEl isolant estándar tiene una conductividad térmica de 0.040 W/m·K. El poliuretano de MOVARA tiene 0.022 W/m·K — casi el doble de eficiente en el mismo espesor.",
+      },
+      {
+        pregunta: "¿Qué pasa con el ruido?",
+        respuesta:
+          "En una casa de ladrillos estándar, el ruido exterior se reduce entre 35 y 40 dB dependiendo del espesor de la pared y la calidad de la construcción.\n\nLas paredes de lana de roca de MOVARA tienen una aislación acústica de 45 dB o más. Más silencio, sin depender de la calidad de la obra.",
+      },
+      {
+        pregunta: "¿Qué pasa si hay un incendio?",
+        respuesta:
+          "La lana de roca es incombustible — Clase A1, la máxima clasificación de resistencia al fuego. No arde, no propaga llamas, no genera humo tóxico y mantiene su forma hasta 1.000°C.\n\nUna casa de ladrillos con aislantes orgánicos o madera en los techos arde. Una MOVARA no.",
+      },
+      {
+        pregunta: "¿Es más cara o más barata que construir?",
+        respuesta:
+          "Construir en Argentina hoy cuesta entre USD 800 y USD 1.500 por m² dependiendo de la zona, los materiales y la mano de obra. Y eso si el presupuesto no sube durante la obra — cosa que en Argentina casi siempre pasa, entre un 30% y un 80% por encima del presupuesto original.\n\nMOVARA tiene un precio por m² fijo desde el día 1. Sin sorpresas. Sin sobrecostos. Lo que acordás es lo que pagás.",
+      },
+    ],
+  },
 ];
 
 /** Paleta por categoría, en el mismo orden que FAQ_CATEGORIES. */
@@ -250,4 +286,5 @@ export const FAQ_CATEGORY_COLORS = [
   { text: "text-red-600", bg: "bg-red-50", border: "border-red-200" },
   { text: "text-indigo-600", bg: "bg-indigo-50", border: "border-indigo-200" },
   { text: "text-amber-600", bg: "bg-amber-50", border: "border-amber-200" },
+  { text: "text-teal-600", bg: "bg-teal-50", border: "border-teal-200" },
 ];
