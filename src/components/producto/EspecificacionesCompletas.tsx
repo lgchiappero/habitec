@@ -111,15 +111,18 @@ export default function EspecificacionesCompletas({
                   <div className="px-5 pb-5 pt-1">
                     <p className={`text-sm leading-relaxed ${theme.descripcion}`}>{s.descripcion}</p>
 
-                    <ul className="mt-4 space-y-2">
-                      {s.beneficios.map((b) => (
-                        <li key={b} className={`flex items-start gap-2.5 text-sm ${theme.beneficio}`}>
-                          <Check className={`w-4 h-4 mt-0.5 shrink-0 ${theme.check}`} />
-                          {b}
-                        </li>
-                      ))}
-                    </ul>
+                    {s.beneficios.length > 0 && (
+                      <ul className="mt-4 space-y-2">
+                        {s.beneficios.map((b) => (
+                          <li key={b} className={`flex items-start gap-2.5 text-sm ${theme.beneficio}`}>
+                            <Check className={`w-4 h-4 mt-0.5 shrink-0 ${theme.check}`} />
+                            {b}
+                          </li>
+                        ))}
+                      </ul>
+                    )}
 
+                    {s.grupos.length > 0 && (
                     <div className={`mt-4 pt-4 border-t space-y-2 ${theme.divider}`}>
                       {s.grupos.map((g) => {
                         const grupoKey = `${s.numero}-${g.id}`;
@@ -165,6 +168,7 @@ export default function EspecificacionesCompletas({
                         );
                       })}
                     </div>
+                    )}
                   </div>
                 </motion.div>
               )}

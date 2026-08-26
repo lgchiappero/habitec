@@ -42,168 +42,97 @@ export type ProductoSeccion = {
 export const PRODUCTO_SECCIONES: ProductoSeccion[] = [
   {
     numero: "01",
-    titulo: "Estructura de acero Q235B — verificada por ingeniería",
+    titulo: "La estructura",
     descripcion:
-      "Cada unidad MOVARA se calcula antes de fabricarse, no después. La estructura pasa por un análisis de ingeniería con 96 combinaciones de carga que verifica los márgenes de seguridad reales frente a sismo, viento y uso — no solo que \"cumple la norma\".",
+      "MOVARA Flex está construida con acero galvanizado Q235B — el mismo tipo de acero que se usa en puentes y construcción civil. No es aluminio, no es madera, no es un container reciclado. Es acero nuevo, fabricado específicamente para ser una vivienda.",
     beneficios: [
-      "Resiste sismos 12 veces por encima del mínimo normativo",
-      "Resiste vientos 6 veces por encima del mínimo normativo",
-      "Estructura calculada con 96 combinaciones de carga",
-      "Equivalente al acero ASTM A36 usado en construcción civil internacional",
+      "No se oxida, no se pudre, no la comen las termitas",
+      "No necesita mantenimiento",
+      "Garantía de fábrica de 3 años sobre la estructura",
     ],
-    grupos: [
-      {
-        tipo: "lista",
-        id: "specs",
-        titulo: "Especificaciones técnicas",
-        items: [
-          "Grado: Q235B — norma GB/T 700-2006",
-          "Equivalencia: ASTM A36 / S235JR",
-          "Límite elástico: ≥235 MPa",
-          "Resistencia a tracción: 370–500 MPa",
-          "Peso total: 3.500 kg",
-          "Software: PKPM 2021 V1.4.0",
-        ],
-      },
-      {
-        tipo: "barras",
-        id: "resultados",
-        titulo: "Resultados de verificación estructural",
-        items: [
-          {
-            label: "Relación tensión máxima",
-            valorLabel: "0.802",
-            limiteLabel: "límite 1.0",
-            fraccion: 0.802,
-          },
-          {
-            label: "Deflexión máxima",
-            valorLabel: "L/790",
-            limiteLabel: "límite L/180",
-            fraccion: 180 / 790,
-            mejora: "4x mejor",
-          },
-          {
-            label: "Desplazamiento por viento",
-            valorLabel: "H/368",
-            limiteLabel: "límite H/60",
-            fraccion: 60 / 368,
-            mejora: "6x mejor",
-          },
-          {
-            label: "Desplazamiento sísmico",
-            valorLabel: "H/742",
-            limiteLabel: "límite H/60",
-            fraccion: 60 / 742,
-            mejora: "12x mejor",
-          },
-        ],
-      },
-    ],
+    grupos: [],
   },
   {
     numero: "02",
-    titulo: "3 capas de protección industrial — apta para costa y campo",
+    titulo: "Las paredes",
     descripcion:
-      "El acero no se pinta una sola vez: se protege con un sistema de 3 capas aplicado en taller, bajo condiciones controladas, pensado para resistir humedad, salinidad y exposición permanente a la intemperie sin repintar cada par de años.",
+      "Las paredes de MOVARA tienen lana de roca de 75mm. No es telgopor, no es espuma. Es el mismo material que se usa en industrias donde el fuego y el ruido son un problema real.",
     beneficios: [
-      "3 capas de pintura industrial aplicadas en taller",
-      "Apta para ambientes costeros e industriales (ISO 12944 C3-C4)",
-      "Durabilidad estimada: 10–15 años sin repintado",
-      "Preparación de superficie por granallado grado Sa 2.5",
+      "En invierno el calor que generás adentro se queda adentro",
+      "En verano el calor de afuera no entra",
+      "Si hay un incendio la pared no arde ni genera humo tóxico — Clase A1",
+      "Mejor aislación acústica que una pared de ladrillos estándar",
     ],
-    grupos: [
-      {
-        tipo: "lista",
-        id: "specs",
-        titulo: "Especificaciones técnicas",
-        items: [
-          "Capa 1: Epoxi rica en zinc, zinc ≥80%, 60–80 micrones",
-          "Capa 2: Epoxi alto sólido, 80–100 micrones",
-          "Capa 3: Poliuretano alifático, 40–60 micrones, carta RAL",
-          "Espesor total: 180–240 micrones",
-          "Norma: ISO 12944 C3-C4",
-        ],
-      },
-    ],
+    grupos: [],
   },
   {
     numero: "03",
-    titulo: "Lana de roca 75mm en paredes — 4 veces más eficiente que una pared de ladrillos",
+    titulo: "El techo",
     descripcion:
-      "Panel de lana de roca 75mm en paredes y particiones. Incombustible y con rendimiento térmico y acústico superior a la construcción tradicional.",
+      "El techo es un panel sándwich de poliuretano — una sola pieza que aísla, impermeabiliza y no necesita nada más encima. Sin isolant, sin cielorrazo aparte, sin etapas.",
     beneficios: [
-      "Aislación térmica 4 veces superior a una pared de ladrillos convencional",
-      "Aislación acústica ≥45 dB — una pared de ladrillos estándar logra 35-40 dB",
-      "Ignífuga Clase A1 — no arde, no propaga llamas, no genera humo tóxico",
-      "En caso de incendio mantiene su forma hasta 1.000°C — la construcción tradicional con aislantes orgánicos arde",
-      "No pudre, no se degrada con humedad, no es alimento de roedores ni insectos",
-      "Sin mantenimiento durante toda la vida útil de la estructura",
+      "No hay goteras — impermeabilización de 5 capas de fábrica",
+      "No hay condensación en el cielorrazo en invierno",
+      "Aísla casi el doble que un techo con isolant estándar",
+      "No necesitás llamar a nadie para mantenimiento",
     ],
-    grupos: [
-      {
-        tipo: "tabla",
-        id: "capas",
-        titulo: "Composición del panel de pared",
-        columnas: ["Capa", "Material", "Función"],
-        filas: [
-          ["1", "Polietileno 0.2mm", "Barrera anti-condensación"],
-          ["2", "Lana de roca 75mm", "Aislación térmica y acústica"],
-          ["3", "Acero galvanizado 1mm", "Barrera de vapor"],
-          ["4", "Bambú/madera o acero lacado 4mm", "Acabado interior"],
-        ],
-      },
-    ],
+    grupos: [],
   },
   {
     numero: "04",
-    titulo: "Panel PU en techo — sistema de impermeabilización integrado de fábrica",
+    titulo: "Las ventanas",
     descripcion:
-      "Panel sándwich con núcleo de poliuretano (PU) en el techo. Sistema de impermeabilización de 5 capas integrado de fábrica.",
+      "Doble vidrio hermético con rotura de puente térmico. Es la tecnología que usan los edificios premium en Buenos Aires y Europa.",
     beneficios: [
-      "Conductividad térmica λ = 0.022 W/m·K vs isolant estándar λ = 0.040 W/m·K — el PU es casi el doble de eficiente en el mismo espesor",
-      "Sistema integrado de fábrica en una sola capa — el techo tradicional requiere 3 etapas separadas: chapa, isolant y cielorrazo, cada una con su mano de obra y posibilidad de fallas",
-      "Sin puentes térmicos — el isolant tradicional pierde eficiencia en los puntos de fijación y bordes",
-      "Impermeabilización de 5 capas integrada de fábrica — el techo tradicional depende de la correcta instalación del isolant y del sellado de juntas",
-      "Sin mantenimiento — el isolant tradicional se degrada, se humedece y pierde propiedades con el tiempo",
-      "No genera condensación interior — problema frecuente en techos con isolant mal instalado",
+      "No hay condensación en el vidrio en invierno",
+      "El frío no entra por el marco",
+      "El ruido de afuera se reduce notablemente",
+      "Mosquiteros incluidos en todas las aberturas",
     ],
-    grupos: [
-      {
-        tipo: "lista",
-        id: "specs",
-        titulo: "Especificaciones técnicas",
-        items: [
-          "Conductividad térmica: λ = 0.022 W/m·K",
-          "Sistema de impermeabilización: 5 capas integradas de fábrica",
-        ],
-      },
-    ],
+    grupos: [],
   },
   {
     numero: "05",
-    titulo: "Soldadura industrial certificada — no hay pernos estructurales",
+    titulo: "El baño y la cocina",
     descripcion:
-      "Las uniones estructurales de MOVARA no se atornillan: se sueldan en taller bajo procesos industriales controlados, con inspección posterior por ultrasonido en cada unión crítica. Menos puntos de falla, más control de calidad.",
+      "Vienen instalados de fábrica. No es preparado para. Es el baño terminado, con inodoro, lavabo, espejo, ducha, paneles de pared y puerta. La cocina con muebles, mesada, pileta y grifo.",
     beneficios: [
-      "Uniones soldadas por arco sumergido en taller",
-      "Control 100% en todas las uniones",
-      "Inspección por ultrasonidos",
-      "Alta soldabilidad sin tratamiento térmico",
+      "El día que llega la MOVARA a tu terreno, podés bañarte. No esperás al plomero, no esperás al ceramista, no esperás a nadie.",
     ],
-    grupos: [
-      {
-        tipo: "lista",
-        id: "specs",
-        titulo: "Especificaciones técnicas",
-        items: [
-          "Proceso principal: SAW — uniones vigas-columnas",
-          "Proceso secundario: MAG/MIG",
-          "Proceso en campo: SMAW",
-          "Carbono equivalente CEV: ≤0.38%",
-        ],
-      },
+    grupos: [],
+  },
+  {
+    numero: "06",
+    titulo: "El sistema eléctrico",
+    descripcion:
+      "220V 50Hz estándar argentino. Tablero con protección diferencial, iluminación LED, tomacorrientes en todos los ambientes.",
+    beneficios: [
+      "Conectás a la red con un electricista matriculado y listo. No hay que adaptar nada ni comprar transformadores.",
     ],
+    grupos: [],
+  },
+  {
+    numero: "07",
+    titulo: "El agua caliente",
+    descripcion: "Calefón eléctrico instantáneo incluido. Conecta cocina y baño desde el primer día.",
+    beneficios: [],
+    grupos: [],
+  },
+  {
+    numero: "08",
+    titulo: "Los tiempos",
+    descripcion:
+      "Desde que confirmás el pedido con el anticipo hasta que tu MOVARA está instalada en tu terreno: entre 90 y 120 días. El plazo puede variar según condiciones logísticas o aduaneras. Te mantenemos informado en todo momento.",
+    beneficios: [],
+    grupos: [],
+  },
+  {
+    numero: "09",
+    titulo: "La garantía",
+    descripcion:
+      "3 años de garantía de fábrica sobre la estructura y los componentes principales. Por escrito, desde el primer día.",
+    beneficios: [],
+    grupos: [],
   },
 ];
 
