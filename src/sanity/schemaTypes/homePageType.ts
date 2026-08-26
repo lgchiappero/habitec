@@ -42,13 +42,14 @@ export const homePageType = defineType({
           name: 'ctaPrimario',
           title: 'CTA primario (botón dorado)',
           type: 'string',
-          initialValue: 'Reservar precio de lanzamiento',
+          description: 'Paso de bajo compromiso (llamada/WhatsApp), no "reservar" ni "comprar" directo.',
+          initialValue: 'Hablar con un asesor',
         }),
         defineField({
           name: 'ctaSecundario',
-          title: 'CTA secundario (ghost)',
+          title: 'CTA secundario (ghost, con flecha)',
           type: 'string',
-          initialValue: 'Reservar precio de lanzamiento',
+          initialValue: 'Ver el proyecto completo',
         }),
         defineField({
           name: 'trustStrip',
