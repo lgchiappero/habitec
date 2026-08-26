@@ -4,6 +4,7 @@
   --color-background: #ffffff;
   --color-foreground: #2F2F2F;
   --font-sans: var(--font-poppins);
+  --font-playfair: var(--font-playfair-display);
 
   /* Dorado premium — paleta MOVARA */
   --color-sage-50:  #FAFAF7;

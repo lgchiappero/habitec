@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Montserrat, Poppins } from "next/font/google";
+import { Montserrat, Poppins, Playfair_Display } from "next/font/google";
 import Script from "next/script";
 import "./globals.css";
 import WizardModal from "@/components/wizard/WizardModal";
@@ -22,6 +22,14 @@ const poppins = Poppins({
   variable: "--font-poppins",
   subsets: ["latin"],
   weight: ["400", "500", "600", "700"],
+  display: "swap",
+});
+
+const playfair = Playfair_Display({
+  variable: "--font-playfair-display",
+  subsets: ["latin"],
+  style: ["italic"],
+  weight: ["500", "600"],
   display: "swap",
 });
 
@@ -68,7 +76,7 @@ export default async function RootLayout({
   const waNumber = config?.whatsappNumber ?? null;
 
   return (
-    <html lang="es" className={`${montserrat.variable} ${poppins.variable} h-full antialiased`}>
+    <html lang="es" className={`${montserrat.variable} ${poppins.variable} ${playfair.variable} h-full antialiased`}>
       <body className="min-h-full flex flex-col bg-white text-stone-900 pb-24 sm:pb-20">
         <noscript>
           <img

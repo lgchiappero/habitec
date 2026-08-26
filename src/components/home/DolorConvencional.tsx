@@ -1,15 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
-import {
-  HardHat,
-  TrendingUp,
-  Clock,
-  Brain,
-  HelpCircle,
-  Frown,
-  ChevronDown,
-} from "lucide-react";
+import { ChevronDown } from "lucide-react";
 
 type Stat = { _key?: string; stat: string; label: string; sub: string };
 type Problema = {
@@ -28,59 +20,42 @@ type DolorContent = {
   separador?: string;
 };
 
-const LUCIDE_ICONS = [HardHat, TrendingUp, Clock, Brain, HelpCircle, Frown];
-const ICON_COLORS = [
-  "text-amber-500",
-  "text-red-500",
-  "text-orange-500",
-  "text-amber-500",
-  "text-red-500",
-  "text-orange-500",
-];
-
 const DEFAULT_PROBLEMAS: Problema[] = [
   {
-    icono: "👷",
-    titulo: "Renegar con albañiles",
-    descripcion:
-      "Llegaron tres días, después desaparecieron. Volvieron a cobrar, avanzaron poco. El ciclo de siempre.",
-    lineaImpacto: "Tiempo perdido que no volvés a recuperar",
+    titulo: "Albañiles que no aparecen",
+    descripcion: "Llegaron tres días, después desaparecieron. El ciclo de siempre.",
   },
   {
-    icono: "💸",
     titulo: "Presupuestos que no cierran",
-    descripcion:
-      "Te dijeron $X. A mitad de obra ya iban $2X. Y todavía faltaba la mitad.",
-    lineaImpacto: "El sobrecosto promedio en Argentina es del 40-60% sobre el presupuesto original",
+    descripcion: "Te dijeron un precio. A mitad de obra ya iban el doble.",
   },
   {
-    icono: "⏳",
     titulo: "Meses que se vuelven años",
-    descripcion:
-      "Lo que iba a estar en 6 meses lleva 2 años y todavía no tiene techo definitivo.",
-    lineaImpacto: "Una obra de 8 meses tarda en promedio 2.3 años en Argentina",
+    descripcion: "Lo que iba a estar en 8 meses lleva 2 años sin techo definitivo.",
   },
   {
-    icono: "🧠",
     titulo: "Decisiones que te consumen",
-    descripcion:
-      "Cerámicos, ventanas, electricista, plomero, inspector. Coordinás vos. Todo. Todo el tiempo.",
-    lineaImpacto: "Más de 200 decisiones técnicas que tenés que tomar sin ser experto",
+    descripcion: "Cerámicos, electricista, plomero. Coordinás vos. Todo. Siempre.",
   },
   {
-    icono: "❓",
     titulo: "Incertidumbre total",
-    descripcion:
-      "Nunca sabés cuánto va a salir en total. Ni cuándo va a terminar. Ni si va a quedar bien.",
-    lineaImpacto: "Sin precio final, sin fecha, sin garantía de resultado",
+    descripcion: "Sin precio final, sin fecha, sin garantía de resultado.",
   },
   {
-    icono: "😤",
     titulo: "El costo emocional",
-    descripcion:
-      "Años de ahorro en juego, decisiones todos los días, y una obra que te sigue en la cabeza 24/7.",
-    lineaImpacto: "El 73% de los que construyeron dicen que no lo volverían a hacer igual",
+    descripcion: "Años de ahorro en juego y una obra que no termina nunca.",
   },
+];
+
+// Sin fotos reales de "obra tradicional" disponibles en /public — cada card
+// usa un fondo con gradiente oscuro + textura sutil en vez de una foto.
+const CARD_BACKGROUNDS = [
+  "from-[#1a1a1a] via-[#1a1a1a] to-[#231d14]",
+  "from-[#1a1a1a] via-[#1a1a1a] to-[#1d1d1d]",
+  "from-[#1a1a1a] via-[#1a1a1a] to-[#20190f]",
+  "from-[#1a1a1a] via-[#1a1a1a] to-[#1c1c1c]",
+  "from-[#1a1a1a] via-[#1a1a1a] to-[#221b10]",
+  "from-[#2F2F2F] via-[#262626] to-[#1a1a1a]",
 ];
 
 export default function DolorConvencional({ content }: { content?: DolorContent | null }) {
@@ -116,48 +91,53 @@ export default function DolorConvencional({ content }: { content?: DolorContent 
         </motion.div>
 
         {/* Problem cards */}
-        <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4 mb-16">
+        <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-5 mb-16">
           {problemas.map((p, i) => {
-            const LucideIcon = LUCIDE_ICONS[i % LUCIDE_ICONS.length];
-            const iconColor = ICON_COLORS[i % ICON_COLORS.length];
-            const useEmoji = p.icono && /\p{Emoji}/u.test(p.icono);
+            const numero = String(i + 1).padStart(2, "0");
+            const bg = CARD_BACKGROUNDS[i % CARD_BACKGROUNDS.length];
 
             return (
               <motion.div
                 key={p._key ?? p.titulo}
-                initial={{ opacity: 0, y: 20 }}
+                initial={{ opacity: 0, y: 24 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
-                transition={{ duration: 0.45, delay: i * 0.07 }}
-                className="bg-stone-50 border border-stone-100 rounded-2xl p-6 flex flex-col hover:border-stone-200 hover:shadow-sm transition-all duration-200"
+                transition={{ duration: 0.5, delay: i * 0.07 }}
+                className="group relative h-[280px] lg:h-[380px] rounded-2xl overflow-hidden cursor-default"
               >
-                {/* Icon */}
-                <div className="mb-5">
-                  {useEmoji ? (
-                    <span className="text-4xl leading-none">{p.icono}</span>
-                  ) : (
-                    <LucideIcon size={40} className={iconColor} strokeWidth={1.5} />
-                  )}
+                {/* "Foto" de fondo (gradiente + textura) con zoom sutil en hover */}
+                <div
+                  className={`absolute inset-0 bg-gradient-to-br ${bg} transition-transform duration-500 ease-out group-hover:scale-105`}
+                >
+                  <div
+                    className="absolute inset-0 opacity-[0.05]"
+                    style={{
+                      backgroundImage: "radial-gradient(circle, #D4B06A 1px, transparent 1px)",
+                      backgroundSize: "28px 28px",
+                    }}
+                  />
                 </div>
 
-                {/* Title */}
-                <h3 className="font-bold text-[#2F2F2F] text-base mb-2 leading-snug">
-                  {p.titulo}
-                </h3>
+                {/* Overlay oscuro de abajo hacia arriba — se aclara levemente en hover */}
+                <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/45 to-black/10 transition-opacity duration-500 group-hover:opacity-80" />
 
-                {/* Description */}
-                <p className="text-stone-500 text-sm leading-relaxed flex-1">
-                  {p.descripcion}
-                </p>
+                {/* Borde sutil */}
+                <div className="absolute inset-0 rounded-2xl ring-1 ring-inset ring-white/[0.06]" />
 
-                {/* Impact line */}
-                {p.lineaImpacto && (
-                  <div className="mt-4 pt-4 border-t border-stone-200">
-                    <p className="text-xs font-semibold text-red-500 leading-snug">
-                      ↳ {p.lineaImpacto}
-                    </p>
-                  </div>
-                )}
+                {/* Número */}
+                <span className="absolute top-6 left-6 text-4xl lg:text-5xl font-bold text-[#D4B06A] leading-none">
+                  {numero}
+                </span>
+
+                {/* Texto */}
+                <div className="absolute bottom-0 left-0 right-0 p-6">
+                  <h3 className="font-bold text-white text-xl lg:text-2xl leading-tight mb-2">
+                    {p.titulo}
+                  </h3>
+                  <p className="text-stone-200 text-sm leading-relaxed line-clamp-2">
+                    {p.descripcion}
+                  </p>
+                </div>
               </motion.div>
             );
           })}
@@ -171,11 +151,11 @@ export default function DolorConvencional({ content }: { content?: DolorContent 
           transition={{ duration: 0.6 }}
           className="flex items-center gap-6 mb-10"
         >
-          <div className="flex-1 h-px bg-stone-100" />
-          <p className="text-sm font-semibold text-[#2F2F2F] text-center shrink-0 px-2">
+          <div className="flex-1 h-px bg-gradient-to-r from-transparent to-[#D4B06A]/40" />
+          <p className="font-playfair italic text-[#D4B06A] text-xl sm:text-2xl text-center shrink-0 px-2">
             {separador}
           </p>
-          <div className="flex-1 h-px bg-stone-100" />
+          <div className="flex-1 h-px bg-gradient-to-l from-transparent to-[#D4B06A]/40" />
         </motion.div>
 
         {/* Quote */}
