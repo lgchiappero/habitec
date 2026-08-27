@@ -116,17 +116,15 @@ export default function DolorConvencional({ content }: { content?: DolorContent 
                 {/* Borde sutil */}
                 <div className="absolute inset-0 rounded-2xl ring-1 ring-inset ring-white/[0.06]" />
 
-                {/* Número */}
-                <span className="absolute top-6 left-6 text-4xl lg:text-5xl font-bold text-[#D4B06A] leading-none">
-                  {numero}
-                </span>
-
-                {/* Texto */}
-                <div className="absolute bottom-0 left-0 right-0 p-6">
+                {/* Contenido — número, título y descripción centrados en la card */}
+                <div className="absolute inset-0 flex flex-col justify-center p-6">
+                  <span className="text-4xl lg:text-5xl font-bold text-[#D4B06A] leading-none mb-3">
+                    {numero}
+                  </span>
                   <h3 className="font-bold text-white text-xl lg:text-2xl leading-tight mb-2">
                     {p.titulo}
                   </h3>
-                  <p className="text-stone-200 text-sm leading-relaxed line-clamp-2">
+                  <p className="text-stone-200 text-sm leading-relaxed">
                     {p.descripcion}
                   </p>
                 </div>
