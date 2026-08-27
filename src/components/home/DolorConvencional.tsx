@@ -27,7 +27,8 @@ const DEFAULT_PROBLEMAS: Problema[] = [
   },
   {
     titulo: "Presupuestos que no cierran",
-    descripcion: "Te dijeron un precio. A mitad de obra ya iban el doble.",
+    descripcion:
+      "Te dijeron un precio. A mitad de obra ya iban el doble. Los materiales siempre terminan siendo más — el desperdicio de los albañiles corre por tu cuenta.",
   },
   {
     titulo: "Meses que se vuelven años",
@@ -45,17 +46,6 @@ const DEFAULT_PROBLEMAS: Problema[] = [
     titulo: "El costo emocional",
     descripcion: "Años de ahorro en juego y una obra que no termina nunca.",
   },
-];
-
-// Sin fotos reales de "obra tradicional" disponibles en /public — cada card
-// usa un fondo con gradiente oscuro + textura sutil en vez de una foto.
-const CARD_BACKGROUNDS = [
-  "from-[#1a1a1a] via-[#1a1a1a] to-[#231d14]",
-  "from-[#1a1a1a] via-[#1a1a1a] to-[#1d1d1d]",
-  "from-[#1a1a1a] via-[#1a1a1a] to-[#20190f]",
-  "from-[#1a1a1a] via-[#1a1a1a] to-[#1c1c1c]",
-  "from-[#1a1a1a] via-[#1a1a1a] to-[#221b10]",
-  "from-[#2F2F2F] via-[#262626] to-[#1a1a1a]",
 ];
 
 export default function DolorConvencional({ content }: { content?: DolorContent | null }) {
@@ -94,7 +84,6 @@ export default function DolorConvencional({ content }: { content?: DolorContent 
         <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-5 mb-16">
           {problemas.map((p, i) => {
             const numero = String(i + 1).padStart(2, "0");
-            const bg = CARD_BACKGROUNDS[i % CARD_BACKGROUNDS.length];
 
             return (
               <motion.div
@@ -105,10 +94,9 @@ export default function DolorConvencional({ content }: { content?: DolorContent 
                 transition={{ duration: 0.5, delay: i * 0.07 }}
                 className="group relative h-[280px] lg:h-[380px] rounded-2xl overflow-hidden cursor-default"
               >
-                {/* "Foto" de fondo (gradiente + textura) con zoom sutil en hover */}
-                <div
-                  className={`absolute inset-0 bg-gradient-to-br ${bg} transition-transform duration-500 ease-out group-hover:scale-105`}
-                >
+                {/* "Foto" de fondo (color de marca + textura) con zoom sutil en hover.
+                    Mismo #2F2F2F en las 6 cards — sin variaciones de tono. */}
+                <div className="absolute inset-0 bg-[#2F2F2F] transition-transform duration-500 ease-out group-hover:scale-105">
                   <div
                     className="absolute inset-0 opacity-[0.05]"
                     style={{
@@ -118,8 +106,12 @@ export default function DolorConvencional({ content }: { content?: DolorContent 
                   />
                 </div>
 
-                {/* Overlay oscuro de abajo hacia arriba — se aclara levemente en hover */}
-                <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/45 to-black/10 transition-opacity duration-500 group-hover:opacity-80" />
+                {/* Overlay oscuro de abajo hacia arriba — mismo gradiente en las 6 cards,
+                    se aclara levemente en hover */}
+                <div
+                  className="absolute inset-0 transition-opacity duration-500 group-hover:opacity-80"
+                  style={{ backgroundImage: "linear-gradient(to top, rgba(0,0,0,0.85) 0%, rgba(0,0,0,0.3) 100%)" }}
+                />
 
                 {/* Borde sutil */}
                 <div className="absolute inset-0 rounded-2xl ring-1 ring-inset ring-white/[0.06]" />
