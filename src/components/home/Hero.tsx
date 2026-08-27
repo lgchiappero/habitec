@@ -52,11 +52,9 @@ export default function Hero({
         quality={85}
       />
 
-      {/* Overlay oscuro: fuerte a la izquierda (legibilidad del texto sobre el
-          cielo/agua), se disuelve hacia la derecha para no tapar el módulo. */}
-      <div className="absolute inset-0 bg-gradient-to-r from-[#12100D]/95 via-[#12100D]/70 to-[#12100D]/15 sm:from-[#12100D]/92 sm:via-[#12100D]/55 sm:to-[#12100D]/10" />
-      {/* Refuerzo de abajo hacia arriba, para que el CTA nunca quede sobre foto sin oscurecer. */}
-      <div className="absolute inset-0 bg-gradient-to-t from-[#12100D]/60 via-transparent to-transparent" />
+      {/* Overlay muy sutil (máx. 15% negro) — la foto es la protagonista.
+          La legibilidad del texto la da el text-shadow, no el oscurecimiento. */}
+      <div className="absolute inset-0 bg-gradient-to-r from-black/15 via-black/[0.08] to-transparent" />
 
       {/* Dot texture */}
       <div
@@ -74,7 +72,7 @@ export default function Hero({
             initial={{ opacity: 0, y: -12 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.7 }}
-            className="inline-flex items-center gap-2 px-3 py-1.5 sm:px-4 sm:py-2 rounded-full border border-[#D4B06A]/25 bg-white/[0.03] text-[#D4B06A]/90 text-[11px] sm:text-xs font-semibold tracking-widest uppercase mb-4 sm:mb-6"
+            className="inline-flex items-center gap-2 px-3 py-1.5 sm:px-4 sm:py-2 rounded-full border border-[#D4B06A]/25 bg-black/25 backdrop-blur-sm text-[#D4B06A]/90 text-[11px] sm:text-xs font-semibold tracking-widest uppercase mb-4 sm:mb-6"
           >
             <span className="w-1.5 h-1.5 rounded-full bg-[#D4B06A] shrink-0" />
             {c.badgePreventa}
@@ -85,7 +83,7 @@ export default function Hero({
             initial={{ opacity: 0, y: 28 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.9, delay: 0.08 }}
-            className="text-3xl sm:text-5xl lg:text-[3.75rem] font-bold text-white leading-[1.08] tracking-tight mb-4 sm:mb-6"
+            className="text-3xl sm:text-5xl lg:text-[3.75rem] font-bold text-white leading-[1.08] tracking-tight mb-4 sm:mb-6 [text-shadow:0_2px_20px_rgba(0,0,0,0.7)]"
           >
             {c.titulo}
             <br />
@@ -97,7 +95,7 @@ export default function Hero({
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.2 }}
-            className="text-sm sm:text-lg text-stone-300 max-w-md leading-relaxed mb-7 sm:mb-10"
+            className="text-sm sm:text-lg text-stone-200 max-w-md leading-relaxed mb-7 sm:mb-10 [text-shadow:0_1px_12px_rgba(0,0,0,0.75)]"
           >
             {c.subtitulo}
           </motion.p>
@@ -121,7 +119,7 @@ export default function Hero({
             </a>
             <a
               href="#dossier"
-              className="group inline-flex items-center justify-center sm:justify-start gap-2 text-white/90 hover:text-white font-semibold text-sm tracking-wide transition-colors"
+              className="group inline-flex items-center justify-center sm:justify-start gap-2 text-white/90 hover:text-white font-semibold text-sm tracking-wide transition-colors [text-shadow:0_1px_10px_rgba(0,0,0,0.75)]"
             >
               {c.ctaSecundario}
               <ArrowRight className="w-4 h-4 transition-transform duration-200 group-hover:translate-x-1" />

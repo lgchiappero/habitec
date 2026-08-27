@@ -4,6 +4,10 @@ import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import { trackExitIntentLead } from "@/lib/meta-pixel";
 
+// Apagado temporal del popup — para reactivarlo, cambiar a `true`. El resto
+// del componente queda intacto, solo condicionado a esta constante.
+const EXIT_INTENT_ENABLED = false;
+
 const LS_SHOWN = "movara_exit_popup_shown";
 const LS_SUBMITTED = "movara_exit_popup_submitted";
 const MIN_TIME_MS = 20_000;            // must spend 20s on page before eligible
@@ -25,6 +29,7 @@ export default function ExitIntentPopup() {
   const lastInternalClickMs = useRef(0);
 
   function tryShow() {
+    if (!EXIT_INTENT_ENABLED) return;
     if (shownRef.current) return;
     if (!readyRef.current) return;
     if (Date.now() - startTime.current < MIN_TIME_MS) return;
@@ -36,6 +41,7 @@ export default function ExitIntentPopup() {
   }
 
   useEffect(() => {
+    if (!EXIT_INTENT_ENABLED) return;
     if (typeof window === "undefined") return;
     if (window.location.pathname.startsWith("/configurador")) return;
     if (localStorage.getItem(LS_SUBMITTED) === "true") return;
