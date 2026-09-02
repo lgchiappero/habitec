@@ -26,6 +26,20 @@ export const MODELOS_QUERY = groq`
     destacado,
     activo,
     order,
+    proximamente,
+  }
+`
+
+// Versión liviana para listados tipo card (home + catálogo básico) — trae
+// solo lo necesario para pintar la card, no toda la ficha del modelo.
+export const MODELOS_HOME_QUERY = groq`
+  *[_type == "modelo" && activo != false] | order(order asc) {
+    _id,
+    "nombre": name,
+    "slug": slug.current,
+    tagline,
+    "imagen": images[0].asset->url,
+    proximamente
   }
 `
 

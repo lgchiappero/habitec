@@ -16,9 +16,16 @@ export default function ModelCard({ model }: Props) {
   const openWizard = useWizardStore((s) => s.openWizard);
   const img = model.images?.[0] ?? null;
   const hasSanityImg = img !== null && isSanityImage(img);
+  const proximamente = !!model.proximamente;
 
   return (
-    <article className="group flex flex-col bg-white border border-stone-100 rounded-2xl overflow-hidden hover:shadow-2xl hover:shadow-stone-900/10 hover:border-stone-200 transition-all duration-300 hover:-translate-y-1">
+    <article
+      className={`group flex flex-col rounded-2xl overflow-hidden transition-all duration-300 ${
+        proximamente
+          ? "border-2 border-dashed border-stone-200 bg-stone-50"
+          : "bg-white border border-stone-100 hover:shadow-2xl hover:shadow-stone-900/10 hover:border-stone-200 hover:-translate-y-1"
+      }`}
+    >
       {/* Image area */}
       <div className="relative aspect-video overflow-hidden bg-stone-900">
         {hasSanityImg ? (
@@ -27,7 +34,7 @@ export default function ModelCard({ model }: Props) {
               src={urlFor({ asset: img.asset }).width(600).fit("max").auto("format").url()}
               alt={img.label ?? model.name}
               fill
-              className="object-contain transition-transform duration-500 group-hover:scale-105"
+              className={`object-contain transition-transform duration-500 ${!proximamente ? "group-hover:scale-105" : "opacity-60"}`}
               sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
             />
             {/* Subtle gradient so badges stay readable */}
@@ -37,8 +44,17 @@ export default function ModelCard({ model }: Props) {
           <CameraPlaceholder />
         )}
 
+        {/* Próximamente badge — toma prioridad sobre el tag normal */}
+        {proximamente && (
+          <div className="absolute top-3 left-3 z-10">
+            <span className="text-[10px] font-bold uppercase tracking-widest px-2.5 py-1 rounded-full bg-stone-200 text-stone-500">
+              Próximamente
+            </span>
+          </div>
+        )}
+
         {/* Tag badge */}
-        {model.tag && (
+        {!proximamente && model.tag && (
           <div className="absolute top-3 left-3 z-10">
             <span className="text-[10px] font-bold uppercase tracking-widest px-2.5 py-1 rounded-full bg-sage-500 text-white shadow-md">
               {model.tag}
@@ -87,30 +103,36 @@ export default function ModelCard({ model }: Props) {
 
         {/* Price + CTAs */}
         <div className="mt-5 pt-5 border-t border-stone-100 flex items-end justify-between">
-          <div>
-            <p className="text-2xl font-bold text-stone-900 leading-none">Consultar precio</p>
-          </div>
-          <div className="flex items-center gap-2">
-            <Link
-              href={`/modelos/${model.slug}`}
-              className="px-4 py-2 border border-stone-200 hover:border-stone-300 text-stone-600 hover:text-stone-900 text-sm font-semibold rounded-xl transition-colors"
-            >
-              Ver detalles
-            </Link>
-            <button
-              onClick={() =>
-                openWizard({
-                  slug: model.slug,
-                  name: model.name,
-                  maxHabitaciones: model.maxHabitaciones,
-                  permiteCocinaSiMax3Hab: model.permiteCocinaSiMax3Hab,
-                })
-              }
-              className="px-4 py-2 bg-sage-600 hover:bg-sage-700 text-white text-sm font-semibold rounded-xl transition-colors"
-            >
-              Me interesa
-            </button>
-          </div>
+          {proximamente ? (
+            <p className="text-sm text-stone-400">Estamos trabajando en este modelo.</p>
+          ) : (
+            <>
+              <div>
+                <p className="text-2xl font-bold text-stone-900 leading-none">Consultar precio</p>
+              </div>
+              <div className="flex items-center gap-2">
+                <Link
+                  href={`/modelos/${model.slug}`}
+                  className="px-4 py-2 border border-stone-200 hover:border-stone-300 text-stone-600 hover:text-stone-900 text-sm font-semibold rounded-xl transition-colors"
+                >
+                  Ver detalles
+                </Link>
+                <button
+                  onClick={() =>
+                    openWizard({
+                      slug: model.slug,
+                      name: model.name,
+                      maxHabitaciones: model.maxHabitaciones,
+                      permiteCocinaSiMax3Hab: model.permiteCocinaSiMax3Hab,
+                    })
+                  }
+                  className="px-4 py-2 bg-sage-600 hover:bg-sage-700 text-white text-sm font-semibold rounded-xl transition-colors"
+                >
+                  Me interesa
+                </button>
+              </div>
+            </>
+          )}
         </div>
       </div>
     </article>

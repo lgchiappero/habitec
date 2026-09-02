@@ -46,6 +46,7 @@ export type ProductModel = {
   finalidades?: string[] | null;
   destacado?: boolean | null;
   activo?: boolean | null;
+  proximamente?: boolean | null;
 };
 
 const IMGS = {

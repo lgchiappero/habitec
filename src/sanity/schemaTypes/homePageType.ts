@@ -366,7 +366,7 @@ export const homePageType = defineType({
       name: 'modelosHome',
       title: 'Sección modelos (landing)',
       type: 'object',
-      description: 'La foto de MOVARA Flex viene de la página "MOVARA Flex". Aquí se edita el encabezado de la sección.',
+      description: 'Los modelos que se muestran se traen automáticamente de "Modelo" (activo = sí). Aquí se edita solo el encabezado de la sección.',
       fields: [
         defineField({
           name: 'titulo',

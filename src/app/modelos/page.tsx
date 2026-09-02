@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { client } from "@/sanity/lib/client";
 import { MODELOS_QUERY, FLEX_CARD_QUERY } from "@/sanity/lib/queries";
-import { MODELS, type ProductModel } from "@/data/models";
+import { type ProductModel } from "@/data/models";
 import CatalogGrid from "@/components/catalog/CatalogGrid";
 import FlexFeatureCard, { type FlexCardData } from "@/components/modelos/FlexFeatureCard";
 
@@ -13,14 +13,16 @@ export const metadata: Metadata = {
 
 export const revalidate = 3600;
 
+// Sin fallback a datos hardcodeados: el catálogo muestra exactamente lo que
+// hay en Sanity. Si la consulta falla o no hay modelos cargados, se muestra
+// vacío en vez de sustituir con contenido de ejemplo.
 async function getModelos(): Promise<ProductModel[]> {
   try {
     const data = await client.fetch<ProductModel[]>(MODELOS_QUERY);
-    if (Array.isArray(data) && data.length > 0) return data;
+    return Array.isArray(data) ? data : [];
   } catch {
-    // Sanity unavailable — fall through to static data
+    return [];
   }
-  return MODELS;
 }
 
 async function getFlex(): Promise<FlexCardData> {

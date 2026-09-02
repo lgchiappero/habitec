@@ -280,6 +280,14 @@ export const modeloType = defineType({
       group: 'marketing',
     }),
     defineField({
+      name: 'proximamente',
+      title: '¿Modelo "Próximamente"?',
+      type: 'boolean',
+      description: 'Muestra el badge "Próximamente" en las listas y deshabilita el link al detalle.',
+      initialValue: false,
+      group: 'marketing',
+    }),
+    defineField({
       name: 'order',
       title: 'Orden en el catálogo',
       type: 'number',
