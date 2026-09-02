@@ -176,5 +176,31 @@ model ConfiguracionPedido {
 
   estado String @default("pendiente") // "pendiente" | "enviado" | "revisado" | "confirmado"
 
+  // ─── Gestión del pedido (post-venta) ──────────────────────
+  numeroPedido        String? // formato MOV-{AÑO}-{NRO 3 dígitos}
+  estadoPedido        String    @default("consulta") // "consulta" | "presupuestado" | "confirmado" | "en_produccion" | "en_transito" | "en_aduana" | "entregado"
+  precioFinal         Float?
+  anticipo            Float?
+  saldoPendiente      Float?
+  numeroFabrica       String?
+  numeroContenedor    String?
+  numeroBL            String?
+  fechaConfirmacion   DateTime?
+  fechaProduccion     DateTime?
+  fechaDespacho       DateTime?
+  fechaArriboEstimado DateTime?
+  fechaEntrega        DateTime?
+  notasInternas       String?
+  notasCliente        String?
+
+  // ─── Costos internos (nunca visibles para el cliente) ─────
+  costoProveedor   Float?
+  costoFlete       Float?
+  costoAduana      Float?
+  costoOtros       Float?
+  costoTotal       Float?
+  margenUSD        Float?
+  margenPorcentaje Float?
+
   @@map("configuraciones_pedido")
 }
