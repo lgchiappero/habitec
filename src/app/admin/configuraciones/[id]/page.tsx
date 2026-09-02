@@ -4,6 +4,7 @@ import { db } from "@/lib/db";
 import { buildPedidoNarrativeEs } from "@/lib/pdf/pedido-narrative-es";
 import type { PedidoInput } from "@/lib/validators/pedido";
 import CopyLinkButton from "@/components/admin/CopyLinkButton";
+import GestionPedidoPanel from "@/components/admin/GestionPedidoPanel";
 
 export const dynamic = "force-dynamic";
 
@@ -27,7 +28,7 @@ export default async function ConfiguracionDetailPage({
   const pendiente = config.estado === "pendiente";
 
   return (
-    <div className="max-w-2xl mx-auto px-6 py-12">
+    <div className="max-w-3xl mx-auto px-6 py-12">
       <Link href="/admin/configuraciones" className="text-sm text-stone-500 hover:text-stone-700">
         ← Volver a la lista
       </Link>
@@ -81,6 +82,33 @@ export default async function ConfiguracionDetailPage({
           <NarrativeView data={config as unknown as PedidoInput} />
         </div>
       )}
+
+      <div className="mt-6">
+        <GestionPedidoPanel
+          id={id}
+          numeroPedido={config.numeroPedido}
+          pendiente={pendiente}
+          initial={{
+            estadoPedido: config.estadoPedido,
+            precioFinal: config.precioFinal,
+            anticipo: config.anticipo,
+            numeroFabrica: config.numeroFabrica,
+            numeroContenedor: config.numeroContenedor,
+            numeroBL: config.numeroBL,
+            fechaConfirmacion: config.fechaConfirmacion?.toISOString() ?? null,
+            fechaProduccion: config.fechaProduccion?.toISOString() ?? null,
+            fechaDespacho: config.fechaDespacho?.toISOString() ?? null,
+            fechaArriboEstimado: config.fechaArriboEstimado?.toISOString() ?? null,
+            fechaEntrega: config.fechaEntrega?.toISOString() ?? null,
+            notasInternas: config.notasInternas,
+            notasCliente: config.notasCliente,
+            costoProveedor: config.costoProveedor,
+            costoFlete: config.costoFlete,
+            costoAduana: config.costoAduana,
+            costoOtros: config.costoOtros,
+          }}
+        />
+      </div>
     </div>
   );
 }
