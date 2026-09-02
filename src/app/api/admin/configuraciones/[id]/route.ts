@@ -1,16 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { z } from "zod";
 import { db } from "@/lib/db";
-
-export const estadoPedidoOptions = [
-  "consulta",
-  "presupuestado",
-  "confirmado",
-  "en_produccion",
-  "en_transito",
-  "en_aduana",
-  "entregado",
-] as const;
+import { estadoPedidoOptions } from "@/lib/pedido/estado-pedido";
 
 const numberOrNull = z.union([z.number(), z.null()]);
 const stringOrNull = z.union([z.string(), z.null()]).transform((v) => (v === "" ? null : v));

@@ -2,24 +2,13 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import { estadoPedidoOptions, estadoPedidoLabels } from "@/lib/pedido/estado-pedido";
 
 const inputClass =
   "w-full rounded-lg border border-[#E5E5E5] px-3 py-2.5 text-sm text-[#2F2F2F] bg-white focus:outline-none focus:ring-2 focus:ring-sage-500";
 const labelClass = "text-sm font-medium text-[#2F2F2F]";
 const readonlyClass =
   "w-full rounded-lg border border-[#E5E5E5] px-3 py-2.5 text-sm text-stone-500 bg-[#F4F4F4]";
-
-const ESTADO_PEDIDO_LABELS: Record<string, string> = {
-  consulta: "Consulta",
-  presupuestado: "Presupuestado",
-  confirmado: "Confirmado",
-  en_produccion: "En producción",
-  en_transito: "En tránsito",
-  en_aduana: "En aduana",
-  entregado: "Entregado",
-};
-
-const ESTADO_PEDIDO_OPTIONS = Object.keys(ESTADO_PEDIDO_LABELS);
 
 type Gestion = {
   estadoPedido: string;
@@ -176,9 +165,9 @@ export default function GestionPedidoPanel({ id, numeroPedido, initial, pendient
             value={form.estadoPedido}
             onChange={(e) => set("estadoPedido", e.target.value)}
           >
-            {ESTADO_PEDIDO_OPTIONS.map((opt) => (
+            {estadoPedidoOptions.map((opt) => (
               <option key={opt} value={opt}>
-                {ESTADO_PEDIDO_LABELS[opt]}
+                {estadoPedidoLabels[opt]}
               </option>
             ))}
           </select>
