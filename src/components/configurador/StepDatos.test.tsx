@@ -199,11 +199,21 @@ describe("StepDatos — validación de nombre", () => {
     expect(screen.getByText(/mínimo 3/i)).toBeInTheDocument();
   });
 
-  it("muestra error si el nombre contiene números", async () => {
+  it("no muestra error si el nombre contiene números", async () => {
     const { user } = renderHarness();
     const nombreInput = screen.getByPlaceholderText("Ej: Juan García");
 
     await user.type(nombreInput, "Juan123");
+    fireEvent.blur(nombreInput);
+
+    expect(screen.queryByText(/solo letras/i)).not.toBeInTheDocument();
+  });
+
+  it("muestra error si el nombre contiene caracteres inválidos", async () => {
+    const { user } = renderHarness();
+    const nombreInput = screen.getByPlaceholderText("Ej: Juan García");
+
+    await user.type(nombreInput, "Juan=Garcia");
     fireEvent.blur(nombreInput);
 
     expect(screen.getByText(/solo letras/i)).toBeInTheDocument();

@@ -22,6 +22,8 @@ describe("nombreSchema", () => {
     "Ana",
     "José Luis",
     "O'Brien",
+    "Juan123",
+    "Cliente Sur S.A.",
   ])("acepta '%s'", (val) => {
     expect(nombreSchema.safeParse(val).success).toBe(true);
   });
@@ -32,10 +34,6 @@ describe("nombreSchema", () => {
 
   it("rechaza string vacío", () => {
     expect(nombreSchema.safeParse("").success).toBe(false);
-  });
-
-  it("rechaza números en el nombre", () => {
-    expect(nombreSchema.safeParse("Juan123").success).toBe(false);
   });
 
   it("rechaza caracteres HTML", () => {

@@ -7,8 +7,8 @@ export const nombreSchema = z
   .min(3, "Mínimo 3 caracteres")
   .max(100, "Máximo 100 caracteres")
   .regex(
-    /^[a-zA-ZáéíóúÁÉÍÓÚüÜñÑ\s\-']+$/,
-    "Solo letras, espacios, tildes y guiones"
+    /^[a-zA-Z0-9áéíóúÁÉÍÓÚüÜñÑ\s\-'.]+$/,
+    "Solo letras, números, espacios, tildes, guiones y puntos"
   );
 
 export const razonSocialSchema = z
