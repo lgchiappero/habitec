@@ -111,73 +111,35 @@ model ConfiguracionPedido {
   clienteEmail    String?
   clienteWhatsapp String?
 
-  // Especificación del producto — null mientras el registro está "pendiente"
-  // (creado desde /admin, todavía no completado por el cliente)
-  modelo        String? // "10ft" | "20ft" | "40ft"
-  zonaClimatica String? // "templada" | "frio_intenso" | "calor_extremo" | "humedad_alta"
+  // Especificación del producto — capturada de punta a punta por el
+  // configurador visual (/configurador), un único flujo con fotos.
+  modelo String? // "10ft" | "20ft" | "40ft"
 
-  // Baño
-  banoInodoro String? // "estandar" | "inteligente_bidet"
-  banoEspejo  String? // "comun" | "inteligente_led"
-  banoDucha   String? // "estandar_esquinero" | "premium"
+  finalidad String? // "inversor" | "agro" | "vivienda" | "turismo" | "empresa" | "sector-publico"
+  provincia String?
+  localidad String?
 
-  // Cocina
-  cocinaTipo      String? // "vitroceramica" | "espacio_gas"
-  cocinaExtractor Boolean @default(false)
-  cocinaAlacena   Boolean @default(false)
-  cocinaVentana   Boolean @default(false)
+  habitaciones  Int?
+  incluyeCocina Boolean @default(true)
+  tipoCocina    String? // "electrico" | "gas"
+  incluyeBano   Boolean @default(true)
+  tipoAgua      String? // "calefon-electrico" | "termotanque-gas"
+  lavarropas    String? // "sin" | "bano" | "cocina" | "externo"
 
-  // Aberturas
-  aberturaRejas      Boolean @default(false)
-  aberturaMosquitero Boolean @default(false)
-  aberturaCortinas   Boolean @default(false)
+  // Selecciones de materiales con foto — Record<selectorKey, optionId|null>,
+  // ver MATERIAL_CATEGORY_GROUPS en src/components/configurador/StepMateriales.tsx
+  materiales Json?
+  upgrades   String[] @default([])
 
-  // Lavarropas, energía, confort
-  lavarropaIncluye   Boolean @default(false)
-  lavarropaUbicacion String? // "bano" | "cocina" | "espacio_externo"
-  energiaSolar       String? // "sin" | "preinstalacion" | "kit_incluido"
-  calefon            String? // "sin" | "electrico"
+  tipoCliente    String? // "particular" | "empresa"
+  razonSocial    String?
+  nombreContacto String?
 
-  // Exterior
-  galeria String? // "sin" | "balcon_techo" | "galeria_perimetral"
-
-  // Mejoras térmicas
-  mejoraParedes100    Boolean @default(false)
-  mejoraTripleVidrio  Boolean @default(false)
-  mejoraTechoSandwich Boolean @default(false)
-
-  // Acabados y diseño — paredes interiores
-  paredInteriorColor         String? // "blanco" | "gris_claro" | "beige" | "madera_clara" | "madera_oscura" | "personalizado"
-  paredInteriorRevestimiento String? // "pintura_lisa" | "panel_madera" | "panel_pvc" | "otro"
-
-  // Acabados y diseño — paredes exteriores
-  paredExteriorColor         String? // "blanco" | "gris" | "beige" | "arena" | "negro_mate" | "personalizado"
-  paredExteriorRevestimiento String? // "chapa_prepintada" | "madera_tratada" | "simil_madera" | "otro"
-
-  // Acabados y diseño — baño
-  banoRevestimiento   String? // "ceramico_blanco" | "ceramico_gris" | "marmol_sintetico" | "madera_pvc" | "otro"
-  banoColorSanitarios String? // "blanco" | "negro" | "cromo"
-
-  // Acabados y diseño — cocina
-  cocinaRevestimiento String? // "ceramico_blanco" | "ceramico_gris" | "acero_inoxidable" | "otro"
-  cocinaColorMuebles  String? // "blanco" | "gris" | "madera_clara" | "madera_oscura"
-
-  // Puertas y aberturas — puerta principal
-  puertaPrincipalTipo     String? // "placa_simple" | "placa_vidrio_lateral" | "doble_hoja" | "corrediza"
-  puertaPrincipalMaterial String? // "acero_pintado" | "aluminio" | "pvc"
-  puertaPrincipalColor    String? // "blanco" | "negro" | "gris" | "igual_exterior"
-
-  // Puertas y aberturas — puerta interior
-  puertaInteriorTipo  String? // "placa" | "corrediza" | "sin_puerta"
-  puertaInteriorColor String? // "igual_paredes" | "blanco" | "natural_madera"
-
-  // Puertas y aberturas — ventanas (todas incluyen DVH y mosquitero)
-  ventanaTipo String? // "tipo_a" | "tipo_b" | "tipo_c"
-
-  estado String @default("pendiente") // "pendiente" | "enviado" | "revisado" | "confirmado"
+  precioEstimado Float? // snapshot de calcularPrecio() al momento del envío
 
   // ─── Gestión del pedido (post-venta) ──────────────────────
-  numeroPedido        String? // formato MOV-{AÑO}-{NRO 3 dígitos}
+  numeroConsulta      String? // formato MOV-CONSULTA-{AÑO}-{NRO 3 dígitos}, generado al enviar el configurador
+  numeroPedido        String? // formato MOV-{AÑO}-{NRO 3 dígitos}, generado al confirmar
   estadoPedido        String    @default("consulta") // "consulta" | "presupuestado" | "confirmado" | "en_produccion" | "en_transito" | "en_aduana" | "entregado"
   precioFinal         Float?
   anticipo            Float?

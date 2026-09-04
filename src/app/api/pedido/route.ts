@@ -1,50 +1,41 @@
 import { NextRequest, NextResponse } from "next/server";
 import { Resend } from "resend";
-import { renderToBuffer } from "@react-pdf/renderer";
 import { db } from "@/lib/db";
 import { pedidoSchema } from "@/lib/validators/pedido";
-import { PedidoDocumentBilingual } from "@/lib/pdf/PedidoDocumentBilingual";
 import { modeloLabelsEs } from "@/lib/pdf/pedido-labels-es";
 import { checkRateLimit, getClientIP } from "@/lib/rate-limit";
+import { generateNumeroConsulta } from "@/lib/pedido/numero-consulta";
 
-async function sendPedidoEmail(pdfBuffer: Buffer, clienteNombre: string, modelo: string) {
+async function sendNotificationEmail(clienteNombre: string, modelo: string, numeroConsulta: string) {
   const apiKey = process.env.RESEND_API_KEY;
   const contactEmail = process.env.CONTACT_EMAIL || "lucianogchiappero@gmail.com";
   const fromEmail = process.env.RESEND_FROM_EMAIL ?? "MOVARA <onboarding@resend.dev>";
 
-  if (!apiKey) return false;
+  if (!apiKey) return;
 
   try {
     const resend = new Resend(apiKey);
     await resend.emails.send({
       from: fromEmail,
       to: contactEmail,
-      subject: `Nueva configuración — ${clienteNombre} — ${modelo}`,
+      subject: `Nueva consulta — ${clienteNombre} — ${modelo} — ${numeroConsulta}`,
       html: `<!DOCTYPE html>
 <html lang="es">
 <head><meta charset="utf-8"></head>
 <body style="margin:0;padding:20px;background:#f4f4f4;font-family:Arial,sans-serif;">
   <div style="max-width:480px;margin:0 auto;background:#fff;border-radius:10px;overflow:hidden;box-shadow:0 2px 8px rgba(0,0,0,.08);">
     <div style="background:#2F2F2F;padding:20px 24px;">
-      <p style="margin:0;color:#D4B06A;font-size:18px;font-weight:bold;">📦 Nueva configuración</p>
+      <p style="margin:0;color:#D4B06A;font-size:18px;font-weight:bold;">📦 Nueva consulta — ${numeroConsulta}</p>
     </div>
     <div style="padding:24px;">
-      <p style="color:#555;line-height:1.6;">${clienteNombre} completó el configurador de pedido para un módulo ${modelo}. El detalle completo (resumen para el cliente + spec técnica para el proveedor) está en el PDF adjunto.</p>
+      <p style="color:#555;line-height:1.6;">${clienteNombre} completó el configurador para un módulo ${modelo}. Vela en el panel: /admin/configuraciones</p>
     </div>
   </div>
 </body>
 </html>`,
-      attachments: [
-        {
-          filename: `pedido-${clienteNombre.replace(/\s+/g, "-").toLowerCase()}.pdf`,
-          content: pdfBuffer,
-        },
-      ],
     });
-    return true;
   } catch (err) {
     console.error("[pedido] Email error:", err);
-    return false;
   }
 }
 
@@ -59,88 +50,46 @@ export async function POST(req: NextRequest) {
     const body = await req.json();
     const parsed = pedidoSchema.safeParse(body);
     if (!parsed.success) {
-      return NextResponse.json({ error: "Datos inválidos" }, { status: 400 });
+      return NextResponse.json(
+        { error: "Datos inválidos", details: parsed.error.issues },
+        { status: 400 }
+      );
     }
 
     const data = parsed.data;
 
-    try {
-      const result = await db.configuracionPedido.updateMany({
-        where: { id: data.configId, estado: "pendiente" },
+    const numeroConsulta = await db.$transaction(async (tx) => {
+      const numero = await generateNumeroConsulta(tx);
+      await tx.configuracionPedido.create({
         data: {
-          leadId: data.leadId || null,
           clienteNombre: data.clienteNombre,
-          clienteEmail: data.clienteEmail || null,
           clienteWhatsapp: data.clienteWhatsapp,
-          estado: "enviado",
+          clienteEmail: data.clienteEmail,
+          tipoCliente: data.tipoCliente,
+          razonSocial: data.razonSocial || null,
+          nombreContacto: data.nombreContacto || null,
           modelo: data.modelo,
-          zonaClimatica: data.zonaClimatica,
-          banoInodoro: data.banoInodoro,
-          banoEspejo: data.banoEspejo,
-          banoDucha: data.banoDucha,
-          cocinaTipo: data.cocinaTipo,
-          cocinaExtractor: data.cocinaExtractor,
-          cocinaAlacena: data.cocinaAlacena,
-          cocinaVentana: data.cocinaVentana,
-          aberturaRejas: data.aberturaRejas,
-          aberturaMosquitero: data.aberturaMosquitero,
-          aberturaCortinas: data.aberturaCortinas,
-          lavarropaIncluye: data.lavarropaIncluye,
-          lavarropaUbicacion: data.lavarropaUbicacion || null,
-          energiaSolar: data.energiaSolar,
-          calefon: data.calefon,
-          galeria: data.galeria,
-          mejoraParedes100: data.mejoraParedes100,
-          mejoraTripleVidrio: data.mejoraTripleVidrio,
-          mejoraTechoSandwich: data.mejoraTechoSandwich,
-          paredInteriorColor: data.paredInteriorColor,
-          paredInteriorRevestimiento: data.paredInteriorRevestimiento,
-          paredExteriorColor: data.paredExteriorColor,
-          paredExteriorRevestimiento: data.paredExteriorRevestimiento,
-          banoRevestimiento: data.banoRevestimiento,
-          banoColorSanitarios: data.banoColorSanitarios,
-          cocinaRevestimiento: data.cocinaRevestimiento,
-          cocinaColorMuebles: data.cocinaColorMuebles,
-          puertaPrincipalTipo: data.puertaPrincipalTipo,
-          puertaPrincipalMaterial: data.puertaPrincipalMaterial,
-          puertaPrincipalColor: data.puertaPrincipalColor,
-          puertaInteriorTipo: data.puertaInteriorTipo,
-          puertaInteriorColor: data.puertaInteriorColor,
-          ventanaTipo: data.ventanaTipo,
+          finalidad: data.finalidad,
+          provincia: data.provincia,
+          localidad: data.localidad,
+          habitaciones: data.habitaciones,
+          incluyeCocina: data.incluyeCocina,
+          tipoCocina: data.tipoCocina,
+          incluyeBano: data.incluyeBano,
+          tipoAgua: data.tipoAgua,
+          lavarropas: data.lavarropas,
+          materiales: data.materiales,
+          upgrades: data.upgrades,
+          precioEstimado: data.precioEstimado,
+          numeroConsulta: numero,
         },
       });
-
-      if (result.count === 0) {
-        return NextResponse.json(
-          { error: "Esta configuración ya fue enviada o no existe" },
-          { status: 409 }
-        );
-      }
-    } catch (dbErr) {
-      console.error("[pedido] DB error:", dbErr);
-      return NextResponse.json({ error: "Error al guardar el pedido" }, { status: 500 });
-    }
-
-    const now = new Date();
-    const fechaEs = now.toLocaleDateString("es-AR", {
-      year: "numeric",
-      month: "long",
-      day: "numeric",
+      return numero;
     });
-    const fechaIso = now.toISOString().slice(0, 10);
 
-    // Un solo PDF bilingüe: resumen en español para el cliente + spec técnica
-    // en inglés para el proveedor, en el mismo documento.
-    const pdfBuffer = await renderToBuffer(
-      PedidoDocumentBilingual({ data, fechaEs, fechaIso })
-    );
+    await sendNotificationEmail(data.clienteNombre, modeloLabelsEs[data.modelo], numeroConsulta);
 
-    await sendPedidoEmail(pdfBuffer, data.clienteNombre, modeloLabelsEs[data.modelo]);
-
-    return NextResponse.json({
-      ok: true,
-      pdfBase64: pdfBuffer.toString("base64"),
-    });
+    return NextResponse.json({ ok: true, numeroConsulta });
   } catch (err) {
     console.error("[pedido]", err);
     return NextResponse.json({ error: "Error al procesar la solicitud" }, { status: 500 });

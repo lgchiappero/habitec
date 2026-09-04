@@ -34,7 +34,6 @@ type Props = {
   id: string;
   numeroPedido: string | null;
   initial: Gestion;
-  pendiente: boolean;
 };
 
 function toDateInput(value: string | null): string {
@@ -45,7 +44,7 @@ function toNumberOrNull(value: string): number | null {
   return value.trim() === "" ? null : Number(value);
 }
 
-export default function GestionPedidoPanel({ id, numeroPedido, initial, pendiente }: Props) {
+export default function GestionPedidoPanel({ id, numeroPedido, initial }: Props) {
   const router = useRouter();
   const [form, setForm] = useState({
     estadoPedido: initial.estadoPedido,
@@ -308,22 +307,20 @@ export default function GestionPedidoPanel({ id, numeroPedido, initial, pendient
           />
         </label>
 
-        {!pendiente && (
-          <div className="grid grid-cols-2 gap-3 pt-2">
-            <a
-              href={`/api/admin/configuraciones/${id}/pdf-cliente`}
-              className="text-center py-2.5 border border-sage-500 text-sage-600 font-bold text-sm rounded-xl hover:bg-sage-50 transition-colors"
-            >
-              Generar PDF cliente
-            </a>
-            <a
-              href={`/api/admin/configuraciones/${id}/pdf-proveedor`}
-              className="text-center py-2.5 border border-stone-400 text-stone-600 font-bold text-sm rounded-xl hover:bg-stone-50 transition-colors"
-            >
-              Generar PDF proveedor
-            </a>
-          </div>
-        )}
+        <div className="grid grid-cols-2 gap-3 pt-2">
+          <a
+            href={`/api/admin/configuraciones/${id}/pdf-cliente`}
+            className="text-center py-2.5 border border-sage-500 text-sage-600 font-bold text-sm rounded-xl hover:bg-sage-50 transition-colors"
+          >
+            Generar PDF cliente
+          </a>
+          <a
+            href={`/api/admin/configuraciones/${id}/pdf-proveedor`}
+            className="text-center py-2.5 border border-stone-400 text-stone-600 font-bold text-sm rounded-xl hover:bg-stone-50 transition-colors"
+          >
+            Generar PDF proveedor
+          </a>
+        </div>
       </div>
 
       <div className="rounded-2xl border border-[#F3C6C6] p-5 space-y-4" style={{ backgroundColor: "#fff0f0" }}>

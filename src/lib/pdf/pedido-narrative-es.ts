@@ -1,128 +1,86 @@
 import type { PedidoInput } from "@/lib/validators/pedido";
+import { getModeloKey, REGIONAL_MODELS } from "@/data/regional-models";
+import { findUpgrade } from "@/data/configurador-catalog";
+import { MATERIAL_CATEGORY_GROUPS, findMaterialOption } from "@/data/material-catalog";
 import {
   modeloLabelsEs,
-  zonaClimaticaLabelsEs,
-  cocinaTipoLabelsEs,
-  lavarropaUbicacionLabelsEs,
-  energiaSolarLabelsEs,
-  calefonLabelsEs,
-  galeriaLabelsEs,
-  paredInteriorColorLabelsEs,
-  paredInteriorRevestimientoLabelsEs,
-  paredExteriorColorLabelsEs,
-  paredExteriorRevestimientoLabelsEs,
-  banoRevestimientoLabelsEs,
-  banoColorSanitariosLabelsEs,
-  cocinaRevestimientoLabelsEs,
-  cocinaColorMueblesLabelsEs,
-  puertaPrincipalTipoLabelsEs,
-  puertaPrincipalMaterialLabelsEs,
-  puertaPrincipalColorLabelsEs,
-  puertaInteriorTipoLabelsEs,
-  puertaInteriorColorLabelsEs,
-  ventanaTipoLabelsEs,
-  siNo,
+  finalidadLabelsEs,
+  tipoCocinaLabelsEs,
+  tipoAguaLabelsEs,
+  lavarropasLabelsEs,
 } from "@/lib/pdf/pedido-labels-es";
 
-const banoInodoroPhrases: Record<PedidoInput["banoInodoro"], string> = {
-  estandar: "Inodoro estándar",
-  inteligente_bidet: "Inodoro inteligente con bidet",
+// Nombre de campo legible por selector — selector.label describe el tramo
+// de opciones ("Opciones base — sin costo"), no el campo en sí.
+const SELECTOR_LABELS_ES: Record<string, string> = {
+  exterior: "Exterior",
+  piso: "Piso",
+  panelesBano: "Paneles del baño",
+  puertaBano: "Puerta del baño",
+  banera: "Bañera",
+  cocina: "Cocina",
+  mesada: "Mesada",
+  cocinaAmpliada: "Cocina ampliada",
+  puertaPrincipal: "Puerta principal",
+  ventanas: "Ventanas",
+  muroVidrio: "Muro cortina de vidrio",
+  galeria: "Galería con sobretecho",
 };
-
-const banoEspejoPhrases: Record<PedidoInput["banoEspejo"], string> = {
-  comun: "Espejo común",
-  inteligente_led: "Espejo inteligente con LED",
-};
-
-const banoDuchaPhrases: Record<PedidoInput["banoDucha"], string> = {
-  estandar_esquinero: "Cabina de ducha estándar esquinero",
-  premium: "Cabina de ducha premium",
-};
-
-function lavarropaFrase(data: PedidoInput): string {
-  if (!data.lavarropaIncluye) return "sin espacio previsto";
-  const ubicacion = data.lavarropaUbicacion!;
-  if (ubicacion === "bano") return "con espacio en el baño";
-  if (ubicacion === "cocina") return "con espacio en la cocina";
-  return "con espacio externo previsto";
-}
 
 export type NarrativeLine = { type: "line"; label: string; value: string };
 export type NarrativeGroup = { type: "group"; title: string; bullets: string[]; note?: string };
 export type NarrativeItem = NarrativeLine | NarrativeGroup;
 
 export function buildPedidoNarrativeEs(data: PedidoInput): NarrativeItem[] {
+  const regionalKey = getModeloKey(data.provincia, data.localidad);
+  const regional = REGIONAL_MODELS[regionalKey];
+
+  const cocinaTxt = data.incluyeCocina
+    ? tipoCocinaLabelsEs[data.tipoCocina]
+    : "Sin cocina";
+  const banoTxt = data.incluyeBano
+    ? `Con baño — ${tipoAguaLabelsEs[data.tipoAgua].toLowerCase()}`
+    : "Sin baño";
+
+  const upgradeBullets = data.upgrades
+    .map((key) => findUpgrade(regionalKey, key)?.nombre)
+    .filter((n): n is string => Boolean(n));
+
+  const materialGroups: NarrativeGroup[] = MATERIAL_CATEGORY_GROUPS.map((group) => {
+    const seenKeys = new Set<string>();
+    const bullets: string[] = [];
+    for (const selector of group.selectors) {
+      if (seenKeys.has(selector.key)) continue;
+      seenKeys.add(selector.key);
+      const found = findMaterialOption(selector.key, data.materiales[selector.key] ?? null);
+      const nombreCampo = SELECTOR_LABELS_ES[selector.key] ?? selector.key;
+      bullets.push(found ? `${nombreCampo}: ${found.option.label}` : `${nombreCampo}: no incluye`);
+    }
+    return { type: "group", title: group.title, bullets };
+  });
+
   return [
     { type: "line", label: "Modelo", value: modeloLabelsEs[data.modelo] },
-    { type: "line", label: "Zona de instalación", value: zonaClimaticaLabelsEs[data.zonaClimatica] },
-    {
-      type: "group",
-      title: "Baño",
-      bullets: [
-        banoInodoroPhrases[data.banoInodoro],
-        banoEspejoPhrases[data.banoEspejo],
-        banoDuchaPhrases[data.banoDucha],
-      ],
-    },
-    {
-      type: "group",
-      title: "Cocina",
-      bullets: [
-        cocinaTipoLabelsEs[data.cocinaTipo],
-        `Extractor de cocina: ${siNo(data.cocinaExtractor)}`,
-        `Alacena superior: ${siNo(data.cocinaAlacena)}`,
-        `Ventana cerca de la cocción: ${siNo(data.cocinaVentana)}`,
-      ],
-    },
-    {
-      type: "group",
-      title: "Aberturas",
-      bullets: [
-        `Rejas: ${siNo(data.aberturaRejas)}`,
-        `Mosquiteros: ${siNo(data.aberturaMosquitero)}`,
-        `Cortinas: ${siNo(data.aberturaCortinas)}`,
-      ],
-    },
-    { type: "line", label: "Lavarropas", value: lavarropaFrase(data) },
+    { type: "line", label: "Finalidad", value: finalidadLabelsEs[data.finalidad] },
     {
       type: "line",
-      label: "Energía solar",
-      value: energiaSolarLabelsEs[data.energiaSolar].toLowerCase(),
+      label: "Ubicación",
+      value: [data.localidad, data.provincia].filter(Boolean).join(", "),
     },
-    { type: "line", label: "Calefón", value: calefonLabelsEs[data.calefon].toLowerCase() },
-    { type: "line", label: "Galería y balcón", value: galeriaLabelsEs[data.galeria].toLowerCase() },
+    { type: "line", label: "Zona", value: regional?.region ?? regionalKey },
     {
       type: "group",
-      title: "Mejoras térmicas",
+      title: "Configuración del espacio",
       bullets: [
-        `Paredes de 100mm: ${siNo(data.mejoraParedes100)}`,
-        `Triple vidrio: ${siNo(data.mejoraTripleVidrio)}`,
-        `Techo con panel sándwich: ${siNo(data.mejoraTechoSandwich)}`,
+        `Habitaciones: ${data.habitaciones}`,
+        `Cocina: ${cocinaTxt}`,
+        `Baño: ${banoTxt}`,
+        `Lavarropas: ${lavarropasLabelsEs[data.lavarropas].toLowerCase()}`,
       ],
     },
-    {
-      type: "group",
-      title: "Acabados y diseño",
-      bullets: [
-        `Color de paredes interiores: ${paredInteriorColorLabelsEs[data.paredInteriorColor]}`,
-        `Revestimiento interior: ${paredInteriorRevestimientoLabelsEs[data.paredInteriorRevestimiento]}`,
-        `Color exterior: ${paredExteriorColorLabelsEs[data.paredExteriorColor]}`,
-        `Revestimiento exterior: ${paredExteriorRevestimientoLabelsEs[data.paredExteriorRevestimiento]}`,
-        `Revestimiento de paredes del baño: ${banoRevestimientoLabelsEs[data.banoRevestimiento]}`,
-        `Color de sanitarios: ${banoColorSanitariosLabelsEs[data.banoColorSanitarios]}`,
-        `Revestimiento de paredes de la cocina: ${cocinaRevestimientoLabelsEs[data.cocinaRevestimiento]}`,
-        `Color de muebles de cocina: ${cocinaColorMueblesLabelsEs[data.cocinaColorMuebles]}`,
-      ],
-    },
-    {
-      type: "group",
-      title: "Puertas y aberturas",
-      bullets: [
-        `Puerta principal: ${puertaPrincipalTipoLabelsEs[data.puertaPrincipalTipo]}, ${puertaPrincipalMaterialLabelsEs[data.puertaPrincipalMaterial].toLowerCase()}, color ${puertaPrincipalColorLabelsEs[data.puertaPrincipalColor].toLowerCase()}`,
-        `Puerta interior: ${puertaInteriorTipoLabelsEs[data.puertaInteriorTipo].toLowerCase()}, color ${puertaInteriorColorLabelsEs[data.puertaInteriorColor].toLowerCase()}`,
-        `Ventanas: ${ventanaTipoLabelsEs[data.ventanaTipo]}`,
-      ],
-      note: "Las ventanas incluyen DVH (doble vidrio hermético) y mosquitero en todos los tipos.",
-    },
+    ...materialGroups,
+    ...(upgradeBullets.length
+      ? [{ type: "group" as const, title: "Mejoras a cotizar", bullets: upgradeBullets }]
+      : []),
   ];
 }

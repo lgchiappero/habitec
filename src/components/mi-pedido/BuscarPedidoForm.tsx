@@ -13,7 +13,8 @@ const inputClass =
   "w-full rounded-lg border border-[#E5E5E5] px-3 py-2.5 text-sm text-[#2F2F2F] bg-white focus:outline-none focus:ring-2 focus:ring-sage-500";
 
 type Pedido = {
-  numeroPedido: string;
+  numeroConsulta: string | null;
+  numeroPedido: string | null;
   clienteNombre: string;
   modelo: string | null;
   notasCliente: string | null;
@@ -81,6 +82,7 @@ export default function BuscarPedidoForm() {
   }
 
   const currentIndex = pedido ? estadoPedidoIndex(pedido.estadoPedido) : -1;
+  const codigoMostrado = pedido ? (pedido.numeroPedido ?? pedido.numeroConsulta) : null;
 
   return (
     <div className="space-y-6">
@@ -108,7 +110,7 @@ export default function BuscarPedidoForm() {
         <div className="bg-white rounded-2xl border border-[#E5E5E5] p-5 space-y-6">
           <div>
             <p className="text-sage-500 text-xs font-bold uppercase tracking-widest mb-1">
-              {pedido.numeroPedido}
+              {codigoMostrado}
             </p>
             <h2 className="text-lg font-bold text-[#2F2F2F]">{pedido.clienteNombre}</h2>
             {pedido.modelo && <p className="text-sm text-stone-600">{pedido.modelo}</p>}
@@ -157,7 +159,7 @@ export default function BuscarPedidoForm() {
           )}
 
           <a
-            href={getWhatsAppUrl(`Hola! Quería consultar por mi pedido ${pedido.numeroPedido}`)}
+            href={getWhatsAppUrl(`Hola! Quería consultar por mi pedido ${codigoMostrado}`)}
             target="_blank"
             rel="noopener noreferrer"
             className="block text-center py-2.5 border border-sage-500 text-sage-600 font-bold text-sm rounded-xl hover:bg-sage-50 transition-colors"

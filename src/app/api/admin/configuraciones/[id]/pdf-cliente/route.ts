@@ -11,7 +11,7 @@ export async function GET(
   const { id } = await params;
   const config = await db.configuracionPedido.findUnique({ where: { id } });
 
-  if (!config || config.estado === "pendiente") {
+  if (!config) {
     return NextResponse.json({ error: "Configuración no encontrada" }, { status: 404 });
   }
 

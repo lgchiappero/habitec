@@ -15,9 +15,12 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: "Ingresá un código de pedido" }, { status: 400 });
   }
 
+  const codigo = parsed.data.codigo.toUpperCase();
+
   const config = await db.configuracionPedido.findFirst({
-    where: { numeroPedido: parsed.data.codigo.toUpperCase() },
+    where: { OR: [{ numeroConsulta: codigo }, { numeroPedido: codigo }] },
     select: {
+      numeroConsulta: true,
       numeroPedido: true,
       clienteNombre: true,
       modelo: true,
@@ -36,6 +39,7 @@ export async function POST(req: NextRequest) {
   }
 
   return NextResponse.json({
+    numeroConsulta: config.numeroConsulta,
     numeroPedido: config.numeroPedido,
     clienteNombre: config.clienteNombre,
     modelo: config.modelo ? modeloLabelsEs[config.modelo as PedidoInput["modelo"]] : null,
